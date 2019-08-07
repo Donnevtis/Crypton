@@ -1,13 +1,18 @@
 <template>
     <div class="convers-button">
+        <NotificationCounter/>
     <img class="convers-button__icon" alt="Vue logo" src="../assets/conversation.svg">
         
     </div>
 </template>
 
 <script>
+import NotificationCounter from "./AppCounter";
 export default {
-name:'ConversationButton'
+name:'ConversationButton',
+components:{
+    NotificationCounter
+}
 }
 </script>
 
@@ -22,6 +27,8 @@ name:'ConversationButton'
 .convers-button__icon {
     display: block;
     margin: 7px auto 0;
+    position: relative;
+    z-index: 1;
 
 }
 </style>

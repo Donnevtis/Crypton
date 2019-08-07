@@ -21,7 +21,7 @@ export default {
     position: relative;
     display: flex;     
     height: 100%;      
-   align-items: center; 
+    align-items: center; 
 }
 
 .menu-list__button:hover {
@@ -34,7 +34,7 @@ export default {
 }
 
 .menu-list__button.active .menu-list__icon{
-    fill: white;
+    fill: rgba(255, 255, 255, 0.8);
 }
 
 .menu-list__button.active {
