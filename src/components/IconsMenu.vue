@@ -4,8 +4,8 @@
         v-for="item in menuItems" 
         :key="item.id" 
         :code="item.svg" 
-        :class="{active: currentTab === item}" 
-        @toActive="currentTab = item"/>
+        :class="{active: currentTab === item.id}" 
+        @toActive="currentTab = item.id"/>
     </ul>
 </template>
 <script>
@@ -19,7 +19,7 @@ export default {
     },
     data() {
       return {
-        currentTab: '/static/item0.svg',
+        currentTab: 0,
         menuItems: [
             {
                  id:0, 
@@ -63,7 +63,7 @@ export default {
 </script>
 <style scoped>
 .menu-list {
-    height: 430px;   
+    height: 468px;   
     width: 90px;
     display: flex;
     flex-direction: column;

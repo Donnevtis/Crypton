@@ -21,7 +21,7 @@ components:{
     position: relative;    
     width: 34px;
     height: 34px;   
-    background: #4C4D55;
+    background: var(--color-conversation-active);
     border-radius: 2px;
 }
 .convers-button__icon {

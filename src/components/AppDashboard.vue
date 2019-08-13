@@ -1,78 +1,98 @@
 <template>
-    <div class="dashboard">
-        <div class="balance"></div>       
-        <div class="wallets"></div>       
-        <div class="interes"></div>       
-        <div class="receice"></div>       
-        <div class="chart"></div>       
-        <div class="markets"></div>       
-        <div class="transactions"></div>       
-        <div class="news"></div>       
-    </div>
+  <div class="dashboard">
+    <balance class="balance-module" :mainInfo="mainInfo" @update="changeColor" />
+    <wallets class="wallets-module" />
+    <interest class="interes-module" />
+    <recieve class="receive-module" />
+    <div class="chart" />
+    <div class="markets" />
+    <div class="transactions" />
+    <news class="news-module" />
+  </div>
 </template>
 
 <script>
+import Balance from "./DashboardBalance";
+import Wallets from "./DashboardWallets";
+import Interest from "./DashboardInterests";
+import Recieve from "./DashboardRecieve";
+import News from "./DashboardNews";
 
 export default {
-name: 'AppDashboard'
-}
+  name: "AppDashboard",
+  components: {
+    Balance,
+    Wallets,
+    Interest,
+    Recieve,
+    News
+  },
+  data() {
+    return {
+      mainInfo: {
+        transactions: 1456,
+        walletsCount: 5,
+        balance: 1424,
+        currencyEUR: 2.7795,
+        currency: "EUR",
+        currencyProfit: 15
+      }
+    };
+  },
+  methods: {
+    changeColor() {
+      document.documentElement.style.setProperty("--color-dark-gray", "#fff");
+    }
+  }
+};
 </script>
 
-<style>
+<style scoped>
 .dashboard {
-    position: fixed;
-    height: calc(100vh - 108px);
-    width: calc(100vw - 90px);
-    padding: 40px 40px 38px 30px;
-    bottom: 0;
-    right: 0;
-    display: grid;
-    grid-template-rows: .7fr 1.2fr 1.25fr .85fr;
-    grid-template-columns: 1.36fr 1.36fr .4fr 1.2fr 1.58fr;
-    grid-template-areas: "a b b b g"
-                         "a c d d g"
-                         "e e e f g"
-                         "e e e f h";
-    gap:18px;
-    }
-.balance {
-grid-area: a;
-background-color: aliceblue;
+  position: fixed;
+  height: calc(100vh - 108px);
+  width: calc(100vw - 90px);
+  padding: 40px 40px 38px 30px;
+  bottom: 0;
+  right: 0;
+  display: grid;
+  grid-template-rows: 0.7fr 1.2fr 1.25fr 0.85fr;
+  grid-template-columns: 1.36fr 1.36fr 0.4fr 1.2fr 1.58fr;
+  grid-template-areas:
+    "a b b b g"
+    "a c d d g"
+    "e e e f g"
+    "e e e f h";
+  gap: 1.3vw;
 }
-.wallets {
-grid-area: b;
-background-color: darkblue;
-
-
+.balance-module {
+  grid-area: a;
 }
-.interes {
-grid-area: c;
-background-color: violet;
-
+.wallets-module {
+  grid-area: b;
 }
-.receice {
-grid-area: d;
-background-color: rebeccapurple;
-
+.interes-module {
+  grid-area: c;
+}
+.receive-module {
+  grid-area: d;
 }
 .chart {
-grid-area: e;
-background-color: saddlebrown;
-
+  grid-area: e;
+  background-color: var(--color-middle);
 }
 .markets {
-grid-area: f;
-background-color: silver;
-
+  grid-area: f;
+  background-color: var(--color-middle);
 }
 .transactions {
-grid-area: g;
-background-color: burlywood;
-
+  grid-area: g;
+  background-color: var(--color-middle);
 }
-.news {
-grid-area: h;
-background-color: black;
-
+.news-module {
+  grid-area: h;
+}
+div {
+  border-radius: 2px;
 }
 </style>

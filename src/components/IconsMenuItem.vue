@@ -25,7 +25,7 @@ export default {
 }
 
 .menu-list__button:hover {
-    background: #2A2B31;        
+    background: var(--color-light);        
 }
 
 .menu-list__icon {    
@@ -38,7 +38,7 @@ export default {
 }
 
 .menu-list__button.active {
-    background: #2A2B31;    
+    background: var(--color-light);        
 }
 
 </style>

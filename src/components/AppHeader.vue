@@ -52,6 +52,9 @@ export default {
     components: {
        SearchForm
     },
+    props: {
+      
+    },
     data(){
         return {
             title: 'Dashboard',
@@ -82,14 +85,13 @@ export default {
     font-weight: 200;
     position: relative;    
     font-size: 24px;
-    color: white;       
+    color: var(--color-white);
 }
 .search-form {
-    position: relative;
-    left: -7.5vw; 
+    position: absolute;
+    left: 245px; 
 }
-.support {
-    grid-column: 4;
+.support {   
     display: flex;   
     justify-content: space-between;
     width: 142px;    
@@ -98,14 +100,14 @@ export default {
     width: 96px;
     height: 35px;
     font-size: 12px;
-    color: white;
-    background: #2a2b31;
+    color: var(--color-white);
+    background: var(--color-light);
     display: flex;
     align-items: center;
     transition: ease .1s; 
 }
 .support-button:hover {
-    background: #45464D
+    background: var(--color-bright)
 }
 .support-button svg {    
     margin: 0 12px;
@@ -113,12 +115,12 @@ export default {
 
 .plus-button {   
     font-size: 24px;
-    border: 2px solid #2a2b31;
+    border: 2px solid var(--color-light);
     text-align: center;   
     transition: ease .1s; 
 }
 .plus-button:hover {
-    border-color: rgba(255, 255, 255, 0.8);
+    border-color: var(--color-white);
 }
 .plus-button svg{
    margin: 0 auto;
@@ -128,23 +130,28 @@ export default {
     align-items: center;
     justify-content:space-around;
 }
-.sandwich{
-    display: block;
+.sandwich {
+    display: block;   
+    transition: ease .2s; 
 }
+.sandwich svg {
+    margin: 0 auto;
+}
+
 .name {
     display: block;
     font-size: 14px;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.8);
-    margin: 0 14px 0 10px;
+    color: var(--color-white);
+    margin: 0 14px;
 }
-.profile-button {    
+.profile-button  {    
     display: block;
-    background: #2a2b31;  
+    background: var(--color-light);  
     transition: ease .1s;  
 }
-.profile-button:hover {
-    background: #45464D;
+.profile-button:hover, .sandwich:hover {
+    background: var(--color-bright);
 }
 .profile-button svg {
     margin: 0 auto;
@@ -160,7 +167,7 @@ button {
 }
 
 .plus-button:hover path, .support-button:hover path, .profile-button:hover path, .sandwich:hover path  {
-    fill: rgba(255, 255, 255, 0.8);
+    fill: var(--color-white);
 }
 
 

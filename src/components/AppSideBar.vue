@@ -27,26 +27,24 @@ export default {
 <style scoped>
 .sidebar {
 position: fixed;
-float: left;
+padding: 34px 0;
 display: flex;
 flex-direction: column;
 justify-content: space-between;
+align-items: center;
 left: 0%;
 top: 0%;
 bottom: 0%;
 width: 90px;
-background-color: #1D2024;
+background-color: var(--color-middle);
+border-radius: 0;
 }
 .sidebar__logo {
 position: relative;
-margin:34px auto 0 auto;
 }
 .sidebar__menu {
-
-    margin: 0 auto 34px;
+    position: absolute;
+    top: 148px;
 }           
-.conversation-button {
-    margin: 0 auto 35px;
-}
 </style>
 

@@ -26,7 +26,7 @@ name: 'SearchForm'
      left: 235px;
      width: 245px;
      height: 35px;
-     background: #2A2B31;
+     background: var(--color-light);
      border-radius: 2px;   
     }
 input {     
@@ -49,7 +49,7 @@ button{
      transition: ease .1s;
  }
 button:hover path{
-     fill: rgba(255, 255, 255, 0.8);
+     fill: var(--color-white);
    
  } 
 
