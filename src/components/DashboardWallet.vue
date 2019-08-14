@@ -9,7 +9,7 @@
     <div class="footer">
       <span class="name">{{currency.name}}</span>
       <transition name="fade">
-        <span v-if="show" class="rate">{{ currency.amount}}</span>
+        <span v-if="currency.active" class="rate">{{ currency.amount}}</span>
       </transition>
     </div>
   </div>
@@ -21,11 +21,6 @@ export default {
   props: {
     currency: Object,
     tab: Number
-  },
-  computed: {
-    show() {
-      return this.tab === this.currency.id;
-    }
   },
   methods: {
     changer() {

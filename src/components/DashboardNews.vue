@@ -47,7 +47,7 @@ export default {
             month: "short"
           });
         })
-        .catch(err => {
+        .catch(err => { // eslint-disable-next-line
           console.log(err);
           this.errored = true;
         })

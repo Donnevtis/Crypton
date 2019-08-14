@@ -37,6 +37,7 @@ export default {
   --color-text-light: #606166;
   --color-conversation-active: #4c4d55;
   --color-wallets-counter: #252529;
+  --charcoal-grey: #323235;
 }
 #app {
   position: fixed;

@@ -4,9 +4,7 @@
       v-for="wallet in wallets"
       :key="wallet.id"
       :currency="wallet"
-      :class="{active: currentTab === wallet.id}"
-      :tab="currentTab"
-      @to-active="currentTab = wallet.id"
+      :class="{active: true === wallet.active}"     
     />
     <a href="#">Add wallet</a>
   </div>
@@ -19,11 +17,6 @@ export default {
   name: "DashboardWallets",
   components: {
     Wallet
-  },
-  data() {
-    return {
-      currentTab: 1
-    };
   },
   computed: {
     wallets() {
