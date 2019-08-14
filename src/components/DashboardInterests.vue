@@ -25,7 +25,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 17px 21px 15px 13px;
+  padding: 17px 21px 15px 24px;
   position: relative;
   background-color: var(--color-slate);
   height: 100%;

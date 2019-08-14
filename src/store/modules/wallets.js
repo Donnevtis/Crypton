@@ -5,7 +5,8 @@ const state = {
                 name: 'Bitcoin',
                 amount: 0.221746,
                 icon: 'static/currency/BTC.png',
-                fullness: 81
+                fullness: 81,
+                active: true,
             },
             {
                 id: 2,
@@ -13,7 +14,9 @@ const state = {
                 name: 'Ethereum',
                 amount: 0.34746,
                 icon: 'static/currency/ETH.png',
-                fullness: 12
+                fullness: 12,
+                active: false,
+
             },
             {
                 id: 3,
@@ -21,7 +24,9 @@ const state = {
                 name: 'Litecoin',
                 amount: 0.12,
                 icon: 'static/currency/LTC.png',
-                fullness: 21
+                fullness: 21,
+                active: false,
+
             },
             {
                 id: 4,
@@ -29,7 +34,9 @@ const state = {
                 name: 'Dash',
                 amount: 412,
                 icon: 'static/currency/DASH.png',
-                fullness: 85
+                fullness: 85,
+                active: false,
+
             },
             {
                 id: 5,
@@ -37,7 +44,9 @@ const state = {
                 name: 'Ripple',
                 amount: 0.0003,
                 icon: "https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@e35e7396237e8b8afee29deca14407bb5e25926d/svg/black/bch.svg",
-                fullness: 3
+                fullness: 3,
+                active: false,
+
             }
         ]
     },
@@ -47,7 +56,13 @@ const state = {
 
     },
     actions = {},
-    mutations = {};
+    mutations = {
+        changeActive(state, id) {
+            state.wallets.find(item => item.active == true).active = false;
+            state.wallets.find(item => item.id == id).active = true;
+
+        }
+    };
 
 
 export default {

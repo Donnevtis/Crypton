@@ -4,7 +4,7 @@
     <wallets class="wallets-module" />
     <interest class="interes-module" />
     <recieve class="receive-module" />
-    <div class="chart" />
+    <chart class="chart-module" />
     <div class="markets" />
     <div class="transactions" />
     <news class="news-module" />
@@ -17,6 +17,7 @@ import Wallets from "./DashboardWallets";
 import Interest from "./DashboardInterests";
 import Recieve from "./DashboardRecieve";
 import News from "./DashboardNews";
+import Chart from "./DashboardChart";
 
 export default {
   name: "AppDashboard",
@@ -25,7 +26,8 @@ export default {
     Wallets,
     Interest,
     Recieve,
-    News
+    News,
+    Chart
   },
   data() {
     return {
@@ -77,9 +79,8 @@ export default {
 .receive-module {
   grid-area: d;
 }
-.chart {
+.chart-module {
   grid-area: e;
-  background-color: var(--color-middle);
 }
 .markets {
   grid-area: f;

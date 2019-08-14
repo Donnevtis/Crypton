@@ -1,6 +1,9 @@
 <template>
   <div class="interest">
-    <canvas class="loader" width="34" height="34"></canvas>
+    <svg class="loader" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35">
+      <circle cx="16" cy="16" r="14" fill="none" stroke="var(--color-light)" stroke-width="2" />
+      <path :d="d" fill="transparent" stroke="var(--color-green)" stroke-width="3" />
+    </svg>
     <div class="percent" :wallet="wallet">{{ wallet.fullness + '%' }}</div>
     <div class="name" :wallet="wallet">{{wallet.name}}</div>
     <button class="options"></button>
@@ -13,24 +16,24 @@ export default {
   props: {
     wallet: Object
   },
-  mounted: function() {
-    const circle = this.$el.querySelector(".loader");
-    const ctx = circle.getContext("2d");
-
-    const koef = this.wallet.fullness / 50;
-
-    ctx.beginPath();
-    ctx.lineWidth = 2;
-
-    ctx.strokeStyle = "#2a2b31";
-    ctx.arc(17, 17, 13, 0, Math.PI * 2);
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.lineWidth = 3;
-    ctx.strokeStyle = "#7ac231";
-    ctx.arc(17, 17, 13, 0, Math.PI * koef);
-    ctx.stroke();
+  computed: {
+    d() {
+      const ringVal = {
+        r: 14,
+        cx: 15,
+        cy: 30
+      };
+      const coords = [];
+      const limit = Math.round(this.wallet.fullness * 3.6);
+      for (let fi = 0; fi < limit; fi++) {
+        if (fi % 2 == 0) continue;
+        const rad = fi / (180 / Math.PI);
+        const x = (ringVal.r * Math.sin(rad) + 16).toFixed(5);
+        const y = (ringVal.r * Math.cos(rad) + 16).toFixed(5);
+        coords.push(`L ${x} ${y}`);
+      }
+      return `M ${ringVal.cx} ${ringVal.cy} ${coords.join(" ")}`;
+    }
   }
 };
 </script>
@@ -46,12 +49,12 @@ export default {
 .loader {
   box-sizing: border-box;
   position: relative;
-  left: 0.6vw;
-  top: 0.3vw;
+  width: 2.3vw;
+  height: 2.3vw;
 }
 .percent {
   position: absolute;
-  left: 5vw;
+  left: 4vw;
   font-size: 24px;
   font-weight: 300;
   font-style: normal;

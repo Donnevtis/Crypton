@@ -1,5 +1,5 @@
 <template>
-  <div class="wallet" @click="$emit('to-active')">
+  <div class="wallet" @click="changer">
     <div class="header">
       <span class="acronym">{{currency.acronym}}</span>
       <div class="icon">
@@ -22,14 +22,15 @@ export default {
     currency: Object,
     tab: Number
   },
-  data() {
-    return {
-      // show: ''
-    };
-  },
   computed: {
     show() {
       return this.tab === this.currency.id;
+    }
+  },
+  methods: {
+    changer() {
+      this.$emit("to-active");
+      this.$store.commit("changeActive", this.currency.id);
     }
   }
 };

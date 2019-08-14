@@ -50,6 +50,7 @@ ul {
   list-style-type: none;
 }
 * {
+  user-select: none;
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -71,7 +72,6 @@ a {
   cursor: text;
   background-color: transparent;
   vertical-align: middle;
-  font-family: "Helvetica Neue";
   color: white;
 }
 

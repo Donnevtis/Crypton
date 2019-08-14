@@ -22,8 +22,7 @@ export default {
   },
   data() {
     return {
-      currentTab: 1,
-      show: true
+      currentTab: 1
     };
   },
   computed: {
