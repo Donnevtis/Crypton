@@ -12,22 +12,33 @@
     </div>
 
     <div class="chart-graph">
-      <div class="chart-worth">
-        <span class="chart-worth-item">20k</span>
-        <span class="chart-worth-item">15k</span>
-        <span class="chart-worth-item">10k</span>
-        <span class="chart-worth-item">5k</span>
-        <span class="chart-worth-item">0k</span>
-      </div>
+      <svg class="chart-field" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 200">
+        <text class="chart-worth" x="2" y="12" fill="var(--color-text-light)">20k</text>
+        <text class="chart-worth" x="2" y="50" fill="var(--color-text-light)">15k</text>
+        <text class="chart-worth" x="2" y="88" fill="var(--color-text-light)">10k</text>
+        <text class="chart-worth" x="2" y="127" fill="var(--color-text-light)">5k</text>
+        <text class="chart-worth" x="2" y="166" fill="var(--color-text-light)">0k</text>
 
-      <div class="chart-timeframes">
-        <span class="chart-timeframes-frame">23 oct</span>
-        <span class="chart-timeframes-frame">23 oct</span>
-        <span class="chart-timeframes-frame">23 oct</span>
-        <span class="chart-timeframes-frame">23 oct</span>
-        <span class="chart-timeframes-frame">23 oct</span>
-        <span class="chart-timeframes-frame">23 oct</span>
-      </div>
+        <line x1="45" y1="10" x2="600" y2="10" stroke="var(--charcoal-grey)" />
+        <line x1="45" y1="48.25" x2="600" y2="48.25" stroke="var(--charcoal-grey)" />
+        <line x1="45" y1="86.5" x2="600" y2="86.5" stroke="var(--charcoal-grey)" />
+        <line x1="45" y1="124.75" x2="600" y2="124.75" stroke="var(--charcoal-grey)" />
+        <line x1="45" y1="163" x2="600" y2="163" stroke="var(--charcoal-grey)" />
+
+        <line x1="82" y1="163" x2="82" y2="167" stroke="var(--charcoal-grey)" />
+        <line x1="182" y1="163" x2="182" y2="167" stroke="var(--charcoal-grey)" />
+        <line x1="282" y1="163" x2="282" y2="167" stroke="var(--charcoal-grey)" />
+        <line x1="382" y1="163" x2="382" y2="167" stroke="var(--charcoal-grey)" />
+        <line x1="482" y1="163" x2="482" y2="167" stroke="var(--charcoal-grey)" />
+        <line x1="582" y1="163" x2="582" y2="167" stroke="var(--charcoal-grey)" />
+
+        <text class="chart-timeframes" x="70" y="200" fill="var(--color-text-light)">23 oct</text>
+        <text class="chart-timeframes" x="170" y="200" fill="var(--color-text-light)">23 oct</text>
+        <text class="chart-timeframes" x="270" y="200" fill="var(--color-text-light)">23 oct</text>
+        <text class="chart-timeframes" x="370" y="200" fill="var(--color-text-light)">23 oct</text>
+        <text class="chart-timeframes" x="470" y="200" fill="var(--color-text-light)">23 oct</text>
+        <text class="chart-timeframes" x="570" y="200" fill="var(--color-text-light)">23 oct</text>
+      </svg>
     </div>
   </div>
 </template>
@@ -51,7 +62,7 @@ export default {
   width: 100%;
   height: 100%;
   background-color: var(--color-middle);
-  padding: 1.57vw 2.42vw 2.57vw 2.4vw;
+  padding: 1.57vw 2.42vw 2.5vw 2.4vw;
 }
 .chart-header {
   display: flex;
@@ -62,7 +73,7 @@ export default {
 .chart-graph {
   position: relative;
   width: 100%;
-  height: 77%;
+  height: 25vh;
 }
 .chart-title {
   font-size: 1.4vw;
@@ -86,19 +97,12 @@ export default {
   display: flex;
   justify-content: space-between;
 }
-.chart-worth {
-  height: 20.24vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin: 0 0 2.42vw 0.2vw;
-}
-.chart-timeframes {
+
+.chart-field {
   position: absolute;
+  height: 100%;
+  top: 0;
   right: 0;
-  bottom: 0;
-  width: 37.5vw;
-  display: flex;
-  justify-content: space-between;
+  width: 100%;
 }
 </style>
