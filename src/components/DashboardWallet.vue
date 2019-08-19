@@ -9,7 +9,7 @@
     <div class="footer">
       <span class="name">{{currency.name}}</span>
       <transition name="fade">
-        <span v-if="currency.active" class="rate">{{ currency.amount}}</span>
+        <span v-if="active === currency.id" class="rate">{{ currency.amount}}</span>
       </transition>
     </div>
   </div>
@@ -26,6 +26,11 @@ export default {
     changer() {
       this.$emit("to-active");
       this.$store.commit("changeActive", this.currency.id);
+    }
+  },
+  computed: {
+    active() {
+      return this.$store.getters.getActiveWallet;
     }
   }
 };

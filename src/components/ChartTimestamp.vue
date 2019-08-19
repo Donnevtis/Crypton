@@ -5,7 +5,7 @@
       class="chart-timestamp chart-timestamps-1m"
       v-for="timestamp in timestamps"
       :key="timestamp.id"
-      :class="{ 'chart-timestamp_active': timestamp.active === true}"
+      :class="{ 'chart-timestamp_active': timestamp.mnth === active}"
       @click.prevent="onActive(timestamp)"
     >{{timestamp.t}}</a>
   </div>
@@ -18,11 +18,14 @@ export default {
   computed: {
     timestamps() {
       return this.$store.getters.getStamps;
+    },
+    active() {
+      return this.$store.getters.getActiveStamp;
     }
   },
   methods: {
     onActive(timestamp) {
-      this.$store.commit("onActive", timestamp.id);
+      this.$store.commit("onActive", timestamp.mnth);
     }
   }
 };
@@ -40,7 +43,7 @@ export default {
   height: 1.6vw;
   font-size: 0.85vw;
   font-weight: 500;
-  line-height: 2.4vh;
+  line-height: 2.7vh;
   color: var(--color-text-light);
   cursor: pointer;
   text-align: center;

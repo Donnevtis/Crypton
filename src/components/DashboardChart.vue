@@ -22,7 +22,8 @@ export default {
   },
   computed: {
     wallet() {
-      return this.$store.getters.allWallets.find(item => item.active === true);
+      const active = this.$store.getters.getActiveWallet;
+      return this.$store.getters.allWallets.find(item => item.id === active);
     }
   }
 };

@@ -15,27 +15,67 @@
       <line x1="45" y1="163" x2="600" y2="163" />
     </g>
     <g stroke="var(--charcoal-grey)">
-      <line x1="82" y1="163" x2="82" y2="167" />
-      <line x1="182" y1="163" x2="182" y2="167" />
-      <line x1="282" y1="163" x2="282" y2="167" />
-      <line x1="382" y1="163" x2="382" y2="167" />
-      <line x1="482" y1="163" x2="482" y2="167" />
-      <line x1="582" y1="163" x2="582" y2="167" />
+      <line x1="72" y1="163" x2="72" y2="167" />
+      <line x1="172" y1="163" x2="172" y2="167" />
+      <line x1="272" y1="163" x2="272" y2="167" />
+      <line x1="372" y1="163" x2="372" y2="167" />
+      <line x1="472" y1="163" x2="472" y2="167" />
+      <line x1="572" y1="163" x2="572" y2="167" />
     </g>
     <g class="chart-timeframes" fill="var(--color-text-light)">
-      <text class="chart-timeframes" x="70" y="200">23 oct</text>
-      <text x="170" y="200">23 oct</text>
-      <text x="270" y="200">23 oct</text>
-      <text x="370" y="200">23 oct</text>
-      <text x="470" y="200">23 oct</text>
-      <text x="570" y="200">23 oct</text>
+      <text x="60" y="200">{{ date[0] }}</text>
+      <text x="160" y="200">{{ date[1] }}</text>
+      <text x="260" y="200">{{ date[2] }}</text>
+      <text x="360" y="200">{{ date[3] }}</text>
+      <text x="460" y="200">{{ date[4] }}</text>
+      <text x="560" y="200">{{ date[5] }}</text>
     </g>
   </svg>
 </template>
 
 <script>
 export default {
-  name: "ChartGraph"
+  name: "ChartGraph",
+  computed: {
+    date() {
+      const range = this.$store.getters.getActiveStamp;
+      const now = new Date();
+      let date = new Date();
+      let dates = [];
+
+      if (range) {
+        date.setMonth(now.getMonth() - range);
+        const point = (now - date) / 5;
+
+        for (let i = 0; i < 6; i++) {
+          dates.push(
+            new Date(date).toLocaleString("en", {
+              hour12: false,
+              day: "numeric",
+              month: "short"
+            })
+          );
+          date = +date + point;
+        }
+      } else {
+        date.setMinutes(now.getMinutes() - 10);
+        const point = (now - date) / 5;
+
+        for (let i = 0; i < 6; i++) {
+          dates.push(
+            new Date(date).toLocaleString("en", {
+              hour12: false,
+              hour: "numeric",
+              minute: "numeric"
+            })
+          );
+          date = +date + point;
+        }
+      }
+
+      return dates;
+    }
+  }
 };
 </script>
 

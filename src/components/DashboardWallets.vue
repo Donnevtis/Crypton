@@ -4,7 +4,7 @@
       v-for="wallet in wallets"
       :key="wallet.id"
       :currency="wallet"
-      :class="{active: true === wallet.active}"     
+      :class="{active: active === wallet.id}"
     />
     <a href="#">Add wallet</a>
   </div>
@@ -21,6 +21,9 @@ export default {
   computed: {
     wallets() {
       return this.$store.getters.getFewWallets(4);
+    },
+    active() {
+      return this.$store.getters.getActiveWallet;
     }
   }
 };
