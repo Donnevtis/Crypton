@@ -23,12 +23,7 @@
       <line x1="572" y1="163" x2="572" y2="167" />
     </g>
     <g class="chart-timeframes" fill="var(--color-text-light)">
-      <text x="60" y="200">{{ date[0] }}</text>
-      <text x="160" y="200">{{ date[1] }}</text>
-      <text x="260" y="200">{{ date[2] }}</text>
-      <text x="360" y="200">{{ date[3] }}</text>
-      <text x="460" y="200">{{ date[4] }}</text>
-      <text x="560" y="200">{{ date[5] }}</text>
+      <text v-for="time in timers" :key="time.time" :x='time.x' y="200">{{ time.time }}</text>
     </g>
   </svg>
 </template>
@@ -36,44 +31,86 @@
 <script>
 export default {
   name: "ChartGraph",
-  computed: {
-    date() {
-      const range = this.$store.getters.getActiveStamp;
-      const now = new Date();
-      let date = new Date();
-      let dates = [];
+  data(){
+    return {
+        x: 60,
+        times: 0,
+    }
+  },
+    created(){
 
-      if (range) {
-        date.setMonth(now.getMonth() - range);
-        const point = (now - date) / 5;
+        class Timers{
+            constructor(x, time, date){
+                this.x = x;
+                this.time = time;
+                this.date = date;
+            }
+            getX(){
+                return this.x
+            }
+            slideX(t){
+                 this.time = 0
+                setInterval(()=>{
+                 console.log(this.time)
+                 this.time += 1
+                }, t)
+
+            }
+            getTime(){
+                return this.time
+            }
+            date(){
+                return this.date
+            }
+            set(x){
+                this.x = x;
+            }
+        };
+
+        let date  = new Date();
+        let dates = [];
+
+        date.setMinutes(new Date().getMinutes() - 10);
+        const point = (new Date() - date) / 5;
+
 
         for (let i = 0; i < 6; i++) {
-          dates.push(
-            new Date(date).toLocaleString("en", {
-              hour12: false,
-              day: "numeric",
-              month: "short"
-            })
-          );
-          date = +date + point;
-        }
-      } else {
-        date.setMinutes(now.getMinutes() - 10);
-        const point = (now - date) / 5;
+        const time = new Date(date).toLocaleString("en", {
+                        hour12: false,
+                        hour: "numeric",
+                        minute: "numeric"
+                        })
+          let timers = new Timers(this.x, time);
+        timers.slideX(1000)
 
-        for (let i = 0; i < 6; i++) {
-          dates.push(
-            new Date(date).toLocaleString("en", {
+            dates.push(timers);
+            date = +date + point;
+            this.x  += 100;
+            }
+
+            console.log(dates)
+        this.timers = dates;
+       // this.pushStamp(dates)
+        },
+
+
+  methods:{
+
+
+     pushStamp(dates){
+
+    setInterval(()=>{
+    let day = new Date(Date.now()).toLocaleString("en", {
               hour12: false,
-              hour: "numeric",
+             hour: "numeric",
               minute: "numeric"
-            })
-          );
-          date = +date + point;
-        }
-      }
+            });
+        if ( dates[5].time !== day){
 
-      return dates;
+            dates[5].time = day
+        }
+    },2000)
+
     }
   }
 };
