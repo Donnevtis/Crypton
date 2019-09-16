@@ -40,7 +40,7 @@ export default {
         activeStamp(){return this.$store.getters.getActiveStamp},
         timers: function(){
             this.dates = [];
-            const marksHandler = new MarksHandler(this.activeStamp,this.x , 6);
+            const marksHandler = new MarksHandler(this.activeStamp, this.x, 6);
             this.dates = marksHandler.lines;
             return this.dates
         }
