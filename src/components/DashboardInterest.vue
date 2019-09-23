@@ -24,10 +24,10 @@ export default {
         cy: 30
       };
       const coords = [];
-      const limit = Math.round(this.wallet.fullness * 3.6);
-      for (let fi = 0; fi < limit; fi++) {
-        if (fi % 2 == 0) continue;
-        const rad = fi / (180 / Math.PI);
+      const limit = Math.round(this.wallet.fullness * 3.6); // degree of percents (10 percent * 3.6 = 36 degree)
+      for (let φ = 0; φ < limit; φ++) { // φ is degree
+        if (φ % 2 == 0) continue;
+        const rad = φ * Math.PI / 180;
         const x = (ringVal.r * Math.sin(rad) + 16).toFixed(5);
         const y = (ringVal.r * Math.cos(rad) + 16).toFixed(5);
         coords.push(`L ${x} ${y}`);

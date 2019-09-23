@@ -1,16 +1,16 @@
 <template>
-  <div>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 210">
-      <svg class="chart-field">
-        <g class="chart-worth" fill="var(--color-text-light)">
-          <text x="2" y="12">20k</text>
-          <text x="2" y="50">15k</text>
-          <text x="2" y="88">10k</text>
-          <text x="2" y="127">5k</text>
-          <text x="2" y="166">0k</text>
-        </g>
-      </svg>
-      <svg class="chart-graph" viewBox="-30 0 600 210">
+  <div class="chart-container">
+    <svg class="chart-field" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 210">
+      <g class="chart-worth" fill="var(--color-text-light)">
+        <text x="2" y="12">20k</text>
+        <text x="2" y="50">15k</text>
+        <text x="2" y="88">10k</text>
+        <text x="2" y="127">5k</text>
+        <text x="2" y="166">0k</text>
+      </g>
+    </svg>
+    <svg class="chart-graph" xmlns="http://www.w3.org/2000/svg" viewBox="-30 0 600 210">
+      <svg>
         <g stroke="var(--charcoal-grey)" stroke-width=".5" style="shape-rendering: crispEdges">
           <line x1="0" y1="10" x2="570" y2="10" />
           <line x1="0" y1="48.25" x2="570" y2="48.25" />
@@ -120,18 +120,15 @@ class Mark {
 </script>
 
 <style scoped>
+.chart-container {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+.chart-graph,
 .chart-field {
   position: absolute;
   height: 100%;
-  top: 0;
-  right: 0;
-  width: 100%;
-}
-.chart-graph {
-  display: block;
-  position: absolute;
-  height: 100%;
-  top: 0;
   width: 100%;
 }
 .chart-worth,
