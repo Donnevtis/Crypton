@@ -45,14 +45,18 @@ export default {
       dates: []
     };
   },
+  created: function(){
+
+        setTimeout(()=>{this.dates.pop(); console.log(this.dates)}, 3000)
+
+  },
   computed: {
     activeStamp() {
       return this.$store.getters.getActiveStamp;
     },
     timers: function() {
-      this.dates = [];
-      const marksHandler = new MarksHandler(this.activeStamp, this.x, 6); // handler(active time range, mark x-position, count marks)
-      this.dates = marksHandler.lines;
+    //   this.dates = [];
+      this.dates = new MarksHandler(this.activeStamp, this.x, 6).lines; // handler(active time range, mark x-position, count marks)
       return this.dates;
     }
   }
