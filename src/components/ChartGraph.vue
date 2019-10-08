@@ -17,26 +17,34 @@
           <line x1="0" y1="86.5" x2="570" y2="86.5" />
           <line x1="0" y1="124.75" x2="570" y2="124.75" />
           <line x1="0" y1="163" x2="570" y2="163" />
+          <line x1="542" y1="10" x2="542" y2="163" />
         </g>
         <g stroke="var(--charcoal-grey)">
           <line
-            v-for="time in timers"
-            :key="time.time"
+            v-for="time in dates"
+            :key="time.i"
             :x1="time.x + 12"
             y1="163"
             :x2="time.x + 12"
             y2="167"
           />
         </g>
-        <g class="chart-timeframes" fill="var(--color-text-light)">
-          <text v-for="time in timers" :key="time.time" :x="time.x" y="200">{{ time.t }}</text>
-        </g>
+
+        <transition-group
+          tag="g"
+          name="list"
+          class="chart-timeframes"
+          fill="var(--color-text-light)"
+        >
+          <text v-for="time in dates" :key="time.i" :x="time.x" y="200">{{ time.t }}</text>
+        </transition-group>
       </svg>
     </svg>
   </div>
 </template>
 
 <script>
+import { watch } from "fs";
 export default {
   name: "ChartGraph",
   data() {
@@ -45,19 +53,17 @@ export default {
       dates: []
     };
   },
-  created: function(){
-
-        setTimeout(()=>{this.dates.pop(); console.log(this.dates)}, 3000)
-
+  created() {
+    this.dates = new MarksHandler(this.activeStamp, this.x, 6).lines; // handler(active time range, mark x-position, count marks)
   },
   computed: {
     activeStamp() {
       return this.$store.getters.getActiveStamp;
-    },
-    timers: function() {
-    //   this.dates = [];
-      this.dates = new MarksHandler(this.activeStamp, this.x, 6).lines; // handler(active time range, mark x-position, count marks)
-      return this.dates;
+    }
+  },
+  watch: {
+    activeStamp(stamp) {
+      this.dates = new MarksHandler(stamp, this.x, 6).lines;
     }
   }
 };
@@ -74,13 +80,22 @@ class MarksHandler {
   }
   fillLines() {
     const block = [];
-    for (let i = 0; i < this.count; i++) {
-      let mark = new Mark(this.x, this.t, this.range);
+    let i = 0;
+    for (i; i < this.count; i++) {
+      let mark = new Mark(this.x, this.t, this.range, i);
       mark.t = this.output(mark.t);
       block.push(mark);
       this.t = +this.t + this.range;
       this.x += 100;
     }
+
+    setInterval(() => {
+      block.shift();
+      let mark = new Mark(530, new Date(), this.range, i++);
+      mark.t = this.output(mark.t);
+      block.push(mark);
+      console.log(i);
+    }, this.range);
     return block;
   }
   time() {
@@ -108,11 +123,12 @@ class MarksHandler {
   }
 }
 class Mark {
-  constructor(x, t, range) {
+  constructor(x, t, range, i) {
     this.x = x;
     this.t = t;
     this.range = range;
-    this.slideX(range / 250);
+    this.i = i;
+    this.slideX(range / 400);
   }
 
   slideX(t) {
@@ -121,6 +137,9 @@ class Mark {
     }, t);
   }
 }
+// window.onfocus = () => {
+//   console.log("cv");
+// };
 </script>
 
 <style scoped>
@@ -140,5 +159,13 @@ class Mark {
   font-size: 10px;
   font-weight: 500;
   color: var(--color-text-light);
+}
+
+.list-enter-active {
+  transition: all 1s;
+}
+.list-enter {
+  opacity: 0;
+  transform: translateY(30px);
 }
 </style>
