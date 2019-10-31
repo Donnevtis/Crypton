@@ -1,5 +1,5 @@
 <template>
-  <div class="chart-container">
+  <div class="chart-container" @visibilitychange="start">
     <svg class="chart-field" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 210">
       <g class="chart-worth" fill="var(--color-text-light)">
         <text x="2" y="12">20k</text>
@@ -44,7 +44,6 @@
 </template>
 
 <script>
-import { watch } from "fs";
 export default {
   name: "ChartGraph",
   data() {
@@ -65,6 +64,11 @@ export default {
     activeStamp(stamp) {
       this.dates = new MarksHandler(stamp, this.x, 6).lines;
     }
+  },
+  methods: {
+    start() {
+      alert("show");
+    }
   }
 };
 
@@ -80,23 +84,20 @@ class MarksHandler {
   }
   fillLines() {
     const block = [];
-    let i = 0;
-    for (i; i < this.count; i++) {
-      let mark = new Mark(this.x, this.t, this.range, i);
-      mark.t = this.output(mark.t);
+
+    for (let i = 0; i < this.count; i++) {
+      let mark = new Mark(this, i);
       block.push(mark);
       this.t = +this.t + this.range;
       this.x += 100;
     }
-
-    setInterval(() => {
-      block.shift();
-      let mark = new Mark(530, new Date(), this.range, i++);
-      mark.t = this.output(mark.t);
-      block.push(mark);
-      console.log(i);
-    }, this.range);
     return block;
+  }
+  getNewDate(i) {
+    this.t = new Date();
+    this.x = 530;
+    let mark = new Mark(this, i);
+    return mark;
   }
   time() {
     this.t.setMinutes(new Date().getMinutes() - 10);
@@ -123,23 +124,25 @@ class MarksHandler {
   }
 }
 class Mark {
-  constructor(x, t, range, i) {
-    this.x = x;
-    this.t = t;
-    this.range = range;
+  constructor(hand, i) {
+    this.x = hand.x;
+    this.t = hand.output(hand.t);
+    this.range = hand.range;
     this.i = i;
-    this.slideX(range / 400);
+    this.obj = hand;
+    this.slideX(this.range / 400);
   }
 
-  slideX(t) {
+  slideX(r) {
     setInterval(() => {
       this.x -= 0.25;
-    }, t);
+      if (this.x == -70) {
+        this.obj.lines.shift();
+        this.obj.lines.push(this.obj.getNewDate(this.i));
+      }
+    }, r);
   }
 }
-// window.onfocus = () => {
-//   console.log("cv");
-// };
 </script>
 
 <style scoped>
