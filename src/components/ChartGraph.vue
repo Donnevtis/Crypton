@@ -1,5 +1,5 @@
 <template>
-  <div class="chart-container" @visibilitychange="start">
+  <div class="chart-container">
     <svg class="chart-field" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 210">
       <g class="chart-worth" fill="var(--color-text-light)">
         <text x="2" y="12">20k</text>
@@ -53,6 +53,13 @@ export default {
     };
   },
   created() {
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") {
+        this.dates = new MarksHandler(this.activeStamp, this.x, 6).lines; // handler(active time range, mark x-position, count marks)
+      } else {
+        this.dates = [];
+      }
+    });
     this.dates = new MarksHandler(this.activeStamp, this.x, 6).lines; // handler(active time range, mark x-position, count marks)
   },
   computed: {
@@ -63,11 +70,6 @@ export default {
   watch: {
     activeStamp(stamp) {
       this.dates = new MarksHandler(stamp, this.x, 6).lines;
-    }
-  },
-  methods: {
-    start() {
-      alert("show");
     }
   }
 };
@@ -96,7 +98,7 @@ class MarksHandler {
   getNewDate(i) {
     this.t = new Date();
     this.x = 530;
-    let mark = new Mark(this, i);
+    let mark = new Mark(this, i - 1);
     return mark;
   }
   time() {
@@ -134,11 +136,14 @@ class Mark {
   }
 
   slideX(r) {
-    setInterval(() => {
+    this.timer = setInterval(() => {
       this.x -= 0.25;
+      // console.log(this.i);
+
       if (this.x == -70) {
         this.obj.lines.shift();
         this.obj.lines.push(this.obj.getNewDate(this.i));
+        clearInterval(this.timer);
       }
     }, r);
   }
