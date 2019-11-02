@@ -21,7 +21,7 @@
         </g>
         <g stroke="var(--charcoal-grey)">
           <line
-            v-for="time in dates"
+            v-for="time in lines"
             :key="time.i"
             :x1="time.x + 12"
             y1="163"
@@ -36,12 +36,13 @@
           class="chart-timeframes"
           fill="var(--color-text-light)"
         >
-          <text v-for="time in dates" :key="time.i" :x="time.x" y="200">{{ time.t }}</text>
+          <text v-for="time in lines" :key="time.i" :x="time.x" y="200">{{ time.t }}</text>
         </transition-group>
       </svg>
     </svg>
   </div>
 </template>
+
 
 <script>
 export default {
@@ -49,18 +50,48 @@ export default {
   data() {
     return {
       x: 30,
-      dates: []
+      lines: []
     };
   },
   created() {
-    document.addEventListener("visibilitychange", () => {
-      if (document.visibilityState === "visible") {
-        this.dates = new MarksHandler(this.activeStamp, this.x, 6).lines; // handler(active time range, mark x-position, count marks)
-      } else {
-        this.dates = [];
-      }
-    });
-    this.dates = new MarksHandler(this.activeStamp, this.x, 6).lines; // handler(active time range, mark x-position, count marks)
+    // document.addEventListener("visibilitychange", () => {
+    //   if (document.visibilityState === "visible") {
+    //     this.dates = new MarksHandler(this.activeStamp, this.x, 6).lines; // handler(active time range, mark x-position, count marks)
+    //   } else {
+    //     this.dates = [];
+    //   }
+    // });
+
+    this.dates = new MarksHandler(this.activeStamp, this.x, 6); // handler(active time range, mark x-position, count marks)
+    this.lines = this.dates.lines; // array with objects of the timers
+
+    const work = `onmessage=()=>{let a=0;requestAnimationFrame(function b(c){let d=c-a;a=c,postMessage(d),requestAnimationFrame(b)})}`;
+    // onmessage = e => {
+    //     let start = 0;
+    //     requestAnimationFrame(function animate(time) {
+    //     let progress = time - start;
+    //     start = time;
+    //     postMessage(progress);
+    //     requestAnimationFrame(animate);
+    // })
+    // };;
+    const blob = new Blob([work], { type: "application/javascript" });
+    const url = URL.createObjectURL(blob);
+    const worker = new Worker(url);
+    worker.onmessage = e => {
+      this.lines.forEach((line, i, lines) => {
+        let x = line.x;
+        x -= +(1 / (1200 / e.data)); //formula for the offset of the pixels
+        line.x = +x.toFixed(3);
+        if (x <= -70) {
+          //delete and create the timers
+          lines.shift();
+          lines.push(this.dates.getNewDate(line.i));
+        }
+      });
+    };
+    worker.postMessage("");
+    URL.revokeObjectURL(url);
   },
   computed: {
     activeStamp() {
@@ -86,7 +117,6 @@ class MarksHandler {
   }
   fillLines() {
     const block = [];
-
     for (let i = 0; i < this.count; i++) {
       let mark = new Mark(this, i);
       block.push(mark);
@@ -132,43 +162,10 @@ class Mark {
     this.range = hand.range;
     this.i = i;
     this.obj = hand;
-    this.slideX(this.range / 400);
   }
-
-  slideX(r) {
-    this.timer = setInterval(() => {
-      this.x -= 0.25;
-      if (this.x == -70) {
-        this.obj.lines.shift();
-        this.obj.lines.push(this.obj.getNewDate(this.i));
-        clearInterval(this.timer);
-      }
-    }, r);
-  }
-
-  // slideX() {                                                   // requestAnimationFrame model
-  //   animate({
-  //     draw: x => {
-  //       this.x -= 1 / (1200 / x).toFixed(2);
-  //     }
-  //   });
-  // }
 }
-
-// function animate({ draw }) {
-//   let start = null;
-//   // let draw = dr;
-//   return requestAnimationFrame(function animate(time) {
-//     let progress = time - start;
-//     start = time || start;
-
-//     draw(progress); // отрисовать её
-//     if (progress < 20000) {
-//       requestAnimationFrame(animate);
-//     }
-//   });
-// }
 </script>
+
 
 <style scoped>
 .chart-container {
