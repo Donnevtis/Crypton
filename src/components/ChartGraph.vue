@@ -61,37 +61,9 @@ export default {
     //     this.dates = [];
     //   }
     // });
-
     this.dates = new MarksHandler(this.activeStamp, this.x, 6); // handler(active time range, mark x-position, count marks)
     this.lines = this.dates.lines; // array with objects of the timers
-
-    const work = `onmessage=()=>{let a=0;requestAnimationFrame(function b(c){let d=c-a;a=c,postMessage(d),requestAnimationFrame(b)})}`;
-    // onmessage = e => {
-    //     let start = 0;
-    //     requestAnimationFrame(function animate(time) {
-    //     let progress = time - start;
-    //     start = time;
-    //     postMessage(progress);
-    //     requestAnimationFrame(animate);
-    // })
-    // };;
-    const blob = new Blob([work], { type: "application/javascript" });
-    const url = URL.createObjectURL(blob);
-    const worker = new Worker(url);
-    worker.onmessage = e => {
-      this.lines.forEach((line, i, lines) => {
-        let x = line.x;
-        x -= +(1 / (1200 / e.data)); //formula for the offset of the pixels
-        line.x = +x.toFixed(3);
-        if (x <= -70) {
-          //delete and create the timers
-          lines.shift();
-          lines.push(this.dates.getNewDate(line.i));
-        }
-      });
-    };
-    worker.postMessage("");
-    URL.revokeObjectURL(url);
+    this.moveWorker();
   },
   computed: {
     activeStamp() {
@@ -100,7 +72,43 @@ export default {
   },
   watch: {
     activeStamp(stamp) {
-      this.dates = new MarksHandler(stamp, this.x, 6).lines;
+      if (this.worker) {
+        stamp ? this.worker.terminate() || null : this.moveWorker();
+      }
+      this.dates = new MarksHandler(stamp, this.x, 6);
+      this.lines = this.dates.lines;
+    }
+  },
+  methods: {
+    moveWorker() {
+      const work = "onmessage=e=>(eval(`(${(e.data)})()`))";
+      const blob = new Blob([work], { type: "application/javascript" });
+      const url = URL.createObjectURL(blob);
+      this.worker = new Worker(url);
+      this.worker.onmessage = e => {
+        this.lines.forEach((line, i, lines) => {
+          let x = line.x;
+          x -= +(1 / (1200 / e.data)); //formula for the offset of the pixels
+          line.x = +x.toFixed(3);
+          if (x <= -70) {
+            //delete and create the timers
+            lines.shift();
+            lines.push(this.dates.getNewDate(line.i));
+          }
+        });
+      };
+      let obj = () => {
+        let start = 0;
+        requestAnimationFrame(function animate(time) {
+          let progress = time - start;
+          start = time;
+          postMessage(progress);
+          requestAnimationFrame(animate);
+        });
+      };
+
+      this.worker.postMessage(obj.toString());
+      URL.revokeObjectURL(url);
     }
   }
 };
