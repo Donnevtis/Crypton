@@ -138,8 +138,6 @@ class Mark {
   slideX(r) {
     this.timer = setInterval(() => {
       this.x -= 0.25;
-      // console.log(this.i);
-
       if (this.x == -70) {
         this.obj.lines.shift();
         this.obj.lines.push(this.obj.getNewDate(this.i));
@@ -147,7 +145,29 @@ class Mark {
       }
     }, r);
   }
+
+  // slideX() {                                                   // requestAnimationFrame model
+  //   animate({
+  //     draw: x => {
+  //       this.x -= 1 / (1200 / x).toFixed(2);
+  //     }
+  //   });
+  // }
 }
+
+// function animate({ draw }) {
+//   let start = null;
+//   // let draw = dr;
+//   return requestAnimationFrame(function animate(time) {
+//     let progress = time - start;
+//     start = time || start;
+
+//     draw(progress); // отрисовать её
+//     if (progress < 20000) {
+//       requestAnimationFrame(animate);
+//     }
+//   });
+// }
 </script>
 
 <style scoped>
