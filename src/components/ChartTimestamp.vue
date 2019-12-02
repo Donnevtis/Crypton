@@ -26,6 +26,7 @@ export default {
   methods: {
     onActive(timestamp) {
       this.$store.commit("onActive", timestamp.mnth);
+      this.$store.commit("computedRates", this.$store.getters);
     }
   }
 };

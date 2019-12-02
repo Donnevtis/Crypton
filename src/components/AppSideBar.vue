@@ -36,7 +36,7 @@ left: 0%;
 top: 0%;
 bottom: 0%;
 width: 90px;
-background-color: var(--color-middle);
+background-color: var(--color-middle, grey);
 border-radius: 0;
 }
 .sidebar__logo {

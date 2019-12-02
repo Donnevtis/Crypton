@@ -16,6 +16,9 @@ export default {
     SideBar,
     Header,
     Dashboard
+  },
+  created() {
+    this.$store.dispatch("fetchRates", 1);
   }
 };
 </script>

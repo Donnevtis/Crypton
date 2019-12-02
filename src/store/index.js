@@ -7,8 +7,8 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
     modules: {
+        timestamps, //don't change order
         wallets,
-        timestamps
     }
 })
 export default store;

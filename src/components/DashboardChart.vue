@@ -22,8 +22,7 @@ export default {
   },
   computed: {
     wallet() {
-      const active = this.$store.getters.getActiveWallet;
-      return this.$store.getters.allWallets.find(item => item.id === active);
+      return this.$store.getters.getActiveWallet;
     }
   }
 };
