@@ -1,28 +1,28 @@
 const state = {
         timestamps: [
-            { id: 0, t: "1m", mnth: 1, dateRange: null, startTime: null },
-            { id: 1, t: "3m", mnth: 3, dateRange: null, startTime: null },
-            { id: 2, t: "6m", mnth: 6, dateRange: null, startTime: null },
-            { id: 3, t: "1y", mnth: 12, dateRange: null, startTime: null },
-            { id: 4, t: "Now", mnth: 0, dateRange: 0, startTime: 0 },
-        ],
-        activeStamp: 0
+            { id: 0, active: false, t: "1m", mnth: 1 },
+            { id: 1, active: false, t: "3m", mnth: 3 },
+            { id: 2, active: false, t: "6m", mnth: 6 },
+            { id: 3, active: false, t: "1y", mnth: 12 },
+            { id: 4, active: true, t: "Now", mnth: 0 },
+        ]
+
     },
     getters = {
         getStamps: state => state.timestamps,
-        getActiveStamp: state => state.activeStamp,
-        getActiveTimeStamp: state => state.timestamps.find((stamp) => stamp.mnth == state.activeStamp),
+        getActiveStamp: state => state.timestamps.find(stamp => stamp.active),
+        getStartTime(state, getters) {
+            return new Date().setMonth(new Date().getUTCMonth() - getters.getActiveStamp.mnth)
+        },
         getDateRange(state, getters) {
-            const startTime = new Date().setMonth(new Date().getUTCMonth() - state.activeStamp)
-            getters.getActiveTimeStamp.startTime = startTime
-            return getters.getActiveTimeStamp.dateRange = Date.now() - startTime
+            return getters.getActiveStamp.dateRange = Date.now() - getters.getStartTime;
         }
 
     },
     actions = {},
     mutations = {
-        onActive(state, mnth) {
-            state.activeStamp = mnth;
+        setActiveStamp(state, id) {
+            state.timestamps.forEach(stamp => stamp.active = stamp.id === id ? true : false);
         },
 
     };

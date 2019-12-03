@@ -16,12 +16,13 @@
         line(v-for='time in lines' :key='time.i' :x1='time.x + 12' y1='163' :x2='time.x + 12' y2='167')
       transition-group.chart-timeframes(tag='g' name='list' fill='var(--color-text-light)')
         text(v-for='time in lines' :key='time.i' :x='time.x' y='200') {{ time.t }}
-  chartCurve(:timeRange="timeRange")
+  chartCurve(:assets="assets")
 </template>
 
 
 <script>
 import chartCurve from "./ChartCurve";
+import { mapGetters } from "vuex";
 export default {
   name: "ChartGraph",
   components: {
@@ -31,49 +32,52 @@ export default {
     return {
       x: 30,
       lines: [],
-      priceLines: []
+      priceLines: [],
+      assets: {}
     };
   },
   created() {
     // handler(active month range, time range mark x-position, count marks)
-    this.dates = new MarksHandler(this.activeStamp, this.timeRange, this.x, 6);
+    this.dates = new MarksHandler(this.getActiveStamp.mnth, this.x, 6);
     this.lines = this.dates.lines; // array with objects of the timers
     this.moveWorker();
   },
   computed: {
-    activeStamp() {
-      return this.$store.getters.getActiveStamp;
-    },
-
-    timeRange() {
-      return this.$store.getters.getDateRange;
-    },
-    limits() {
-      return this.$store.getters.getWorthLimits;
-    }
+    ...mapGetters([
+      "getActiveStamp",
+      "getDateRange",
+      "getWorthLimits",
+      "getStartTime",
+      "getRates"
+    ])
   },
 
   watch: {
-    limits(limits) {
+    assets({ limits }) {
       let max = limits.max;
-      const step = (max - limits.min) / 5;
+      const step = (max - limits.min) / 4;
       const prices = [];
       let y = 12;
       for (let i = 0; i < 5; i++) {
         let price =
           max >= 1000 ? (max / 1000).toFixed(1) + "k" : max.toFixed() + "$";
         prices.push({ price, y });
-        y += 39;
+        y += 38.5;
         max -= step;
       }
       this.priceLines = prices;
     },
-    activeStamp(stamp) {
+    getRates(rates) {
+      if (rates.length <= 0) return;
+      this.assets = this.graphAssets(rates);
+    },
+    getActiveStamp(stamp) {
       if (this.worker) {
-        stamp ? this.worker.terminate() || null : this.moveWorker();
+        stamp.mnth ? this.worker.terminate() || null : this.moveWorker();
       }
-      this.dates = new MarksHandler(stamp, this.timeRange, this.x, 6);
+      this.dates = new MarksHandler(stamp.mnth, this.x, 6);
       this.lines = this.dates.lines;
+      this.assets = this.graphAssets(this.getRates);
     }
   },
   methods: {
@@ -108,17 +112,42 @@ export default {
 
       this.worker.postMessage(obj.toString());
       URL.revokeObjectURL(url);
+    },
+    setRates(rates) {
+      let i = rates.length - 1;
+      while (rates[i].time > this.getStartTime) {
+        --i;
+      }
+      return rates.slice(i, rates.length);
+    },
+    setLimits(rates) {
+      const min = this.setRates(rates).reduce(
+        (prev, item) => Math.min(prev, item.priceUsd),
+        9e12
+      );
+      const max = this.setRates(rates).reduce(
+        (prev, item) => Math.max(prev, item.priceUsd),
+        0
+      );
+      return { min, max };
+    },
+    graphAssets(rates) {
+      return {
+        range: this.getDateRange,
+        rates: this.setRates(rates),
+        limits: this.setLimits(rates)
+      };
     }
   }
 };
 
 class MarksHandler {
-  constructor(months, timeRange, x, count) {
+  constructor(months, x, count) {
     this.months = months;
     this.x = x;
     this.count = count;
     this.t = new Date();
-    this.range = months ? timeRange / 5 : this.time();
+    this.range = months ? this.date() : this.time();
     this.output = months ? this.dateOut() : this.timeOut();
     this.lines = this.fillLines();
   }
@@ -142,10 +171,15 @@ class MarksHandler {
     this.t.setMinutes(new Date().getMinutes() - 10);
     return (new Date() - this.t) / 5;
   }
-  // date() {
-  //   this.t.setMonth(new Date().getMonth() - this.months);
-  //   return (new Date() - this.t) / 5;
-  // }
+  date() {
+    this.t.setMonth(new Date().getMonth() - this.months);
+    /*eslint-disable*/
+    let range = Date.now() - this.t;
+    range = range - 42 * (range / 542);
+    console.log(42 * (range / 542), this.t.getTime());
+    this.t = this.t.getTime() + 42 * (range / 542);
+    return range / 5;
+  }
   timeOut() {
     return mSec =>
       new Date(mSec).toLocaleString("en", {
@@ -158,7 +192,8 @@ class MarksHandler {
     return mSec =>
       new Date(mSec).toLocaleString("en", {
         day: "numeric",
-        month: "short"
+        month: "short",
+        year: "numeric"
       });
   }
 }

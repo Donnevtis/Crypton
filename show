@@ -1,0 +1,98 @@
+[33mcommit 520f628e3e950f982566e3ed9b35d1d41d0f393a[m
+Author: Donald Nevtis <nevtees@gmail.com>
+Date:   Sun Nov 3 00:44:59 2019 +0300
+
+    worker updated(is method) and months dont move
+
+[1mdiff --git a/src/assets/worker.js b/src/assets/worker.js[m
+[1mdeleted file mode 100644[m
+[1mindex 002bb55..0000000[m
+[1m--- a/src/assets/worker.js[m
+[1m+++ /dev/null[m
+[36m@@ -1,13 +0,0 @@[m
+[31m-console.log(231);[m
+[31m-onmessage = e => {[m
+[31m-    let start = 0;[m
+[31m-[m
+[31m-    requestAnimationFrame(function animate(time) {[m
+[31m-        let progress = time - start;[m
+[31m-        start = time;[m
+[31m-        postMessage(progress)[m
+[31m-[m
+[31m-        requestAnimationFrame(animate);[m
+[31m-    })[m
+[31m-[m
+[31m-};[m
+\ No newline at end of file[m
+[1mdiff --git a/src/components/ChartGraph.vue b/src/components/ChartGraph.vue[m
+[1mindex d882e9f..7542c23 100644[m
+[1m--- a/src/components/ChartGraph.vue[m
+[1m+++ b/src/components/ChartGraph.vue[m
+[36m@@ -61,37 +61,9 @@[m [mexport default {[m
+     //     this.dates = [];[m
+     //   }[m
+     // });[m
+[31m-[m
+     this.dates = new MarksHandler(this.activeStamp, this.x, 6); // handler(active time range, mark x-position, count marks)[m
+     this.lines = this.dates.lines; // array with objects of the timers[m
+[31m-[m
+[31m-    const work = `onmessage=()=>{let a=0;requestAnimationFrame(function b(c){let d=c-a;a=c,postMessage(d),requestAnimationFrame(b)})}`;[m
+[31m-    // onmessage = e => {[m
+[31m-    //     let start = 0;[m
+[31m-    //     requestAnimationFrame(function animate(time) {[m
+[31m-    //     let progress = time - start;[m
+[31m-    //     start = time;[m
+[31m-    //     postMessage(progress);[m
+[31m-    //     requestAnimationFrame(animate);[m
+[31m-    // })[m
+[31m-    // };;[m
+[31m-    const blob = new Blob([work], { type: "application/javascript" });[m
+[31m-    const url = URL.createObjectURL(blob);[m
+[31m-    const worker = new Worker(url);[m
+[31m-    worker.onmessage = e => {[m
+[31m-      this.lines.forEach((line, i, lines) => {[m
+[31m-        let x = line.x;[m
+[31m-        x -= +(1 / (1200 / e.data)); //formula for the offset of the pixels[m
+[31m-        line.x = +x.toFixed(3);[m
+[31m-        if (x <= -70) {[m
+[31m-          //delete and create the timers[m
+[31m-          lines.shift();[m
+[31m-          lines.push(this.dates.getNewDate(line.i));[m
+[31m-        }[m
+[31m-      });[m
+[31m-    };[m
+[31m-    worker.postMessage("");[m
+[31m-    URL.revokeObjectURL(url);[m
+[32m+[m[32m    this.moveWorker();[m
+   },[m
+   computed: {[m
+     activeStamp() {[m
+[36m@@ -100,7 +72,43 @@[m [mexport default {[m
+   },[m
+   watch: {[m
+     activeStamp(stamp) {[m
+[31m-      this.dates = new MarksHandler(stamp, this.x, 6).lines;[m
+[32m+[m[32m      if (this.worker) {[m
+[32m+[m[32m        stamp ? this.worker.terminate() || null : this.moveWorker();[m
+[32m+[m[32m      }[m
+[32m+[m[32m      this.dates = new MarksHandler(stamp, this.x, 6);[m
+[32m+[m[32m      this.lines = this.dates.lines;[m
+[32m+[m[32m    }[m
+[32m+[m[32m  },[m
+[32m+[m[32m  methods: {[m
+[32m+[m[32m    moveWorker() {[m
+[32m+[m[32m      const work = "onmessage=e=>(eval(`(${(e.data)})()`))";[m
+[32m+[m[32m      const blob = new Blob([work], { type: "application/javascript" });[m
+[32m+[m[32m      const url = URL.createObjectURL(blob);[m
+[32m+[m[32m      this.worker = new Worker(url);[m
+[32m+[m[32m      this.worker.onmessage = e => {[m
+[32m+[m[32m        this.lines.forEach((line, i, lines) => {[m
+[32m+[m[32m          let x = line.x;[m
+[32m+[m[32m          x -= +(1 / (1200 / e.data)); //formula for the offset of the pixels[m
+[32m+[m[32m          line.x = +x.toFixed(3);[m
+[32m+[m[32m          if (x <= -70) {[m
+[32m+[m[32m            //delete and create the timers[m
+[32m+[m[32m            lines.shift();[m
+[32m+[m[32m            lines.push(this.dates.getNewDate(line.i));[m
+[32m+[m[32m          }[m
+[32m+[m[32m        });[m

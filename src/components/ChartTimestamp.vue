@@ -5,8 +5,8 @@
       class="chart-timestamp chart-timestamps-1m"
       v-for="timestamp in timestamps"
       :key="timestamp.id"
-      :class="{ 'chart-timestamp_active': timestamp.mnth === active}"
-      @click.prevent="onActive(timestamp)"
+      :class="{ 'chart-timestamp_active': timestamp.active}"
+      @click.prevent="setActiveStamp(timestamp.id)"
     >{{timestamp.t}}</a>
   </div>
 </template>
@@ -18,15 +18,11 @@ export default {
   computed: {
     timestamps() {
       return this.$store.getters.getStamps;
-    },
-    active() {
-      return this.$store.getters.getActiveStamp;
     }
   },
   methods: {
-    onActive(timestamp) {
-      this.$store.commit("onActive", timestamp.mnth);
-      this.$store.commit("computedRates", this.$store.getters);
+    setActiveStamp(id) {
+      this.$store.commit("setActiveStamp", id);
     }
   }
 };

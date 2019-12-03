@@ -18,7 +18,7 @@ export default {
     Dashboard
   },
   created() {
-    this.$store.dispatch("fetchRates", 1);
+    this.$store.dispatch("fetchRates");
   }
 };
 </script>

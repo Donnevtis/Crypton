@@ -7,8 +7,7 @@ const state = {
                 amount: 0.221746,
                 icon: 'static/currency/BTC.png',
                 fullness: 81,
-                rates: [],
-                limits: {}
+                rates: []
             },
             {
                 id: 2,
@@ -18,8 +17,7 @@ const state = {
                 amount: 0.34746,
                 icon: 'static/currency/ETH.png',
                 fullness: 12,
-                rates: [],
-                limits: {}
+                rates: []
             },
             {
                 id: 3,
@@ -29,8 +27,7 @@ const state = {
                 amount: 0.12,
                 icon: 'static/currency/LTC.png',
                 fullness: 21,
-                rates: [],
-                limits: {}
+                rates: []
             },
             {
                 id: 4,
@@ -40,8 +37,8 @@ const state = {
                 amount: 412,
                 icon: 'static/currency/DASH.png',
                 fullness: 85,
-                rates: [],
-                limits: {}
+                rates: []
+
             },
             {
                 id: 5,
@@ -51,31 +48,29 @@ const state = {
                 amount: 0.0003,
                 icon: "https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@e35e7396237e8b8afee29deca14407bb5e25926d/svg/black/bch.svg",
                 fullness: 3,
-                rates: [],
-                limits: {}
+                rates: []
             }
-        ],
-        rates: []
+        ]
+
     },
     getters = {
         allWallets: state => state.wallets,
         getFewWallets: state => count => state.wallets.slice(0, count),
         getActiveWallet: state => state.wallets.find(item => item.active),
         getRates: (state, getters) => getters.getActiveWallet.rates,
-        getLimits: (state, getters) => getters.getActiveWallet.limits
-
     },
     actions = {
-        /* eslint-disable */
-        fetchRates({ state, commit, getters }) {
-            console.log('store')
-            const wallet = state.wallets.find(wallet => wallet.active)
+        fetchRates({ commit, getters }) {
+            const wallet = getters.getActiveWallet;
+            if (wallet.rates.length > 0) return
+
+
             const link = `https://api.coincap.io/v2/assets/${wallet.name.toLowerCase()}/history?interval=d1`
             fetch(link)
                 .then(res => res.json())
                 .then(res => {
-                    commit('setRates', res.data);
-                    commit('computedRates', getters);
+                    const rates = res.data;
+                    commit('setRates', { rates, wallet });
 
                 })
                 .catch(err => {
@@ -88,25 +83,12 @@ const state = {
     },
     mutations = {
         changeActive(state, id) {
-            state.wallets.map(wallet => wallet.active = wallet.id == id ? true : false)
+            state.wallets.forEach(wallet => wallet.active = wallet.id == id ? true : false)
         },
-        setRates(state, rates) {
-            state.rates = rates
-        },
-        computedRates(state, getters) {
-            //cut rates
-            const startTime = getters.getActiveTimeStamp.startTime;
-            let i = state.rates.length - 1
-            while (state.rates[i].time > startTime) {--i }
-            getters.getActiveWallet.rates = state.rates.slice(i, state.rates.length)
-                //count limits
-            const min = getters.getActiveWallet.rates.reduce((prev, item) => Math.min(prev, item.priceUsd), 9e12)
-            const max = getters.getActiveWallet.rates.reduce((prev, item) => Math.max(prev, item.priceUsd), 0)
-            getters.getActiveWallet.limits = { min, max }
+        setRates(state, { rates, wallet }) {
+            rates.sort((a, b) => a.time - b.time)
+            wallet.rates = rates
         }
-
-
-
     };
 
 
