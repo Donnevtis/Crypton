@@ -1,21 +1,20 @@
 <template lang="pug">
 svg.chart-graph(@mousemove="onmousein" xmlns='http://www.w3.org/2000/svg' viewBox='-30 -10 600 210')
   g.chart-curve( fill='transparent' stroke="var(--color-green)" stroke-width='2')
-    path( :d='d' )
-  line(:x1='x1' y1='0' :x2='x1' y2='153' stroke="var(--color-text-light)" stroke-width='.5'  style='shape-rendering: crispEdges')
+    path( :d='d' ref='path')
   g.chart-helper(fill='var(--color-text-light)')
+    line(:x1='x1' y1='0' :x2='x1' y2='153' stroke="var(--color-text-light)" stroke-width='.5'  style='shape-rendering: crispEdges')
     text(:x='x1-25' y='167') {{helper.date}}
     text(:x='x1-25' y='177') {{helper.price}}
 </template>
 
 <script>
-import { gsap } from "gsap";
 export default {
   name: "charCurve",
   props: { assets: Object },
   data() {
     return {
-      d: "M30 10L100 163",
+      d: "M0 100L600 100",
       x1: 0,
       graph: [],
       helper: {}
@@ -23,10 +22,12 @@ export default {
   },
   watch: {
     assets(asset) {
+      console.log(asset);
+
       this.buildCurve(asset);
     }
   },
-  /* eslint-disable */
+
   methods: {
     onmousein(e) {
       const scaleX = e.path[2].clientWidth / 600;
@@ -42,7 +43,9 @@ export default {
             date: new Date(point.time).toLocaleString("en", {
               day: "numeric",
               month: "short",
-              year: "numeric"
+              year: "numeric",
+              hour: "numeric",
+              timeZoneName: "short"
             }),
             price: "$" + point.price.toFixed(2)
           }
@@ -95,5 +98,10 @@ export default {
   font-size: 10px;
   font-weight: 500;
   color: var(--color-text-light);
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+}
+.chart-graph:hover .chart-helper {
+  opacity: 1;
 }
 </style>

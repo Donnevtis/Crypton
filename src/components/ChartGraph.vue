@@ -77,7 +77,6 @@ export default {
       }
       this.dates = new MarksHandler(stamp.mnth, this.x, 6);
       this.lines = this.dates.lines;
-      this.assets = this.graphAssets(this.getRates);
     }
   },
   methods: {
@@ -115,10 +114,10 @@ export default {
     },
     setRates(rates) {
       let i = rates.length - 1;
-      while (rates[i].time > this.getStartTime) {
+      while (rates[i].time >= this.getStartTime) {
         --i;
       }
-      return rates.slice(i, rates.length);
+      return rates.slice(i);
     },
     setLimits(rates) {
       const min = this.setRates(rates).reduce(
@@ -173,11 +172,10 @@ class MarksHandler {
   }
   date() {
     this.t.setMonth(new Date().getMonth() - this.months);
-    /*eslint-disable*/
     let range = Date.now() - this.t;
-    range = range - 42 * (range / 542);
-    console.log(42 * (range / 542), this.t.getTime());
-    this.t = this.t.getTime() + 42 * (range / 542);
+    const offsetTime = 42 * (range / 542);
+    range = range - offsetTime;
+    this.t = this.t.getTime() + offsetTime;
     return range / 5;
   }
   timeOut() {
@@ -192,8 +190,7 @@ class MarksHandler {
     return mSec =>
       new Date(mSec).toLocaleString("en", {
         day: "numeric",
-        month: "short",
-        year: "numeric"
+        month: "short"
       });
   }
 }

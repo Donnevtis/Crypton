@@ -4,7 +4,7 @@ const state = {
             { id: 1, active: false, t: "3m", mnth: 3 },
             { id: 2, active: false, t: "6m", mnth: 6 },
             { id: 3, active: false, t: "1y", mnth: 12 },
-            { id: 4, active: true, t: "Now", mnth: 0 },
+            { id: 4, active: true, t: "Now", mnth: 0, },
         ]
 
     },
@@ -12,10 +12,13 @@ const state = {
         getStamps: state => state.timestamps,
         getActiveStamp: state => state.timestamps.find(stamp => stamp.active),
         getStartTime(state, getters) {
-            return new Date().setMonth(new Date().getUTCMonth() - getters.getActiveStamp.mnth)
+            if (getters.getActiveStamp.mnth) {
+                return new Date().setMonth(new Date().getMonth() - getters.getActiveStamp.mnth)
+            }
+            return Date.now() - 6e5;
         },
         getDateRange(state, getters) {
-            return getters.getActiveStamp.dateRange = Date.now() - getters.getStartTime;
+            return Date.now() - getters.getStartTime;
         }
 
     },
