@@ -22,8 +22,6 @@ export default {
   },
   watch: {
     assets(asset) {
-      console.log(asset);
-
       this.buildCurve(asset);
     }
   },
@@ -45,7 +43,7 @@ export default {
               month: "short",
               year: "numeric",
               hour: "numeric",
-              timeZoneName: "short"
+              minute: "numeric"
             }),
             price: "$" + point.price.toFixed(2)
           }

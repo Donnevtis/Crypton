@@ -25,7 +25,6 @@ export default {
   methods: {
     changer() {
       this.$store.commit("changeActive", this.currency.id);
-      this.$store.dispatch("fetchRates");
     }
   }
 };

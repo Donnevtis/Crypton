@@ -23,7 +23,6 @@ export default {
   methods: {
     setActiveStamp(id) {
       this.$store.commit("setActiveStamp", id);
-      this.$store.dispatch("fetchRates");
     }
   }
 };

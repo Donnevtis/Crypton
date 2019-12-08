@@ -41,14 +41,15 @@ export default {
     this.dates = new MarksHandler(this.getActiveStamp.mnth, this.x, 6);
     this.lines = this.dates.lines; // array with objects of the timers
     this.moveWorker();
+    this.graphAssets();
   },
   computed: {
     ...mapGetters([
       "getActiveStamp",
       "getDateRange",
-      "getWorthLimits",
       "getStartTime",
-      "getRates"
+      "getActiveWallet",
+      "rates"
     ])
   },
 
@@ -67,9 +68,8 @@ export default {
       }
       this.priceLines = prices;
     },
-    getRates(rates) {
-      if (rates.length <= 0) return;
-      this.assets = this.graphAssets(rates);
+    getActiveWallet() {
+      this.graphAssets();
     },
     getActiveStamp(stamp) {
       if (this.worker) {
@@ -77,6 +77,7 @@ export default {
       }
       this.dates = new MarksHandler(stamp.mnth, this.x, 6);
       this.lines = this.dates.lines;
+      this.graphAssets();
     }
   },
   methods: {
@@ -130,11 +131,13 @@ export default {
       );
       return { min, max };
     },
-    graphAssets(rates) {
-      return {
+    async graphAssets() {
+      await this.$store.dispatch("fetchRates");
+      console.log(this.rates);
+      this.assets = {
         range: this.getDateRange,
-        rates: this.setRates(rates),
-        limits: this.setLimits(rates)
+        rates: this.setRates(this.rates.rates),
+        limits: this.setLimits(this.rates.rates)
       };
     }
   }
