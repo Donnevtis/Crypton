@@ -1,56 +1,37 @@
 <template lang="pug">
-svg.chart-graph(@mousemove="onmousein" xmlns='http://www.w3.org/2000/svg' viewBox='-30 -10 600 210')
+svg.chart-graph(xmlns='http://www.w3.org/2000/svg' viewBox='-30 -10 600 210' ) 
   g.chart-curve( fill='transparent' stroke="var(--color-green)" stroke-width='2')
-    path( :d='d' ref='path')
-  g.chart-helper(fill='var(--color-text-light)')
-    line(:x1='x1' y1='0' :x2='x1' y2='153' stroke="var(--color-text-light)" stroke-width='.5'  style='shape-rendering: crispEdges')
-    text(:x='x1-25' y='167') {{helper.date}}
-    text(:x='x1-25' y='177') {{helper.price}}
+    path( :d='d' ref='path') 
 </template>
 
 <script>
 export default {
   name: "charCurve",
-  props: { assets: Object },
+  props: { coin: String },
   data() {
     return {
-      d: "M0 100L600 100",
-      x1: 0,
-      graph: [],
-      helper: {}
+      d: "",
+      x1: 0
     };
   },
-  watch: {
-    assets(asset) {
-      this.buildCurve(asset);
+  computed: {
+    limits() {
+      return this.$store.state.history.coins[this.coin].limits;
+    },
+    cutPrices() {
+      return this.$store.state.history.coins[this.coin].cutPrices;
     }
   },
-
+  watch: {
+    cutPrices() {
+      this.buildCurve();
+    }
+  },
   methods: {
-    onmousein(e) {
-      const scaleX = e.path[2].clientWidth / 600;
-      const scaleY = e.path[3].clientHeight / 210;
-      const x = e.layerX / scaleX;
-      const y = e.layerY;
-      this.x1 = Math.max(0, x - 30);
-      const point = this.graph.find(
-        item => item.x.toFixed() == this.x1.toFixed()
-      );
-      this.helper = point
-        ? {
-            date: new Date(point.time).toLocaleString("en", {
-              day: "numeric",
-              month: "short",
-              year: "numeric",
-              hour: "numeric",
-              minute: "numeric"
-            }),
-            price: "$" + point.price.toFixed(2)
-          }
-        : this.helper;
-    },
-    buildCurve({ limits, rates }) {
-      this.graph = [];
+    buildCurve() {
+      const limits = this.limits;
+      const rates = this.cutPrices;
+      this.$store.commit("clearGraph");
       const min = limits.min;
       const max = limits.max;
       const x = 542;
@@ -58,8 +39,8 @@ export default {
       const xResolution = (rates[rates.length - 1].time - rates[0].time) / x;
       const yResolution = (max - min) / y;
       const startY = costToCoords(rates[0].priceUsd);
-      const paths = [`M0 ${startY}`];
-      this.graph.push({
+      const paths = [`M0,${startY}`];
+      this.$store.commit("pushGraphInfo", {
         x: 0,
         y: startY,
         time: rates[0].time,
@@ -70,8 +51,9 @@ export default {
       for (let i = 1; i < rates.length; i++) {
         const pathX = (rates[i].time - rates[0].time) / xResolution;
         const pathY = costToCoords(rates[i].priceUsd);
-        paths.push(`L${pathX} ${pathY} `);
-        this.graph.push({
+        paths.push(`L${pathX},${pathY}`);
+
+        this.$store.commit("pushGraphInfo", {
           x: pathX,
           y: pathY,
           time: rates[i].time,
@@ -91,15 +73,5 @@ export default {
 <style>
 .chart-curve {
   position: absolute;
-}
-.chart-helper {
-  font-size: 10px;
-  font-weight: 500;
-  color: var(--color-text-light);
-  opacity: 0;
-  transition: opacity 0.5s ease-out;
-}
-.chart-graph:hover .chart-helper {
-  opacity: 1;
 }
 </style>

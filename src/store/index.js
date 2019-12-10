@@ -3,7 +3,6 @@ import Vuex from 'vuex';
 import wallets from './modules/wallets'
 import timestamps from './modules/timestamps'
 import history from './modules/coins.history'
-
 Vue.use(Vuex);
 
 const store = new Vuex.Store({

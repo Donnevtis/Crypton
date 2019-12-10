@@ -5,7 +5,8 @@ const state = {
             { id: 2, active: false, t: "6m", mnth: 6 },
             { id: 3, active: false, t: "1y", mnth: 12 },
             { id: 4, active: true, t: "Now", mnth: 0, },
-        ]
+        ],
+        time: () => setInterval(() => Date.now(), 1000)
 
     },
     getters = {
@@ -15,7 +16,7 @@ const state = {
             if (getters.getActiveStamp.mnth) {
                 return new Date().setMonth(new Date().getMonth() - getters.getActiveStamp.mnth)
             }
-            return Date.now() - 6e5;
+            return Date.now() - 36e4;
         },
         getDateRange(state, getters) {
             return Date.now() - getters.getStartTime;

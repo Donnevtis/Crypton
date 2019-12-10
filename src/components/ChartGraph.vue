@@ -16,24 +16,28 @@
         line(v-for='time in lines' :key='time.i' :x1='time.x + 12' y1='163' :x2='time.x + 12' y2='167')
       transition-group.chart-timeframes(tag='g' name='list' fill='var(--color-text-light)')
         text(v-for='time in lines' :key='time.i' :x='time.x' y='200') {{ time.t }}
-  chartCurve(:assets="assets")
+  component(:is="graph" :coin="coin") 
+  helper
 </template>
 
 
 <script>
 import chartCurve from "./ChartCurve";
+import helper from "./ChartHelper";
+import spinner from "./Spinner";
 import { mapGetters } from "vuex";
 export default {
   name: "ChartGraph",
   components: {
-    chartCurve
+    chartCurve,
+    helper,
+    spinner
   },
   data() {
     return {
       x: 30,
       lines: [],
-      priceLines: [],
-      assets: {}
+      coin: ""
     };
   },
   created() {
@@ -41,42 +45,37 @@ export default {
     this.dates = new MarksHandler(this.getActiveStamp.mnth, this.x, 6);
     this.lines = this.dates.lines; // array with objects of the timers
     this.moveWorker();
-    this.graphAssets();
+    this.$store.dispatch("fetchRates").then(() => this.graphAssets());
   },
   computed: {
     ...mapGetters([
       "getActiveStamp",
       "getDateRange",
-      "getStartTime",
       "getActiveWallet",
-      "rates"
-    ])
+      "rates",
+      "onlineRates",
+      "priceLines"
+    ]),
+    graph() {
+      return this.coin ? chartCurve : "spinner";
+    }
   },
 
   watch: {
-    assets({ limits }) {
-      let max = limits.max;
-      const step = (max - limits.min) / 4;
-      const prices = [];
-      let y = 12;
-      for (let i = 0; i < 5; i++) {
-        let price =
-          max >= 1000 ? (max / 1000).toFixed(1) + "k" : max.toFixed() + "$";
-        prices.push({ price, y });
-        y += 38.5;
-        max -= step;
-      }
-      this.priceLines = prices;
-    },
-    getActiveWallet() {
+    async getActiveWallet() {
+      await this.$store.dispatch("fetchRates");
       this.graphAssets();
     },
-    getActiveStamp(stamp) {
+    async getActiveStamp(stamp) {
       if (this.worker) {
         stamp.mnth ? this.worker.terminate() || null : this.moveWorker();
       }
       this.dates = new MarksHandler(stamp.mnth, this.x, 6);
       this.lines = this.dates.lines;
+      await this.$store.dispatch("fetchRates");
+      this.graphAssets();
+    },
+    onlineRates() {
       this.graphAssets();
     }
   },
@@ -90,7 +89,7 @@ export default {
       this.worker.onmessage = e => {
         this.lines.forEach((line, i, lines) => {
           let x = line.x;
-          x -= +(1 / (1200 / e.data)); //formula for the offset of the pixels
+          x -= +(1 / (line.range / 100 / e.data)); //formula for the offset of the pixels
           line.x = +x.toFixed(3);
           if (x <= -70) {
             //delete and create the timers
@@ -113,32 +112,26 @@ export default {
       this.worker.postMessage(obj.toString());
       URL.revokeObjectURL(url);
     },
-    setRates(rates) {
-      let i = rates.length - 1;
-      while (rates[i].time >= this.getStartTime) {
-        --i;
-      }
-      return rates.slice(i);
-    },
-    setLimits(rates) {
-      const min = this.setRates(rates).reduce(
-        (prev, item) => Math.min(prev, item.priceUsd),
-        9e12
-      );
-      const max = this.setRates(rates).reduce(
-        (prev, item) => Math.max(prev, item.priceUsd),
-        0
-      );
-      return { min, max };
-    },
-    async graphAssets() {
-      await this.$store.dispatch("fetchRates");
-      console.log(this.rates);
-      this.assets = {
-        range: this.getDateRange,
-        rates: this.setRates(this.rates.rates),
-        limits: this.setLimits(this.rates.rates)
-      };
+    // setRates(prices) {
+    //   let i = prices.length - 1;
+    //   while (prices[i].time >= Date.now() - this.getDateRange) {
+    //     --i;
+    //   }
+    //   return prices.slice(i);
+    // },
+    // setLimits(prices) {
+    //   const min = this.setRates(prices).reduce(
+    //     (prev, item) => Math.min(prev, item.priceUsd),
+    //     9e12
+    //   );
+    //   const max = this.setRates(prices).reduce(
+    //     (prev, item) => Math.max(prev, item.priceUsd),
+    //     0
+    //   );
+    //   return { min, max };
+    // },
+    graphAssets() {
+      this.coin = this.rates.name;
     }
   }
 };
@@ -170,7 +163,7 @@ class MarksHandler {
     return mark;
   }
   time() {
-    this.t.setMinutes(new Date().getMinutes() - 10);
+    this.t.setMinutes(new Date().getMinutes() - 5);
     return (new Date() - this.t) / 5;
   }
   date() {
