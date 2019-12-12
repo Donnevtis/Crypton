@@ -1,4 +1,4 @@
-# culc
+# Crypton
 
 ## Project setup
 ```
