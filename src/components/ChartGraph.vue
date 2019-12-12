@@ -58,6 +58,9 @@ export default {
     ]),
     graph() {
       return this.coin ? chartCurve : "spinner";
+    },
+    worker() {
+      return this.$store.state.worker.worker;
     }
   },
 
@@ -68,7 +71,9 @@ export default {
     },
     async getActiveStamp(stamp) {
       if (this.worker) {
-        stamp.mnth ? this.worker.terminate() || null : this.moveWorker();
+        stamp.mnth
+          ? this.$store.commit("stopWorker") || null
+          : this.moveWorker();
       }
       this.dates = new MarksHandler(stamp.mnth, this.x, 6);
       this.lines = this.dates.lines;
@@ -81,11 +86,7 @@ export default {
   },
   methods: {
     moveWorker() {
-      //Create worker for parralel animation computing
-      const work = "onmessage=e=>(eval(`(${(e.data)})()`))";
-      const blob = new Blob([work], { type: "application/javascript" });
-      const url = URL.createObjectURL(blob);
-      this.worker = new Worker(url);
+      this.$store.commit("startWorker");
       this.worker.onmessage = e => {
         this.lines.forEach((line, i, lines) => {
           let x = line.x;
@@ -98,38 +99,7 @@ export default {
           }
         });
       };
-      //Worker's code
-      const obj = () => {
-        let start = 0;
-        requestAnimationFrame(function animate(time) {
-          let progress = time - start;
-          start = time;
-          postMessage(progress);
-          requestAnimationFrame(animate);
-        });
-      };
-
-      this.worker.postMessage(obj.toString());
-      URL.revokeObjectURL(url);
     },
-    // setRates(prices) {
-    //   let i = prices.length - 1;
-    //   while (prices[i].time >= Date.now() - this.getDateRange) {
-    //     --i;
-    //   }
-    //   return prices.slice(i);
-    // },
-    // setLimits(prices) {
-    //   const min = this.setRates(prices).reduce(
-    //     (prev, item) => Math.min(prev, item.priceUsd),
-    //     9e12
-    //   );
-    //   const max = this.setRates(prices).reduce(
-    //     (prev, item) => Math.max(prev, item.priceUsd),
-    //     0
-    //   );
-    //   return { min, max };
-    // },
     graphAssets() {
       this.coin = this.rates.name;
     }

@@ -45,11 +45,12 @@ const
                 dispatch("cumputeProps", name)
             })
         },
-        cumputeProps({ commit, getters }, name) {
+        cumputeProps({ commit, getters, dispatch }, name) {
             const itemsMutation = name == "instaRates" ? 'narrowPriceItems' : 'widePriceItems'
             commit('cutRates', { range: getters.getDateRange, name })
             commit('priceLimits', name)
             commit(itemsMutation, { name })
+            dispatch('curve', name)
 
         },
         onlineRates({ commit, dispatch }, name) {
@@ -59,7 +60,6 @@ const
             }
             if (this.pricesWs) this.pricesWs.close();
             this.pricesWs = new WebSocket(`wss://ws.coincap.io/prices?assets=${name}`)
-
             const startTime = Date.now();
             this.pricesWs.onmessage = msg => {
                 const priceUsd = JSON.parse(msg.data)[name];
@@ -69,44 +69,13 @@ const
                 dispatch('cumputeProps', 'instaRates')
             }
         },
-        buildCurve({ state, commit }, name) {
-            const limits = state.coins[name].limits;
-            const rates = state.coins[name].cutPrices;
-            commit("clearGraph");
-            const min = limits.min;
-            const max = limits.max;
-            const x = 542;
-            const y = 153;
-            const xResolution = (rates[rates.length - 1].time - rates[0].time) / x;
-            const yResolution = (max - min) / y;
-            const startY = costToCoords(rates[0].priceUsd);
-            const paths = [`M0,${startY}`];
-            commit("pushGraphInfo", {
-                x: 0,
-                y: startY,
-                time: rates[0].time,
-                date: rates[0].date,
-                price: +rates[0].priceUsd
-            });
-
-            for (let i = 1; i < rates.length; i++) {
-                const pathX = (rates[i].time - rates[0].time) / xResolution;
-                const pathY = costToCoords(rates[i].priceUsd);
-                paths.push(`L${pathX},${pathY}`);
-
-                this.$store.commit("pushGraphInfo", {
-                    x: pathX,
-                    y: pathY,
-                    time: rates[i].time,
-                    date: rates[i].date,
-                    price: +rates[i].priceUsd
-                });
-            }
-
-            function costToCoords(cost) {
-                return (max - min - (+cost - min)) / yResolution;
-            }
-            const d = paths.join("");
+        curve({ commit }, name) {
+            const prices = state.coins[name].cutPrices
+            const limits = state.coins[name].limits
+            const curve = new Curve({ prices, limits })
+            commit('clearGraph')
+            commit('pushGraphInfo', curve.coinStack)
+            commit('d', { d: curve.d, name })
         }
 
     },
@@ -124,8 +93,8 @@ const
         currentPrice(state, priceUsd) {
             state.currentPrice = priceUsd
         },
-        pushGraphInfo(state, vals) {
-            state.graph.push(vals)
+        pushGraphInfo(state, coinStack) {
+            state.graph = coinStack
         },
         clearGraph(state) {
             state.graph = [];
@@ -179,6 +148,55 @@ const
             }
             Vue.set(state.coins[name], 'priceItems', prices)
         },
+        d(state, { d, name }) {
+            Vue.set(state.coins[name], 'd', d)
+        }
+
     }
+class Curve {
+    constructor({ limits, prices }) {
+        this.limits = limits;
+        this.prices = prices;
+        this.min = limits.min;
+        this.max = limits.max;
+        this.x = 542;
+        this.y = 153;
+        this.xResolution = (this.prices[this.prices.length - 1].time - this.prices[0].time) / this.x;
+        this.yResolution = (this.max - this.min) / this.y;
+        this.startY = this.costToCoordsY(this.prices[0].priceUsd);
+        this.paths = [`M0,${this.startY}`];
+        this.coinStack = [{
+            x: 0,
+            y: this.startY,
+            time: this.prices[0].time,
+            date: this.prices[0].date,
+            price: +this.prices[0].priceUsd
+        }]
+        this.buildCoords()
+    }
+    buildCoords() {
+        for (let i = 1; i < this.prices.length; i++) {
+            const pathX = (this.prices[i].time - this.prices[0].time) / this.xResolution
+            const pathY = this.costToCoordsY(this.prices[i].priceUsd)
+            this.paths.push(`L${pathX},${pathY}`);
+            this.coinStack.push({
+                x: pathX,
+                y: pathY,
+                time: this.prices[i].time,
+                date: this.prices[i].date,
+                price: +this.prices[i].priceUsd
+            })
+        }
+    }
+
+    costToCoordsY(cost) {
+        return (this.max - this.min - (+cost - this.min)) / this.yResolution
+    }
+
+    get d() {
+        return this.paths.join("");
+    }
+
+}
 
 export default { state, getters, actions, mutations }
