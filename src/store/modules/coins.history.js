@@ -17,6 +17,8 @@ const
         fetchRates({ commit, getters, dispatch }) {
             dispatch('onlineRates', false)
             return new Promise(async(resolve, reject) => {
+
+                //check last update
                 const coin = getters.rates
                 let name = getters.getActiveWallet.name.toLowerCase()
                 if (coin.isUpdate === new Date().setUTCHours(0, 0, 0, 0)) {
@@ -25,8 +27,12 @@ const
                     return
                 }
                 const online = !getters.getActiveStamp.mnth
+
+                //link constructor
                 const [interval, mutation] = online ? [`m1&start=${new Date() - 9e5}&end=${Date.now()}`, 'setInstaRates'] : ['d1', 'setLongRates']
                 const link = `https://api.coincap.io/v2/assets/${name}/history?interval=${interval}`
+
+                //get coins history from coincap.io API             
                 let res = await fetch(link)
                 if (!(res.ok)) {
                     reject(res.status)
@@ -35,9 +41,15 @@ const
                 res = await res.json()
                 const prices = res.data;
                 prices.sort((a, b) => a.time - b.time)
+
+                //set update timestamp
                 const isUpdate = new Date().setUTCHours(0, 0, 0, 0)
+
+                //save result
                 commit(mutation, { prices, name, isUpdate })
                 resolve()
+
+                //create WebSocket connection if current changes is need to see
                 if (online) {
                     dispatch('onlineRates', name)
                     name = 'instaRates'
@@ -45,6 +57,7 @@ const
                 dispatch("cumputeProps", name)
             })
         },
+        //mutations-chain for set values
         cumputeProps({ commit, getters, dispatch }, name) {
             const itemsMutation = name == "instaRates" ? 'narrowPriceItems' : 'widePriceItems'
             commit('cutRates', { range: getters.getDateRange, name })
@@ -53,6 +66,7 @@ const
             dispatch('curve', name)
 
         },
+        //WebSocket action
         onlineRates({ commit, dispatch }, name) {
             if (!name && this.pricesWs) {
                 this.pricesWs.close()
@@ -62,13 +76,16 @@ const
             this.pricesWs = new WebSocket(`wss://ws.coincap.io/prices?assets=${name}`)
             const startTime = Date.now();
             this.pricesWs.onmessage = msg => {
+                //result handler
                 const priceUsd = JSON.parse(msg.data)[name];
                 const time = startTime + +msg.timeStamp.toFixed();
+
                 commit('currentPrice', priceUsd)
                 commit('addOnlineRates', { priceUsd, time })
                 dispatch('cumputeProps', 'instaRates')
             }
         },
+        //create curve action
         curve({ commit }, name) {
             const prices = state.coins[name].cutPrices
             const limits = state.coins[name].limits
@@ -153,6 +170,8 @@ const
         }
 
     }
+
+//the curve constructor
 class Curve {
     constructor({ limits, prices }) {
         this.limits = limits;
@@ -165,6 +184,7 @@ class Curve {
         this.yResolution = (this.max - this.min) / this.y;
         this.startY = this.costToCoordsY(this.prices[0].priceUsd);
         this.paths = [`M0,${this.startY}`];
+        //init stack props for prices data
         this.coinStack = [{
             x: 0,
             y: this.startY,
@@ -190,9 +210,9 @@ class Curve {
     }
 
     costToCoordsY(cost) {
-        return (this.max - this.min - (+cost - this.min)) / this.yResolution
-    }
-
+            return (this.max - this.min - (+cost - this.min)) / this.yResolution
+        }
+        //return svg PATH string
     get d() {
         return this.paths.join("");
     }
