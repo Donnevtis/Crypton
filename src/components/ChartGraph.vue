@@ -11,12 +11,13 @@
         line(x1='0' y1='86.5' x2='570' y2='86.5')
         line(x1='0' y1='124.75' x2='570' y2='124.75')
         line(x1='0' y1='163' x2='570' y2='163')
-        line(x1='542' y1='10' x2='542' y2='163')
+        line(x1='542' y1='10' x2='542' y2='163')        
       g(stroke='var(--charcoal-grey)')
         line(v-for='time in lines' :key='time.i' :x1='time.x + 12' y1='163' :x2='time.x + 12' y2='167')
       transition-group.chart-timeframes(tag='g' name='list' fill='var(--color-text-light)')
         text(v-for='time in lines' :key='time.i' :x='time.x' y='200') {{ time.t }}
   component(:is="graph" :coin="coin") 
+  component(:is="blinkPoint")   
   helper
 </template>
 
@@ -25,13 +26,17 @@
 import chartCurve from "./ChartCurve";
 import helper from "./ChartHelper";
 import spinner from "./Spinner";
+import blinkPoint from "./ChartBlinkPoint";
+
 import { mapGetters } from "vuex";
+
 export default {
   name: "ChartGraph",
   components: {
     chartCurve,
     helper,
-    spinner
+    spinner,
+    blinkPoint
   },
   data() {
     return {
@@ -58,6 +63,9 @@ export default {
     ]),
     graph() {
       return this.coin ? chartCurve : "spinner";
+    },
+    blinkPoint() {
+      return this.coin ? blinkPoint : "spinner";
     },
     worker() {
       return this.$store.state.worker.worker;

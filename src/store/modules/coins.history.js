@@ -3,18 +3,22 @@ const
     state = {
         coins: { instaRates: { isUpdate: null, prices: [] } },
         graph: [],
-        currentPrice: 0
+        currentPrice: 0,
+        currentTime: 0,
+        curve: {},
+        renderInterval: void ''
     },
     getters = {
         rates: (state, getters) => getters.getActiveStamp.mnth ? getters.activeCoin : state.coins.instaRates,
         priceLines: (state, getters) => getters.getActiveStamp.mnth ? getters.activeCoin.priceItems : state.coins.instaRates.priceItems,
         onlineRates: state => state.coins.instaRates.prices,
         activeCoin: (state, getters) => state.coins[getters.getActiveWallet.name.toLowerCase()] || { isUpdate: null, prices: [] },
-
+        thicPointY: (state) => state.curve.costToCoordsY(state.currentPrice) || 10
 
     },
     actions = {
-        fetchRates({ commit, getters, dispatch }) {
+        fetchRates({ commit, getters, dispatch, state }) {
+            clearInterval(state.renderInterval)
             dispatch('onlineRates', false)
             return new Promise(async(resolve, reject) => {
 
@@ -51,71 +55,81 @@ const
 
                 //create WebSocket connection if current changes is need to see
                 if (online) {
-                    dispatch('onlineRates', name)
+                    dispatch('onlineRates', name).then(res => dispatch('startRenderChanges', res))
                     name = 'instaRates'
                 }
                 dispatch("cumputeProps", name)
             })
         },
         //mutations-chain for set values
-        cumputeProps({ commit, getters, dispatch }, name) {
+        cumputeProps({ commit, getters }, name) {
             const itemsMutation = name == "instaRates" ? 'narrowPriceItems' : 'widePriceItems'
             commit('cutRates', { range: getters.getDateRange, name })
             commit('priceLimits', name)
             commit(itemsMutation, { name })
-            dispatch('curve', name)
+            commit('curve', name)
 
         },
         //WebSocket action
-        onlineRates({ commit, dispatch }, name) {
-            if (!name && this.pricesWs) {
-                this.pricesWs.close()
-                return
-            }
-            if (this.pricesWs) this.pricesWs.close();
-            this.pricesWs = new WebSocket(`wss://ws.coincap.io/prices?assets=${name}`)
-            const startTime = Date.now();
-            this.pricesWs.onmessage = msg => {
-                //result handler
-                const priceUsd = JSON.parse(msg.data)[name];
-                const time = startTime + +msg.timeStamp.toFixed();
-
-                commit('currentPrice', priceUsd)
-                commit('addOnlineRates', { priceUsd, time })
-                dispatch('cumputeProps', 'instaRates')
-            }
+        onlineRates({ commit }, name) {
+            return new Promise(res => {
+                if (!name && this.pricesWs) {
+                    this.pricesWs.close()
+                    res(true)
+                    return
+                }
+                if (this.pricesWs) this.pricesWs.close();
+                this.pricesWs = new WebSocket(`wss://ws.coincap.io/prices?assets=${name}`)
+                const startTime = Date.now();
+                let time = 0;
+                let priceUsd = 0;
+                this.pricesWs.onmessage = msg => {
+                    //result handler
+                    priceUsd = JSON.parse(msg.data)[name];
+                    time = startTime + +msg.timeStamp.toFixed();
+                    commit('currentPrice', { priceUsd, time })
+                    res(false)
+                }
+            })
         },
-        //create curve action
-        curve({ commit }, name) {
-            const prices = state.coins[name].cutPrices
-            const limits = state.coins[name].limits
-            const curve = new Curve({ prices, limits })
-            commit('clearGraph')
-            commit('pushGraphInfo', curve.coinStack)
-            commit('d', { d: curve.d, name })
+        startRenderChanges({ commit, dispatch, state }, close) {
+            state.renderInterval = setInterval(() => {
+                requestAnimationFrame(() => {
+                    commit('addOnlineRates');
+                    dispatch('cumputeProps', 'instaRates')
+                })
+            }, 1000)
         }
+
 
     },
     mutations = {
+        //create curve
+        curve(state, name) {
+            const prices = state.coins[name].cutPrices
+            const limits = state.coins[name].limits
+            state.curve = new Curve({ prices, limits })
+            state.graph = state.curve.coinStack
+            Vue.set(state.coins[name], 'd', state.curve.d)
+        },
         setLongRates(state, { prices, name, isUpdate }) {
             Vue.set(state.coins, name, { name, prices, isUpdate })
         },
         setInstaRates(state, { prices }) {
             state.coins.instaRates = { prices, name: 'instaRates', isUpdate: null }
         },
-        addOnlineRates(state, price) {
-            if (state.coins.instaRates.prices.length > 400) state.coins.instaRates.prices.shift();
-            state.coins.instaRates.prices.push(price);
+        addOnlineRates(state) {
+            if (state.coins.instaRates.prices.length > 4000) state.coins.instaRates.prices.shift();
+            state.coins.instaRates.prices.push({ priceUsd: state.currentPrice, time: state.currentTime });
         },
-        currentPrice(state, priceUsd) {
+        currentPrice(state, { priceUsd, time }) {
             state.currentPrice = priceUsd
+            state.currentTime = time
         },
         pushGraphInfo(state, coinStack) {
             state.graph = coinStack
         },
-        clearGraph(state) {
-            state.graph = [];
-        },
+
         cutRates(state, { range, name }) {
             const prices = state.coins[name].prices
             let i = prices.length - 1;
@@ -189,7 +203,6 @@ class Curve {
             x: 0,
             y: this.startY,
             time: this.prices[0].time,
-            date: this.prices[0].date,
             price: +this.prices[0].priceUsd
         }]
         this.buildCoords()
@@ -203,7 +216,6 @@ class Curve {
                 x: pathX,
                 y: pathY,
                 time: this.prices[i].time,
-                date: this.prices[i].date,
                 price: +this.prices[i].priceUsd
             })
         }

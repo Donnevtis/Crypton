@@ -1,6 +1,6 @@
 <template lang="pug">
 svg.chart-graph(xmlns='http://www.w3.org/2000/svg' viewBox='-30 -10 600 210' ) 
-  g.chart-curve( fill='transparent' stroke="var(--color-green)" stroke-width='2')
+  g.chart-curve( fill='transparent' stroke="var(--color-green)" stroke-width='1')
     path( :d='d' ref='path') 
 </template>
 
@@ -19,5 +19,8 @@ export default {
 <style>
 .chart-curve {
   position: absolute;
+}
+path {
+  transition-duration: 0.5s;
 }
 </style>

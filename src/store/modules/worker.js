@@ -1,11 +1,10 @@
 //animation web-worker
-
 const state = {
         worker: {}
     },
     mutations = {
         startWorker(state) {
-            const work = "onmessage=e=>(eval(`(${(e.data)})()`))";
+            const work = "onmessage=e=>eval(`(${(e.data)})()`)";
             const blob = new Blob([work], { type: "application/javascript" });
             const url = URL.createObjectURL(blob);
             state.worker = new Worker(url)
@@ -20,6 +19,7 @@ const state = {
                 });
             };
             //
+            // state.worker.port.start()
             state.worker.postMessage(obj.toString());
             URL.revokeObjectURL(url);
         },

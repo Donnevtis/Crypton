@@ -31,13 +31,14 @@ export default {
   methods: {
     getNews() {
       fetch(
-        "https://min-api.cryptocompare.com/data/v2/news/?d177dd631fd9bac1a16566cfe5d289b34a7479d57daa474ebaa36fcb873cdd4d"
+        "https://min-api.cryptocompare.com/data/v2/news/?d177dd631fd9bac1a16566cfe5d289b34a7479d57daa474ebaa36fcb873cdd4d",
+        { cors: "no-cors" }
       )
         .then(res => res.json())
         .then(res => {
           this.news = res.Data[0].title;
           this.link = res.Data[0].url;
-          const date = new Date();
+          const date = new Date(res.Data[0].published_on * 1000);
           this.date = date.toLocaleString("en", {
             hour12: false,
             hour: "2-digit",
