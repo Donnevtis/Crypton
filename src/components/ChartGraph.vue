@@ -49,8 +49,8 @@ export default {
     // handler(active month range, time range mark x-position, count marks)
     this.dates = new MarksHandler(this.getActiveStamp.mnth, this.x, 6);
     this.lines = this.dates.lines; // array with objects of the timers
-    this.moveWorker();
-    this.$store.dispatch("fetchRates").then(() => this.graphAssets());
+    this.$store.commit("startWorker");
+    this.$store.dispatch("fetchRates").then(() => this.setCoinName());
   },
   computed: {
     ...mapGetters([
@@ -69,46 +69,46 @@ export default {
     },
     worker() {
       return this.$store.state.worker.worker;
+    },
+    progress() {
+      return this.$store.state.worker.progress;
     }
   },
 
   watch: {
     async getActiveWallet() {
       await this.$store.dispatch("fetchRates");
-      this.graphAssets();
+      this.setCoinName();
     },
     async getActiveStamp(stamp) {
       if (this.worker) {
         stamp.mnth
           ? this.$store.commit("stopWorker") || null
-          : this.moveWorker();
+          : this.$store.commit("startWorker");
       }
       this.dates = new MarksHandler(stamp.mnth, this.x, 6);
       this.lines = this.dates.lines;
       await this.$store.dispatch("fetchRates");
-      this.graphAssets();
+      this.setCoinName();
     },
     onlineRates() {
-      this.graphAssets();
+      this.setCoinName();
+    },
+    progress(secs) {
+      this.lines.forEach((line, i, lines) => {
+        let x = line.x;
+        x -= +(1 / (line.range / 100 / secs)); //formula for the offset of the pixels
+        line.x = +x.toFixed(3);
+        if (x <= -70) {
+          //delete and create the timers
+          lines.shift();
+          lines.push(this.dates.getNewDate(line.i));
+        }
+      });
     }
   },
   methods: {
-    moveWorker() {
-      this.$store.commit("startWorker");
-      this.worker.onmessage = e => {
-        this.lines.forEach((line, i, lines) => {
-          let x = line.x;
-          x -= +(1 / (line.range / 100 / e.data)); //formula for the offset of the pixels
-          line.x = +x.toFixed(3);
-          if (x <= -70) {
-            //delete and create the timers
-            lines.shift();
-            lines.push(this.dates.getNewDate(line.i));
-          }
-        });
-      };
-    },
-    graphAssets() {
+    setCoinName() {
       this.coin = this.rates.name;
     }
   }

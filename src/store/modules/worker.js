@@ -1,6 +1,7 @@
 //animation web-worker
 const state = {
-        worker: {}
+        worker: {},
+        progress: 0
     },
     mutations = {
         startWorker(state) {
@@ -18,10 +19,14 @@ const state = {
                     requestAnimationFrame(animate);
                 });
             };
-            //
-            // state.worker.port.start()
+
             state.worker.postMessage(obj.toString());
             URL.revokeObjectURL(url);
+
+            state.worker.onmessage = e => {
+                state.progress = e.data
+            }
+
         },
         stopWorker(state) {
             state.worker.terminate()

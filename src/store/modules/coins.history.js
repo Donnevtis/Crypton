@@ -13,7 +13,7 @@ const
         priceLines: (state, getters) => getters.getActiveStamp.mnth ? getters.activeCoin.priceItems : state.coins.instaRates.priceItems,
         onlineRates: state => state.coins.instaRates.prices,
         activeCoin: (state, getters) => state.coins[getters.getActiveWallet.name.toLowerCase()] || { isUpdate: null, prices: [] },
-        thicPointY: (state) => state.curve.costToCoordsY(state.currentPrice) || 10
+        blinkPointY: (state) => state.curve.costToCoordsY(state.currentPrice) || 0
 
     },
     actions = {
@@ -53,9 +53,10 @@ const
                 commit(mutation, { prices, name, isUpdate })
                 resolve()
 
+
                 //create WebSocket connection if current changes is need to see
                 if (online) {
-                    dispatch('onlineRates', name).then(res => dispatch('startRenderChanges', res))
+                    dispatch('onlineRates', name).then(() => dispatch('startRenderChanges'))
                     name = 'instaRates'
                 }
                 dispatch("cumputeProps", name)
@@ -75,7 +76,6 @@ const
             return new Promise(res => {
                 if (!name && this.pricesWs) {
                     this.pricesWs.close()
-                    res(true)
                     return
                 }
                 if (this.pricesWs) this.pricesWs.close();
@@ -88,11 +88,11 @@ const
                     priceUsd = JSON.parse(msg.data)[name];
                     time = startTime + +msg.timeStamp.toFixed();
                     commit('currentPrice', { priceUsd, time })
-                    res(false)
+                    res()
                 }
             })
         },
-        startRenderChanges({ commit, dispatch, state }, close) {
+        startRenderChanges({ commit, dispatch, state }) {
             state.renderInterval = setInterval(() => {
                 requestAnimationFrame(() => {
                     commit('addOnlineRates');

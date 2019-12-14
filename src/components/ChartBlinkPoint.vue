@@ -8,7 +8,7 @@ export default {
   name: "blinkPoint",
   computed: {
     pointCoordY() {
-      return this.$store.getters.thicPointY;
+      return this.$store.getters.blinkPointY;
     }
   }
 };
