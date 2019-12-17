@@ -5,7 +5,7 @@
       text(v-for='priceLine in priceLines' :key='priceLine.y' x='2' :y='priceLine.y') {{ priceLine.price }}     
   svg.chart-graph(xmlns='http://www.w3.org/2000/svg' viewBox='-30 0 600 210')
     svg
-      g(stroke='var(--charcoal-grey)' stroke-width='.5' style='shape-rendering: crispEdges')
+      g.chart-crosshair(stroke='var(--charcoal-grey)' :stroke-width='strokeWidth' style='shape-rendering: crispEdges')
         line(x1='0' y1='10' x2='570' y2='10')
         line(x1='0' y1='48.25' x2='570' y2='48.25')
         line(x1='0' y1='86.5' x2='570' y2='86.5')
@@ -17,7 +17,7 @@
       transition-group.chart-timeframes(tag='g' name='list' fill='var(--color-text-light)')
         text(v-for='time in lines' :key='time.i' :x='time.x' y='200') {{ time.t }}
   component(:is="graph" :coin="coin") 
-  component(:is="blinkPoint")   
+  component(v-show="!getActiveStamp.mnth" :is="blinkPoint")   
   helper
 </template>
 
@@ -65,13 +65,17 @@ export default {
       return this.coin ? chartCurve : "spinner";
     },
     blinkPoint() {
-      return this.coin ? blinkPoint : "spinner";
+      return this.coin ? blinkPoint : "";
     },
     worker() {
       return this.$store.state.worker.worker;
     },
     progress() {
       return this.$store.state.worker.progress;
+    },
+    strokeWidth() {
+      const ua = navigator.userAgent;
+      return ua.match(/chrome/gi) ? 0.5 : 1;
     }
   },
 
@@ -197,6 +201,11 @@ class Mark {
   font-size: 10px;
   font-weight: 500;
   color: var(--color-text-light);
+}
+
+_:-moz-tree-row(hover),
+.chart-crosshair {
+  /* Нужные стили */
 }
 
 .list-enter-active {

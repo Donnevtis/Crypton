@@ -158,7 +158,7 @@ const
             let y = 12;
             for (let i = 0; i < count + 1; i++) {
                 let price =
-                    max >= 1000 ? (max / 1000).toFixed(1) + "k" : "$" + max.toFixed();
+                    max >= 1000 ? (max / 1000).toFixed(1) + "k" : "$" + ~~max
                 prices.push({ price, y });
                 y += 38.5;
                 max -= step;
@@ -172,7 +172,7 @@ const
             const prices = [];
             let y = 12;
             for (let i = 0; i < count + 1; i++) {
-                let price = "$" + max.toFixed(2);
+                let price = "$" + ~~max
                 prices.push({ price, y });
                 y += 38.5;
                 max -= step;
