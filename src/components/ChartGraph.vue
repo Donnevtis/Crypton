@@ -2,7 +2,7 @@
 .chart-container
   svg.chart-field(xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 210')
     g.chart-worth(fill='var(--color-text-light)')
-      text(v-for='priceLine in priceLines' :key='priceLine.y' x='2' :y='priceLine.y') {{ priceLine.price }}     
+      text(v-for='item in pricesItems' :key='item.y' x='2' :y='item.y') {{ item.price }}     
   svg.chart-graph(xmlns='http://www.w3.org/2000/svg' viewBox='-30 0 600 210')
     svg
       g(stroke='var(--charcoal-grey)' stroke-width='.5' style='shape-rendering: crispEdges')
@@ -27,8 +27,7 @@ import chartCurve from "./ChartCurve";
 import helper from "./ChartHelper";
 import spinner from "./Spinner";
 import blinkPoint from "./ChartBlinkPoint";
-
-import { mapGetters } from "vuex";
+import { mapState, mapGetters } from "vuex";
 
 export default {
   name: "ChartGraph",
@@ -47,57 +46,56 @@ export default {
   },
   created() {
     // handler(active month range, time range mark x-position, count marks)
-    this.dates = new MarksHandler(this.getActiveStamp.mnth, this.x, 6);
+    this.dates = new MarksHandler(this.activeStamp.mnth, this.x, 6);
     this.lines = this.dates.lines; // array with objects of the timers
-    this.$store.commit("startWorker");
-    this.$store.dispatch("fetchRates").then(() => this.setCoinName());
+    this.$store.commit("createChartField");
+    this.$store.commit("startAnimation");
+    this.$store
+      .dispatch("fetchRates", {
+        coinName: this.getActiveWallet.name,
+        isCurrent: this.activeStamp.mnth
+      })
+      .then(() => this.setCoinName());
   },
   computed: {
-    ...mapGetters([
-      "getActiveStamp",
-      "getDateRange",
-      "getActiveWallet",
-      "rates",
-      "onlineRates",
-      "priceLines"
-    ]),
+    ...mapGetters(["activeStamp", "getActiveWallet"]),
     graph() {
       return this.coin ? chartCurve : "spinner";
     },
     blinkPoint() {
       return this.coin ? blinkPoint : "spinner";
-    },
-    worker() {
-      return this.$store.state.worker.worker;
-    },
-    progress() {
-      return this.$store.state.worker.progress;
     }
   },
 
   watch: {
     async getActiveWallet() {
-      await this.$store.dispatch("fetchRates");
+      await this.$store.dispatch("fetchRates", {
+        coinName: this.getActiveWallet.name,
+        isCurrent: this.activeStamp.mnth
+      });
       this.setCoinName();
     },
-    async getActiveStamp(stamp) {
-      if (this.worker) {
-        stamp.mnth
-          ? this.$store.commit("stopWorker") || null
-          : this.$store.commit("startWorker");
-      }
+    async activeStamp(stamp) {
+      // stamp.mnth
+      //   ? this.$store.commit("stopAnimation") || null
+      //   : this.$store.commit("startAnimation");
+
       this.dates = new MarksHandler(stamp.mnth, this.x, 6);
       this.lines = this.dates.lines;
-      await this.$store.dispatch("fetchRates");
+      await this.$store.dispatch("fetchRates", {
+        coinName: this.getActiveWallet.name,
+        isCurrent: this.activeStamp.mnth
+      });
       this.setCoinName();
     },
     onlineRates() {
       this.setCoinName();
     },
-    progress(secs) {
+    shift(px) {
+      this.$store.commit("animation", px);
       this.lines.forEach((line, i, lines) => {
         let x = line.x;
-        x -= +(1 / (line.range / 100 / secs)); //formula for the offset of the pixels
+        x -= px; //formula for the offset of the pixels
         line.x = +x.toFixed(3);
         if (x <= -70) {
           //delete and create the timers
@@ -109,7 +107,7 @@ export default {
   },
   methods: {
     setCoinName() {
-      this.coin = this.rates.name;
+      this.coin = "bitcoin";
     }
   }
 };

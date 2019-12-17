@@ -3,7 +3,7 @@
     <a
       href
       class="chart-timestamp chart-timestamps-1m"
-      v-for="timestamp in timestamps"
+      v-for="timestamp in timestamps.times"
       :key="timestamp.id"
       :class="{ 'chart-timestamp_active': timestamp.active}"
       @click.prevent="setActiveStamp(timestamp.id)"
@@ -12,18 +12,12 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from "vuex";
 export default {
   name: "ChartTimestamp",
-
-  computed: {
-    timestamps() {
-      return this.$store.getters.getStamps;
-    }
-  },
+  computed: mapState(["timestamps"]),
   methods: {
-    setActiveStamp(id) {
-      this.$store.commit("setActiveStamp", id);
-    }
+    ...mapMutations(["setActiveStamp"])
   }
 };
 </script>

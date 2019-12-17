@@ -4,6 +4,7 @@ import wallets from './modules/wallets'
 import timestamps from './modules/timestamps'
 import history from './modules/coins.history'
 import worker from './modules/worker'
+import chart from './modules/chart'
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
@@ -11,7 +12,8 @@ const store = new Vuex.Store({
         timestamps, //don't change order
         wallets,
         history,
-        worker
+        worker,
+        chart
     }
 })
 export default store;

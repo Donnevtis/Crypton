@@ -11,10 +11,11 @@ const state = {
             state.worker = new Worker(url)
                 // worker's code:
             const obj = () => {
-                let start = 0;
-                requestAnimationFrame(function animate(time) {
-                    let progress = time - start;
-                    start = time;
+                let start = Date.now();
+                requestAnimationFrame(function animate() {
+                    const now = Date.now()
+                    let progress = now - start;
+                    start = now
                     postMessage(progress);
                     requestAnimationFrame(animate);
                 });

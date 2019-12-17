@@ -69,13 +69,13 @@ export default {
   text-transform: uppercase;
   appearance: none;
   cursor: pointer;
-  background-image: url("../assets/options.svg");
+  background-image: url("../assets/svg/options.svg");
   background-repeat: no-repeat;
   background-position: 90% center;
   padding-left: 0.8vw;
 }
 .recieve-wallet:hover {
-  background-image: url("../assets/options-white.svg");
+  background-image: url("../assets/svg/options-white.svg");
 }
 .recieve-wallet-wrap,
 .recieve-amount-wrap,

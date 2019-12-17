@@ -1,7 +1,7 @@
 <template>
     <div class="convers-button">
         <NotificationCounter/>
-    <img class="convers-button__icon" alt="Vue logo" src="../assets/conversation.svg">
+    <img class="convers-button__icon" alt="Vue logo" src="../assets/svg/conversation.svg">
         
     </div>
 </template>
