@@ -2,7 +2,7 @@
 node_modules
 vue.config.js
 .gitignore
-# /dist
+/dist
 
 # local env files
 .env.local
