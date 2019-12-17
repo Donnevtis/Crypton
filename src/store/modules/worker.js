@@ -14,10 +14,6 @@ const state = {
                 requestAnimationFrame(animate.bind(this));
             }
             state.frame = requestAnimationFrame(animate.bind(this));
-
-
-
-
         },
         stopWorker(state) {
             cancelAnimationFrame(state.frame)
