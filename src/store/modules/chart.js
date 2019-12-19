@@ -1,29 +1,45 @@
-import { ChartField } from '../../util/chart-constructor'
+import Vue from 'vue'
+import { Chart } from '../../util/chart-constructor'
 
 const state = {
-        chartField: {}
-    },
+    charts: {},
+},
     getters = {
-        svgPath: ({ coins }) => name => {
-            if (!coins[name].hasOwnProperty('curve')) return 'M0,0L100,100'
-            const curveData = coins[name].curve.dataStack
-            const d = [`M${curveData[0].x},${curveData[0].y}`];
-            for (let i = 1; i < curveData.length; i++) {
-                d.push(`L${curveData[i].x},${curveData[i].y}`)
+        chartLinePath: ({ charts }) => name => {
+            if (!('dataStack' in charts[name])) return 'M0,0L100,100'
+            const lineData = charts[name].dataStack
+            const d = [`M${lineData[0].x},${lineData[0].y}`];
+            for (let i = 1; i < lineData.length; i++) {
+                d.push(`L${lineData[i].x},${lineData[i].y}`)
             }
             return d.join('')
         },
+        activeChart: ({ charts }, getters) => charts[getters.getActiveWallet.name]
+
+
+    },
+    actions = {
+        createChart({ rootState, dispatch, commit, getters }, { coinName, mnths = true }) {
+            const rates = mnths ? 'fullRates' : 'lastRates'
+            commit('createChartField', coinName)
+            return dispatch('fetchRates', { coinName, mnths })
+                .then(() => {
+
+                    commit('createChartLine', { data: rootState.history.coins[coinName][rates], range: getters.dateRange, coinName })
+                })
+        }
     },
     mutations = {
-        createChartField(state) {
-            state.chartField = new ChartField
+        createChartField({ charts }, coinName) {
+            const chart = new Chart
+            Vue.set(charts, coinName, chart);
         },
-        startAnimation({ chartField }) {
-            chartField.animate()
+        createChartLine(state, data) {
+            state.charts[data.coinName].createChartLine(data)
         },
-        stopAnimation({ chartField }) {
-            chartField.stopAnimate()
+        setWidth(state) {
+            state.chart.width = 2
         }
     }
 
-export default { state, getters, mutations }
+export default { state, getters, actions, mutations }

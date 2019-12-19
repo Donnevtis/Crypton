@@ -170,5 +170,10 @@ button {
     fill: var(--color-white);
 }
 
+@media (max-width: 480px) {
+.header {     
+    position: relative;     
+}
+}
 
 </style>

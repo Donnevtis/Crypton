@@ -1,7 +1,7 @@
 <template>
   <div class="chart">
     <div class="chart-header">
-      <div class="chart-title">{{wallet.name}} Chart</div>
+      <div class="chart-title">{{wallet.name.replace(/\w/i, l => l.toUpperCase())}} Chart</div>
       <timestamp />
     </div>
     <div class="chart-graph">
@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import Graph from "./ChartGraph";
-import Timestamp from "./ChartTimestamp";
+import Graph from "./chart/ChartGraph";
+import Timestamp from "./chart/ChartTimestamp";
 
 export default {
   name: "DashboardChart",

@@ -1,5 +1,3 @@
-import Vue from 'vue'
-import { Curve } from '../../util/chart-constructor'
 import API from '../../api/coincap-api'
 const
     state = {
@@ -7,42 +5,31 @@ const
     },
     getters = {},
     actions = {
-        fetchRates({ state, commit, dispatch }, { coinName = 'bitcoin', isCurrent = true }) {
-            API.closeWS();
+        fetchRates({ state, commit, dispatch }, { coinName = 'bitcoin', mnths }) {
+            API.closeWS(); //close WevSocket for prevent multiconnect
             coinName = coinName.toLowerCase()
-            if (isCurrent) {
-                if (!state[coinName] || state[coinName].__updated !== new Date().setUTCHours(0, 0, 0, 0)) {
-                    API.fullData(coinName).then(res => commit('setFullRates', { res, coinName }))
+            if (mnths) {
+                if (state.coins[coinName] && state.coins[coinName].__updated && state.coins[coinName].__updated == new Date().setUTCHours(0, 0, 0, 0)) { //Date == today without hours, min and sec
                     return Promise.resolve()
-                }
-                return Promise.resolve()
-
+                } else return API.fullData(coinName).then(res => commit('setFullRates', { res, coinName })) //res == {...[price, time, ...etc]}; probable needs remove etc                    
+            } else {
+                return API.lastData(coinName).then(res => {
+                    commit('setLastRates', { res, coinName })
+                    dispatch('getCurrentRates', coinName)
+                })
             }
-            API.lastData(coinName).then(res => {
-                commit('setLastRates', { res, coinName })
-                dispatch('getCurrentRates', coinName)
-            })
-            return Promise.resolve()
-
         },
         getCurrentRates({ commit }, coinName) {
-            API.openWS(coinName, (current) => commit('addCurrentPrice', { current, coinName }))
+            API.openWS(coinName, (current) => commit('addCurrentPrice', { current, coinName })) //current == {price, time}
         }
     },
     mutations = {
-        //create curve
-        setCoinData(state, { name, data, range }) {
-            state.activeCoinName = name;
-            const curve = new Curve({ data, range });
-            Vue.set(state.coins[name], 'curve', curve);
-        },
         setFullRates(state, { res, coinName }) {
             const __updated = new Date().setUTCHours(0, 0, 0, 0)
-            state.coins[coinName] = {...state.coins[coinName], fullRates: res, __updated }
-
+            state.coins[coinName] = { ...state.coins[coinName], fullRates: res, __updated }
         },
         setLastRates(state, { res, coinName }) {
-            state.coins[coinName] = {...state.coins[coinName], lastRates: res }
+            state.coins[coinName] = { ...state.coins[coinName], lastRates: res }
         },
         addCurrentPrice({ coins }, { currents, coinName }) {
             coins[coinName].lastRates.push(currents)

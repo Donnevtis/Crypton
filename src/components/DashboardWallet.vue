@@ -7,9 +7,9 @@
       </div>
     </div>
     <div class="footer">
-      <span class="name">{{currency.name}}</span>
+      <span class="name">{{ currency.name.replace(/\w/i, l => l.toUpperCase()) }}</span>
       <transition name="fade">
-        <span v-if="currency.active" class="rate">{{ currency.amount}}</span>
+        <span v-if="currency.active" class="rate">{{ currency.amount }}</span>
       </transition>
     </div>
   </div>

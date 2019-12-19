@@ -50,6 +50,9 @@ export default {
 </script>
 
 <style scoped>
+@media (min-width: 480px) {
+  
+
 .dashboard {
   position: fixed;
   height: calc(100vh - 108px);
@@ -95,5 +98,20 @@ export default {
 }
 div {
   border-radius: 2px;
+}
+}
+@media (max-width: 480px) {
+.dashboard {
+  position: absolute;
+  height: auto;
+  width: 100%;
+  padding: 10px ;
+  bottom: auto;
+  right: 0;
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr ;
+  gap: 5vh;
+}
 }
 </style>

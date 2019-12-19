@@ -45,6 +45,9 @@ position: relative;
 .sidebar__menu {
     position: absolute;
     top: 148px;
-}           
+}          
+@media (max-width: 480px) {
+  .sidebar{ display: none;} 
+} 
 </style>
 
