@@ -11,10 +11,10 @@
 </template>
 
 <script>
-import { setInterval } from "timers";
+import { setInterval } from 'timers';
 
 export default {
-  name: "DashboardNews",
+  name: 'DashboardNews',
   data() {
     return {
       news: null,
@@ -31,26 +31,24 @@ export default {
   methods: {
     getNews() {
       fetch(
-        "https://min-api.cryptocompare.com/data/v2/news/?d177dd631fd9bac1a16566cfe5d289b34a7479d57daa474ebaa36fcb873cdd4d",
-        { cors: "no-cors" }
+        'https://min-api.cryptocompare.com/data/v2/news/?d177dd631fd9bac1a16566cfe5d289b34a7479d57daa474ebaa36fcb873cdd4d',
+        { cors: 'no-cors' }
       )
         .then(res => res.json())
         .then(res => {
           this.news = res.Data[0].title;
           this.link = res.Data[0].url;
           const date = new Date(res.Data[0].published_on * 1000);
-          this.date = date.toLocaleString("en", {
+          this.date = date.toLocaleString('en', {
             hour12: false,
-            hour: "2-digit",
-            minute: "2-digit",
-            day: "numeric",
-            year: "numeric",
-            month: "short"
+            hour: '2-digit',
+            minute: '2-digit',
+            day: 'numeric',
+            year: 'numeric',
+            month: 'short'
           });
         })
-        .catch(err => {
-          // eslint-disable-next-line
-          console.log(err);
+        .catch(() => {
           this.errored = true;
         })
         .finally(() => (this.loading = false));

@@ -19,33 +19,17 @@ export default {
   }
 };
 </script>
-<style lang="stylus">
-color-dark = #18191d
-color-slate = #222429
-color-middle = #1d2024
-color-light = #2a2b31
-color-bright = #45464d
-color-grass = #7ac231
-color-white = #ffffffee
-color-red = #c11e0f
-color-icons = #43444b
-color-text-dark = #3a3c43
-color-text-dark-transporent = #3a3c4385
-color-text-middle = #42434b
-color-text-light = #606166
-color-conversation-active = #4c4d55
-color-wallets-counter = #252529
-color-charcoal = #323235
-
-#app
-  position fixed
-  font-family "Avenir", Helvetica, Arial, sans-serif
-  -webkit-font-smoothing antialiased
-  -moz-osx-font-smoothing grayscale
-  width 100%
-  height 100vh
+<style lang="scss">
+#app {
+  position: fixed;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  width: 100%;
+  height: 100vh;
+}
 </style>
-<style>
+<style lang="scss">
 :root {
   --color-dark: #18191d;
   --color-slate: #222429;

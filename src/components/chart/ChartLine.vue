@@ -1,16 +1,20 @@
 <template lang="pug">
-svg.chart-line(xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 148' ) 
+svg.chart-line(xmlns='http://www.w3.org/2000/svg' :viewBox='viewBox' ) 
   g( fill='transparent' stroke="var(--color-green)" stroke-width='2')
     path( :d='d') 
+  slot
 </template>
 
 <script>
 export default {
-  name: "chartCurve",
+  name: 'chartLine',
   props: { coinName: String },
   computed: {
     d() {
       return this.$store.getters.chartLinePath(this.coinName);
+    },
+    viewBox() {
+      return this.$store.state.chartState.charts[this.coinName].viewBox;
     }
   }
 };

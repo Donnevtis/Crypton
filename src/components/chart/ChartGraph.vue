@@ -1,5 +1,5 @@
 <template lang="pug">
-.chart-container    
+.chart-container 
   svg.chart-graph(xmlns='http://www.w3.org/2000/svg' :viewBox='chart.viewBox' width="500" height="150"  vector-effect="non-scaling-stroke" preserveAspectRatio="xMaxYMid meet")
     svg.chart-field(:viewBox='chart.viewBox')
       g(stroke='var(--charcoal-grey)' stroke-width='0.5' style='shape-rendering: crispEdges')
@@ -8,16 +8,16 @@
           text.chart-worth(fill='var(--color-text-light' :key='line.y'  x='-40' :y='line.y1 + 3') {{ line.$ }}     
         line(:x1='chart.startline.x1' :y1='chart.startline.y1' :x2='chart.startline.x2' :y2='chart.startline.y2')        
       g(stroke='var(--charcoal-grey)')
-        line(v-for='tick in chart.ticks' :key='tick.x' :x1='tick.x + 12' :y1='chart._height+2' :x2='tick.x + 12' :y2='chart._height+5')
+        line(v-for='tick in chart.ticks' :key='tick.x' :x1='tick.x + 12' :y1='chart.height+2' :x2='tick.x + 12' :y2='chart.height+5')
       transition-group.chart-timeframes(tag='g' name='list' fill='var(--color-text-light)')
-        text(v-for='tick in chart.ticks' :key='tick.x' :x='tick.x' :y='chart._height+28') {{ tick.t }}
+        text(v-for='tick in chart.ticks' :key='tick.x' :x='tick.x' :y='chart.height+28') {{ tick.t }}
   component(:is="graph" :coinName="getActiveWallet.name") 
-  component(:is="blinkPoint")   
-  helper
+    helper
+  //- component(:is="blinkPoint")   
 </template>
 
 <script>
-import chartCurve from './ChartCurve';
+import chartLine from './ChartLine';
 import helper from './ChartHelper';
 import spinner from '../Spinner';
 import blinkPoint from './ChartBlinkPoint';
@@ -26,7 +26,7 @@ import { mapGetters } from 'vuex';
 export default {
   name: 'ChartGraph',
   components: {
-    chartCurve,
+    chartLine,
     helper,
     spinner,
     blinkPoint
@@ -60,7 +60,7 @@ export default {
         .join(' '); // '0 0 600 300' -> '-20 0 600 320'
     },
     graph() {
-      return this.isLoad ? chartCurve : 'spinner';
+      return this.isLoad ? chartLine : 'spinner';
     },
     blinkPoint() {
       return this.isLoad ? blinkPoint : 'spinner';
@@ -69,7 +69,7 @@ export default {
 
   watch: {
     getActiveWallet(wallet) {
-      this.isLoad = false;
+      // this.isLoad = false;
       this.$store
         .dispatch('createChart', {
           coinName: wallet.name,

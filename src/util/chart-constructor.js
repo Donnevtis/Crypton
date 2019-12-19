@@ -1,18 +1,18 @@
 //the graph constructor
 
-/* eslint-disable */
+
 export class Chart {
     _width = 498
-    _height = 148
-    _verticalStep = 37
-    range = 36e5
     constructor() {
-        const ordinates = ~~this._height / this._verticalStep
-        const startlineOffset = this._width / 20
-        this.chartLineWidth = this._width - startlineOffset
-        this.viewBox = `0 0 ${this._width + 2} ${this._height + 2}`
-        this.gridY = this.stepper(this._verticalStep, ordinates) //coords for vertical grid
-        this.startline = new Coords(this.chartLineWidth, this.chartLineWidth, 1, this._height + 1) //chart draw start line
+        
+        this._height = 148
+        this._verticalStep = 37
+        this.range = 36e5
+        const ordinates = Math.floor(this._height / this._verticalStep)
+        this.chartLineWidth = this._width
+        this.viewBox = `0 0 ${this._width} ${this._height}`
+        this.gridY = this.#stepper(this._verticalStep, ordinates) //coords for vertical grid
+        this.startline = new Coords(this.chartLineWidth, this.chartLineWidth, 0, this._height) //chart draw start line
         this.crossHair = this.gridY.map(y => new Coords(0, this._width, y, y)) //horizontal dividing lines
 
         function Coords(x1, x2, y1, y2) {
@@ -22,7 +22,19 @@ export class Chart {
             this.y2 = y2
         }
     }
+    #stepper(range, steps, from = 0) {
+        return [... {
+            *[Symbol.iterator]() {
+                for (let i = 0; i < steps + 1; i++) {
+                    yield (from)
+                    from += range
+                }
+            }
+        }]
+    }
 
+
+    // MAIN CHART LINE CREATOR 
     createChartLine({ data, range }) {
         this.range = range
         const croppedData = cropData(data)
@@ -57,7 +69,6 @@ export class Chart {
     costToCoordsY(cost) {
         return (this.limits.max - this.limits.min - (+cost - this.limits.min)) / this.yResolution
     }
-
     findLimits(croppedData) {
         const min = croppedData.reduce(
             (prev, item) => Math.min(prev, item.priceUsd),
@@ -70,14 +81,19 @@ export class Chart {
         return { min, max }
     }
 
+
+    // USD LABALS CREATOR
     createLabels() {
         let max = this.limits.max
         const step = (max - this.limits.min) / this.crossHair.length
         this.crossHair.forEach(l => {
-            l.$ = max >= 1000 && this.range > 4e5 ? (max / 1000).toFixed(1) + "k" : "$" + ~~max
+            l.$ = max >= 1000 && this.range > 4e5 ? (max / 1000).toFixed(1) + "k" : "$" + max.toFixed(2)
             max -= step
         })
     }
+
+
+    // TIME/DATE LABELS CREATOR
     createTicks() {
         const __count = 6;
         const timeStep = this.range / __count;
@@ -108,6 +124,9 @@ export class Chart {
                 });
         }
     }
+
+
+    // GETTER/SETTER SECTION
     set newPrice({ priceUsd, time }) {
         const y = this.costToCoordsY(priceUsd)
         this.dataStack.push({
@@ -128,23 +147,16 @@ export class Chart {
         this.coinData.slice(-1)[0]
         this.currents = currents
     }
-    stepper(range, steps, from = 1) {
-        return [... {
-            *[Symbol.iterator]() {
-                for (let i = 0; i < steps + 1; i++) {
-                    yield (from)
-                    from += range
-                }
-            }
-        }]
-    }
-
-
-    getNewDate() {
+    get getNewDate() {
         const x = 530;
         return { t: new Date(), x }
     }
-
+    get height() {
+        return this._height;
+    }
+    get width() {
+        return this._width;
+    }
 
 }
 

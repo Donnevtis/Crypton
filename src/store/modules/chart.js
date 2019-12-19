@@ -6,7 +6,6 @@ const state = {
 },
     getters = {
         chartLinePath: ({ charts }) => name => {
-            if (!('dataStack' in charts[name])) return 'M0,0L100,100'
             const lineData = charts[name].dataStack
             const d = [`M${lineData[0].x},${lineData[0].y}`];
             for (let i = 1; i < lineData.length; i++) {
