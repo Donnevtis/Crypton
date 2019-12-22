@@ -2,31 +2,26 @@
 
 
 export class Chart {
-    _width = 498
-    constructor() {
-        
-        this._height = 148
-        this._verticalStep = 37
-        this.range = 36e5
-        const ordinates = Math.floor(this._height / this._verticalStep)
+    _XStep = 100
+    _YStep = 50
+    _width = 600
+    _height = 200
+    constructor(box) {
+        this._width = this._XStep * ~~(box.clientWidth / this._XStep)
+        this._height = this._YStep * ~~(box.clientHeight / this._YStep)
+        const absciss = Math.floor(this._width / this._XStep)
+        const ordinates = Math.floor(this._height / this._YStep)
         this.chartLineWidth = this._width
         this.viewBox = `0 0 ${this._width} ${this._height}`
-        this.gridY = this.#stepper(this._verticalStep, ordinates) //coords for vertical grid
-        this.startline = new Coords(this.chartLineWidth, this.chartLineWidth, 0, this._height) //chart draw start line
-        this.crossHair = this.gridY.map(y => new Coords(0, this._width, y, y)) //horizontal dividing lines
-
-        function Coords(x1, x2, y1, y2) {
-            this.x1 = x1
-            this.x2 = x2
-            this.y1 = y1
-            this.y2 = y2
-        }
+        this.gridX = this.stepper(this._XStep, absciss, 'x', 30) //coords for horizontal grid            
+        this.gridY = this.stepper(this._YStep, ordinates, 'y') //horizontal dividing lines
     }
-    #stepper(range, steps, from = 0) {
+
+    stepper(range, steps, axis, from = 0) {
         return [... {
             *[Symbol.iterator]() {
                 for (let i = 0; i < steps + 1; i++) {
-                    yield (from)
+                    yield ({ [axis]: from })
                     from += range
                 }
             }
@@ -36,7 +31,16 @@ export class Chart {
 
     // MAIN CHART LINE CREATOR 
     createChartLine({ data, range }) {
-        this.range = range
+        this.range = range || 36e4
+
+        const cropData = data => {
+            let i = data.length - 1
+            while (data[i].time >= Date.now() - this.range) {
+                --i
+            }
+            return data.slice(i)
+        }
+
         const croppedData = cropData(data)
         this.limits = this.findLimits(croppedData)
         const xResolution = (croppedData[croppedData.length - 1].time - croppedData[0].time) / this._width
@@ -53,18 +57,9 @@ export class Chart {
                 price: +croppedData[i].priceUsd
             })
         }
-
+        this.chartLinePath()
         this.createLabels()
         this.createTicks()
-
-        function cropData(data) {
-            let i = data.length - 1
-            while (data[i].time >= Date.now() - range) {
-                --i
-            }
-            return data.slice(i)
-        }
-
     }
     costToCoordsY(cost) {
         return (this.limits.max - this.limits.min - (+cost - this.limits.min)) / this.yResolution
@@ -80,14 +75,23 @@ export class Chart {
         )
         return { min, max }
     }
+    chartLinePath() {
+        const d = [`M${this.dataStack[0].x},${this.dataStack[0].y}`];
+
+        for (let i = 1; i < this.dataStack.length; i++) {
+            d.push(`L${this.dataStack[i].x},${this.dataStack[i].y}`)
+        }
+
+        this.d = d.join('')
+    }
 
 
-    // USD LABALS CREATOR
+    // USD LABELS CREATOR
     createLabels() {
         let max = this.limits.max
-        const step = (max - this.limits.min) / this.crossHair.length
-        this.crossHair.forEach(l => {
-            l.$ = max >= 1000 && this.range > 4e5 ? (max / 1000).toFixed(1) + "k" : "$" + max.toFixed(2)
+        const step = (max - this.limits.min) / this.gridY.length
+        this.gridY.forEach(l => {
+            l.$ = max >= 1000 && this.range > 4e5 ? (max / 1000).toFixed(1) + "k" : max.toFixed(2)
             max -= step
         })
     }
@@ -95,18 +99,16 @@ export class Chart {
 
     // TIME/DATE LABELS CREATOR
     createTicks() {
-        const __count = 6;
-        const timeStep = this.range / __count;
-        const output = this.range > 4e5 ? daysToLocal() : timeToLocal();
-        let x = 30;
-        let t = Date.now() - this.range;
-        this.ticks = []
+        const timeStep = this.range / this.gridX.length
+        const output = this.range > 4e5 ? daysToLocal() : timeToLocal()
+        let x = 30
+        let t = Date.now() - this.range
 
-        for (let i = 0; i < __count; i++) {
-            this.ticks.push({ t: output(t), x });
-            t = +t + timeStep;
-            x += this._width / __count;
-        }
+
+        this.gridX.forEach({ t: output(t), x });
+        t = +t + timeStep;
+        x += this._width / __count;
+
 
         function timeToLocal() {
             return mSec =>

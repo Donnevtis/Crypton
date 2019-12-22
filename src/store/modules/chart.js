@@ -18,9 +18,11 @@ const state = {
 
     },
     actions = {
-        createChart({ rootState, dispatch, commit, getters }, { coinName, mnths = true }) {
+        createChart({ state, rootState, dispatch, commit, getters }, { coinName, mnths = true, box }) {
             const rates = mnths ? 'fullRates' : 'lastRates'
-            commit('createChartField', coinName)
+            if (!state.charts[coinName]) {
+                commit('createChartField', { coinName, box })
+            }
             return dispatch('fetchRates', { coinName, mnths })
                 .then(() => {
 
@@ -29,15 +31,12 @@ const state = {
         }
     },
     mutations = {
-        createChartField({ charts }, coinName) {
-            const chart = new Chart
+        createChartField({ charts }, { coinName, box }) {
+            const chart = new Chart(box)
             Vue.set(charts, coinName, chart);
         },
         createChartLine(state, data) {
             state.charts[data.coinName].createChartLine(data)
-        },
-        setWidth(state) {
-            state.chart.width = 2
         }
     }
 

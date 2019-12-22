@@ -1,7 +1,9 @@
 <template>
   <div class="chart">
     <div class="chart-header">
-      <div class="chart-title">{{wallet.name.replace(/\w/i, l => l.toUpperCase())}} Chart</div>
+      <div class="chart-title">
+        {{ wallet.name.replace(/\w/i, l => l.toUpperCase()) }} Chart
+      </div>
       <timestamp />
     </div>
     <div class="chart-graph">
@@ -11,11 +13,11 @@
 </template>
 
 <script>
-import Graph from "./chart/ChartGraph";
-import Timestamp from "./chart/ChartTimestamp";
+import Graph from './chart/ChartGraph';
+import Timestamp from './chart/ChartTimestamp';
 
 export default {
-  name: "DashboardChart",
+  name: 'DashboardChart',
   components: {
     Timestamp,
     Graph
@@ -36,7 +38,7 @@ export default {
   width: 100%;
   height: 100%;
   background-color: var(--color-middle);
-  padding: 1.57vw 2.42vw 2.5vw 2.4vw;
+  padding: 30px 20px 40px 40px;
 }
 .chart-header {
   display: flex;
