@@ -2,19 +2,18 @@
 
 
 export class Chart {
-    _XStep = 100
-    _YStep = 50
-    _width = 600
-    _height = 200
+    #XStep = 80
+    #YStep = 50
+    #width = 600
+    #height = 200
     constructor(box) {
-        this._width = this._XStep * ~~(box.clientWidth / this._XStep)
-        this._height = this._YStep * ~~(box.clientHeight / this._YStep)
-        const absciss = Math.floor(this._width / this._XStep)
-        const ordinates = Math.floor(this._height / this._YStep)
-        this.chartLineWidth = this._width
-        this.viewBox = `0 0 ${this._width} ${this._height}`
-        this.gridX = this.stepper(this._XStep, absciss, 'x', 30) //coords for horizontal grid            
-        this.gridY = this.stepper(this._YStep, ordinates, 'y') //horizontal dividing lines
+        this.#width = this.XStep * ~~(box.clientWidth / this.XStep)
+        this.#height = this.YStep * ~~(box.clientHeight / this.YStep)
+        const absciss = Math.floor(this.width / this.XStep) - 1
+        const ordinates = Math.floor(this.height / this.YStep)
+        this.viewBox = `0 0 ${this.width} ${this.height}`
+        this.gridX = this.stepper(this.XStep, absciss, 'x', 30) //coords for horizontal grid            
+        this.gridY = this.stepper(this.YStep, ordinates, 'y') //horizontal dividing lines
     }
 
     stepper(range, steps, axis, from = 0) {
@@ -43,8 +42,8 @@ export class Chart {
 
         const croppedData = cropData(data)
         this.limits = this.findLimits(croppedData)
-        const xResolution = (croppedData[croppedData.length - 1].time - croppedData[0].time) / this._width
-        this.yResolution = (this.limits.max - this.limits.min) / this._height
+        const xResolution = (croppedData[croppedData.length - 1].time - croppedData[0].time) / this.width
+        this.yResolution = (this.limits.max - this.limits.min) / this.height
         this.dataStack = []
 
         for (let i = 0; i < croppedData.length; i++) {
@@ -76,10 +75,10 @@ export class Chart {
         return { min, max }
     }
     chartLinePath() {
-        const d = [`M${this.dataStack[0].x},${this.dataStack[0].y}`];
+        const d = [`M${this.dataStack[0].x}, ${this.dataStack[0].y} `];
 
         for (let i = 1; i < this.dataStack.length; i++) {
-            d.push(`L${this.dataStack[i].x},${this.dataStack[i].y}`)
+            d.push(`L${this.dataStack[i].x}, ${this.dataStack[i].y} `)
         }
 
         this.d = d.join('')
@@ -90,8 +89,8 @@ export class Chart {
     createLabels() {
         let max = this.limits.max
         const step = (max - this.limits.min) / this.gridY.length
-        this.gridY.forEach(l => {
-            l.$ = max >= 1000 && this.range > 4e5 ? (max / 1000).toFixed(1) + "k" : max.toFixed(2)
+        this.gridY.forEach(i => {
+            i.$ = max >= 1000 && this.range > 4e5 ? (max / 1000).toFixed(1) + "k" : max.toFixed(2)
             max -= step
         })
     }
@@ -99,16 +98,11 @@ export class Chart {
 
     // TIME/DATE LABELS CREATOR
     createTicks() {
-        const timeStep = this.range / this.gridX.length
         const output = this.range > 4e5 ? daysToLocal() : timeToLocal()
-        let x = 30
-        let t = Date.now() - this.range
-
-
-        this.gridX.forEach({ t: output(t), x });
-        t = +t + timeStep;
-        x += this._width / __count;
-
+        this.gridX.forEach(i => {
+            const t = this.dataStack.find((l, index, arr) => l.x <= i.x && arr[index + 1].x >= i.x)
+            i.t = output(t.time)
+        });
 
         function timeToLocal() {
             return mSec =>
@@ -118,6 +112,7 @@ export class Chart {
                     minute: "numeric"
                 });
         }
+
         function daysToLocal() {
             return mSec =>
                 new Date(mSec).toLocaleString("en", {
@@ -125,6 +120,7 @@ export class Chart {
                     month: "short"
                 });
         }
+
     }
 
 
@@ -132,7 +128,7 @@ export class Chart {
     set newPrice({ priceUsd, time }) {
         const y = this.costToCoordsY(priceUsd)
         this.dataStack.push({
-            x: this.chartLineWidth,
+            x: this.width,
             y,
             time,
             price: +priceUsd
@@ -154,10 +150,16 @@ export class Chart {
         return { t: new Date(), x }
     }
     get height() {
-        return this._height;
+        return this.#height
     }
     get width() {
-        return this._width;
+        return this.#width
+    }
+    get XStep() {
+        return this.#XStep
+    }
+    get YStep() {
+        return this.#YStep
     }
 
 }
