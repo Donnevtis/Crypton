@@ -1,19 +1,15 @@
 //the graph constructor
 
-
 export class Chart {
     #XStep = 80
     #YStep = 50
     #width = 600
     #height = 200
+
     constructor(box) {
         this.#width = this.XStep * ~~(box.clientWidth / this.XStep)
         this.#height = this.YStep * ~~(box.clientHeight / this.YStep)
-        const absciss = Math.floor(this.width / this.XStep) - 1
-        const ordinates = Math.floor(this.height / this.YStep)
         this.viewBox = `0 0 ${this.width} ${this.height}`
-        this.gridX = this.stepper(this.XStep, absciss, 'x', 30) //coords for horizontal grid            
-        this.gridY = this.stepper(this.YStep, ordinates, 'y') //horizontal dividing lines
     }
 
     stepper(range, steps, axis, from = 0) {
@@ -27,8 +23,14 @@ export class Chart {
         }]
     }
 
-
     // MAIN CHART LINE CREATOR 
+    initChart(data) {
+        const absciss = Math.floor(this.width / this.XStep) - 1
+        const ordinates = Math.floor(this.height / this.YStep)
+        this.gridX = this.stepper(this.XStep, absciss, 'x', 30) //coords for horizontal grid, left offset = 30     
+        this.gridY = this.stepper(this.YStep, ordinates, 'y') //horizontal dividing lines   
+        this.createChartLine(data)
+    }
     createChartLine({ data, range }) {
         this.range = range || 36e4
 
@@ -56,9 +58,9 @@ export class Chart {
                 price: +croppedData[i].priceUsd
             })
         }
-        this.chartLinePath()
+
         this.createLabels()
-        this.createTicks()
+
     }
     costToCoordsY(cost) {
         return (this.limits.max - this.limits.min - (+cost - this.limits.min)) / this.yResolution
@@ -74,14 +76,14 @@ export class Chart {
         )
         return { min, max }
     }
-    chartLinePath() {
+    get chartLinePath() {
         const d = [`M${this.dataStack[0].x}, ${this.dataStack[0].y} `];
 
         for (let i = 1; i < this.dataStack.length; i++) {
             d.push(`L${this.dataStack[i].x}, ${this.dataStack[i].y} `)
         }
 
-        this.d = d.join('')
+        return d.join('')
     }
 
 
@@ -96,20 +98,20 @@ export class Chart {
     }
 
 
-    // TIME/DATE LABELS CREATOR
+    // TIME/DATE LABELS CREATOR    
     createTicks() {
+        this.gridX.forEach((label, index) => { label.t = this.timeSetter(label); label.i = index });
+    }
+    timeSetter(time) {
         const output = this.range > 4e5 ? daysToLocal() : timeToLocal()
-        this.gridX.forEach(i => {
-            const t = this.dataStack.find((l, index, arr) => l.x <= i.x && arr[index + 1].x >= i.x)
-            i.t = output(t.time)
-        });
 
         function timeToLocal() {
             return mSec =>
                 new Date(mSec).toLocaleString("en", {
                     hour12: false,
                     hour: "numeric",
-                    minute: "numeric"
+                    minute: "numeric",
+                    second: "numeric"
                 });
         }
 
@@ -121,34 +123,24 @@ export class Chart {
                 });
         }
 
+        const t = this.dataStack.find((l, index, arr) => l.x <= time.x && arr[index + 1].x >= time.x)
+        return output(t.time)
     }
 
+    currentPrice(data) {
+        this.createChartLine(data)
+        this.gridX.forEach(i => i.x -= this.dataStack[this.dataStack.length - 1].x - this.dataStack[this.dataStack.length - 2].x)
+        if (this.gridX[0].x <= 30 - this.XStep) {
+            const i = -this.gridX[0].i
+            const x = this.gridX[this.gridX.length - 1].x + this.XStep
+            const t = this.timeSetter({ x })
+            this.gridX.push({ x, t, i })
+            this.gridX.shift()
 
-    // GETTER/SETTER SECTION
-    set newPrice({ priceUsd, time }) {
-        const y = this.costToCoordsY(priceUsd)
-        this.dataStack.push({
-            x: this.width,
-            y,
-            time,
-            price: +priceUsd
-        })
+        }
     }
-    set shiftX(shift) {
-        this.animate()
-        this.dataStack.forEach((d, _, a) => {
-            d.x -= shift
-            if (d.x <= -70) a.shift()
-        })
-    }
-    set setCurrents(currents) {
-        this.coinData.slice(-1)[0]
-        this.currents = currents
-    }
-    get getNewDate() {
-        const x = 530;
-        return { t: new Date(), x }
-    }
+
+    // GETTER/SETTER SECTION   
     get height() {
         return this.#height
     }
@@ -163,27 +155,6 @@ export class Chart {
     }
 
 }
-
-
-
-
-    // animate() {
-    //     let now = ~~performance.now()
-    //     function animate(time) {
-    //         this.shift = +(1 / (600 / (~~time - now))).toFixed(3)
-    //         this.shift = .33
-    //         requestAnimationFrame(animate.bind(this))
-    //     }
-    //     this.animation = requestAnimationFrame(animate.bind(this))
-    // }
-    // stopAnimate() {
-    //     if (this.animation === undefined) return
-    //     cancelAnimationFrame(this.animation)
-    // }
-
-
-
-
 
 
 

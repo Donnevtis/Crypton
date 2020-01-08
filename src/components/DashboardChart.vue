@@ -24,7 +24,7 @@ export default {
   },
   computed: {
     wallet() {
-      return this.$store.getters.getActiveWallet;
+      return this.$store.getters.activeWallet;
     }
   }
 };

@@ -20,19 +20,19 @@ export default {
             resolve(res.data)
         })
     },
-    openWS(coinName, /* callback */) {
+    openWS(coinName, callback) {
         // Need changes. It will be rather, if WebSocket won't be closes.       
         this.WS = new WebSocket(`wss://ws.coincap.io/prices?assets=${coinName}`)
-        // const startTime = Date.now();
-        // let time = 0;
-        // let priceUsd = 0;
-        // this.WS.onmessage = msg => {
-        //     priceUsd = JSON.parse(msg.data)[coinName];
-        //     time = startTime + ~~msg.timeStamp;
-        // callback({ priceUsd, time })
+        const startTime = Date.now();
+        let time = 0;
+        let priceUsd = 0;
+        this.WS.onmessage = msg => {
+            priceUsd = JSON.parse(msg.data)[coinName];
+            time = startTime + ~~msg.timeStamp;
+            callback({ priceUsd, time })
+        }
     },
-
     closeWS() {
-        if (this.WS) this.WS.close();
+        if (this.WS) this.WS.close()
     }
 }

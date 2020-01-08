@@ -1,22 +1,22 @@
 <template lang="pug">
 .chart-container(ref='box')
-  template(v-if='chartIsReady')
-    svg.chart-graph(xmlns='http://www.w3.org/2000/svg' :viewBox='chart.viewBox' width="500" height="150"  vector-effect="non-scaling-stroke")
-      svg.chart-field(:viewBox='chart.viewBox')
-        g(stroke='var(--charcoal-grey)' stroke-width='0.5' style='shape-rendering: crispEdges')
-          template(v-for='line in chart.gridY' )        
-            line( :key='line.y' x1='0' :y1='line.y' :x2='chart.width' :y2='line.y')   
-            svg.chart-worth-container(x='-50' width='50')    
-              text.chart-worth(fill='var(--color-text-light' :key='line.y'  x='25' :y='line.y + 3'  text-anchor="middle") {{ line.$ }}               
-          line(:x1='chart.width' :y1='0' :x2='chart.width' :y2='chart.height')        
-        g(stroke='var(--charcoal-grey)')
-          line(v-for='tick in chart.gridX' :key='tick.x' :x1='tick.x' :y1='chart.height' :x2='tick.x' :y2='chart.height+3')
-        template(v-for='tick in chart.gridX')
-          transition(tag='g' mode="out-in" name='list' )
-            text.chart-timeframes(:key='tick.t' :x='tick.x - 12' :y='chart.height+28' fill='var(--color-text-light)') {{ tick.t }}
-    component(:is="graph" :d="d" :viewBox='chart.viewBox') 
+  template(v-if='isLoad')
+    svg.chart-graph(xmlns='http://www.w3.org/2000/svg' :viewBox='chart.viewBox' width="500" height="150" vector-effect="non-scaling-stroke")      
+      g(stroke='var(--charcoal-grey)' stroke-width='0.5' style='shape-rendering: crispEdges')
+        template(v-for='line in chart.gridY' )        
+          line( :key='line.y' x1='0' :y1='line.y' :x2='chart.width' :y2='line.y')   
+          svg.chart-label-container(x='-50' width='50')    
+            text.chart-labels(stroke='transparent' x='25' :y='line.y + 3'  text-anchor="middle") {{ line.$ }}               
+        line(:x1='chart.width' :y1='0' :x2='chart.width' :y2='chart.height')    
+    svg.chart-timers(:viewBox='chart.viewBox' vector-effect="non-scaling-stroke")
+      g(stroke='var(--charcoal-grey)' stroke-width='1')
+        line(v-for='tick in chart.gridX' :key='tick.x' :x1='tick.x' :y1='chart.height' :x2='tick.x' :y2='chart.height+3' style="transform: translateY(-26px)")
+      transition-group(tag='g' name="timers-list" )        
+          svg.chart-label-container(v-for='tick in chart.gridX' :key='tick.i' width='80' :x='tick.x' :y='chart.height')
+            text.chart-labels(stroke='transparent' text-anchor="middle") {{ tick.t }}
+    component(:is="graph" :d="d" :viewBox="chart.viewBox") 
   component(:is="blinkPoint")   
-  helper(v-if="chartIsReady" :chart="chart" :currency="getActiveWallet.name")
+  helper(v-if="isLoad" :chart="chart" :currency="activeWallet.name")
 </template>
 
 <script>
@@ -25,6 +25,7 @@ import helper from "./ChartHelper";
 import spinner from "../Spinner";
 import blinkPoint from "./ChartBlinkPoint";
 import { mapGetters } from "vuex";
+import { Chart } from "../../util/chart-constructor";
 
 export default {
   name: "ChartGraph",
@@ -36,37 +37,25 @@ export default {
   },
   data() {
     return {
-      isLoad: false,
-      chartIsReady: false,
-      d: ""
+      chart: {},
+      currentRates: [],
+      d: {},
+      isLoad: false
     };
   },
   mounted() {
-    this.$store
-      .dispatch("createChart", {
-        coinName: this.getActiveWallet.name,
-        mnths: this.activeStamp.mnth,
-        box: this.$refs.box
-      })
-      .then(() => {
-        this.isLoad = true;
-        this.chartIsReady = true;
-        this.d = this.chart.d;
-      });
+    this.chart = new Chart(this.$refs.box);
+    this.createChartLine();
   },
   computed: {
+    coins() {
+      return this.$store.state.history.coins;
+    },
     ...mapGetters({
       activeStamp: "activeStamp",
-      getActiveWallet: "getActiveWallet",
-      chart: "activeChart"
+      activeWallet: "activeWallet",
+      dateRange: "dateRange"
     }),
-    // ...mapState({chart: state=> state.chartState.charts[this.getActiveWallet.name]}),
-    viewBox() {
-      return this.chart.viewBox
-        .split(" ")
-        .map((item, i) => (i == 0 ? +item - 20 : i == 3 ? +item + 20 : item))
-        .join(" "); // '0 0 600 300' -> '-20 0 600 320'
-    },
     graph() {
       return this.isLoad ? chartLine : "spinner";
     },
@@ -75,45 +64,42 @@ export default {
     }
   },
   watch: {
-    getActiveWallet(wallet) {
-      // this.isLoad = false;
-      this.$store
-        .dispatch("createChart", {
-          coinName: wallet.name,
-          mnths: this.activeStamp.mnth,
-          box: this.$refs.box
-        })
-        .then(() => {
-          this.isLoad = true;
-          this.d = this.chart.d;
-        });
+    activeWallet() {
+      this.createChartLine();
     },
-    activeStamp(stamp) {
-      this.isLoad = false;
-      this.$store
-        .dispatch("createChart", {
-          coinName: this.getActiveWallet.name,
-          mnths: stamp.mnth,
-          box: this.$refs.box
-        })
-        .then(() => {
-          this.isLoad = true;
-          this.d = this.chart.d;
-        });
+    activeStamp() {
+      this.createChartLine();
+    },
+    currentRates(rates) {
+      this.chart.currentPrice({
+        data: rates,
+        range: this.dateRange
+      });
+      this.d = this.chart.chartLinePath;
     }
   },
-  shift(px) {
-    // this.$store.commit("animation", px);
-    this.lines.forEach((line, i, lines) => {
-      let x = line.x;
-      x -= px; //formula for the offset of the pixels
-      line.x = +x.toFixed(3);
-      if (x <= -70) {
-        //delete and create the timers
-        lines.shift();
-        lines.push(this.dates.getNewDate(line.i));
-      }
-    });
+  methods: {
+    createChartLine() {
+      const [rates, action] = this.activeStamp.mnth
+        ? ["fullRates", "fetchFullRates"]
+        : ["lastRates", "fetchCurrentRates"];
+
+      this.$store
+        .dispatch(action, {
+          coinName: this.activeWallet.name
+        })
+        .then(() => {
+          this.chart.initChart({
+            data: this.coins[this.activeWallet.name][rates],
+            range: this.dateRange
+          });
+          this.chart.createTicks();
+          this.d = this.chart.chartLinePath;
+          this.isLoad = true;
+          if (!this.activeStamp.mnth)
+            this.currentRates = this.coins[this.activeWallet.name][rates];
+        });
+    }
   }
 };
 </script>
@@ -132,41 +118,25 @@ export default {
   width: 100%;
   overflow: visible;
 }
-.chart-field {
-  overflow: visible;
+.chart-timers {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  transform: translateY(28px);
 }
-.chart-worth,
-.chart-timeframes {
+.chart-labels {
   position: absolute;
   font-size: 10px;
   font-weight: 500;
-  color: var(--color-text-light);
+  fill: var(--color-text-light);
 }
-.chart-worth-container {
-  transform: translateX(-50px);
-  width: 100px;
-  height: 100px;
+.chart-label-container {
   overflow: visible;
 }
-.chart-worth {
-  transform: translateX(0);
+.timers-list-enter-active {
+  transition: all 1s;
 }
-.list-enter-active {
-  transition: all 0.5s;
-}
-.list-enter-to {
-  opacity: 1;
-}
-.list-enter {
-  opacity: 0;
-}
-.list-leave-active {
-  transition: all 0.5s;
-}
-.list-leave {
-  opacity: 1;
-}
-.list-leave-to {
+.timers-list-enter {
   opacity: 0;
 }
 </style>

@@ -53,8 +53,6 @@ export default {
                 day: "numeric",
                 month: "short",
                 year: "numeric"
-                // hour: "numeric",
-                // minute: "numeric"
               }),
               price: "$" + this.point.price.toFixed(2)
             }
