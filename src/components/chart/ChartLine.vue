@@ -8,7 +8,7 @@ svg.chart-line(xmlns='http://www.w3.org/2000/svg' :viewBox='viewBox'  vector-eff
 <script>
 export default {
   name: "chartLine",
-  props: { d: String, viewBox: String }
+  props: { d: { type: String, default: "", required: true }, viewBox: String }
 };
 </script>
 

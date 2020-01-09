@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "test": "jest"
   },
   "dependencies": {
     "core-js": "^2.6.11",
@@ -19,15 +20,31 @@
     "@vue/cli-plugin-babel": "^4.1.1",
     "@vue/cli-plugin-eslint": "^4.1.1",
     "@vue/cli-service": "^4.1.1",
+    "@vue/test-utils": "^1.0.0-beta.30",
     "babel-eslint": "^10.0.3",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
+    "jest": "^24.9.0",
     "node-sass": "^4.13.0",
     "pug-plain-loader": "^1.0.0",
     "sass-loader": "^8.0.0",
     "stylus": "^0.54.7",
     "stylus-loader": "^3.0.2",
+    "vue-jest": "^3.0.5",
     "vue-template-compiler": "^2.6.11"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "^vue$": "vue/dist/vue.common.js"
+    },
+    "moduleFileExtensions": [
+      "js",
+      "vue"
+    ],
+    "transform": {
+      "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
+      ".*\\.(vue)$": "<rootDir>/node_modules/vue-jest"
+    }
   },
   "eslintConfig": {
     "root": true,

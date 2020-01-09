@@ -40,7 +40,7 @@ export default {
     return {
       chart: {},
       currentRates: [],
-      d: {},
+      d: '',
       pointY: 0,
       isLoad: false,
       isCurrent: false
