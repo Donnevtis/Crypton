@@ -3,8 +3,8 @@ const state = {
         { id: 0, active: false, t: "1m", mnth: 1 },
         { id: 1, active: false, t: "3m", mnth: 3 },
         { id: 2, active: false, t: "6m", mnth: 6 },
-        { id: 3, active: false, t: "1y", mnth: 12 },
-        { id: 4, active: true, t: "Now", mnth: 0, },
+        { id: 3, active: true, t: "1y", mnth: 12 },
+        { id: 4, active: false, t: "Now", mnth: 0, },
     ],
     time: () => setInterval(() => Date.now(), 1000)
 

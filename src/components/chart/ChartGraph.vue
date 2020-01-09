@@ -14,33 +14,36 @@
       transition-group(tag='g' name="timers-list" )        
           svg.chart-label-container(v-for='tick in chart.gridX' :key='tick.i' width='80' :x='tick.x' :y='chart.height')
             text.chart-labels(stroke='transparent' text-anchor="middle") {{ tick.t }}
-    component(:is="graph" :d="d" :viewBox="chart.viewBox") 
-  component(:is="blinkPoint")   
-  helper(v-if="isLoad" :chart="chart" :currency="activeWallet.name")
+    chart-line(:d="d" :viewBox="chart.viewBox") 
+  app-spinner(v-else)
+  blink-point(v-if="isCurrent" :chart="chart" :y="pointY")   
+  chart-helper(v-if="isLoad" :chart="chart" :currency="activeWallet.name")
 </template>
 
 <script>
-import chartLine from "./ChartLine";
-import helper from "./ChartHelper";
-import spinner from "../Spinner";
-import blinkPoint from "./ChartBlinkPoint";
+import ChartLine from "./ChartLine";
+import ChartHelper from "./ChartHelper";
+import AppSpinner from "../Spinner";
+import BlinkPoint from "./ChartBlinkPoint";
 import { mapGetters } from "vuex";
 import { Chart } from "../../util/chart-constructor";
 
 export default {
   name: "ChartGraph",
   components: {
-    chartLine,
-    helper,
-    spinner,
-    blinkPoint
+    ChartLine,
+    ChartHelper,
+    AppSpinner,
+    BlinkPoint
   },
   data() {
     return {
       chart: {},
       currentRates: [],
       d: {},
-      isLoad: false
+      pointY: 0,
+      isLoad: false,
+      isCurrent: false
     };
   },
   mounted() {
@@ -55,19 +58,14 @@ export default {
       activeStamp: "activeStamp",
       activeWallet: "activeWallet",
       dateRange: "dateRange"
-    }),
-    graph() {
-      return this.isLoad ? chartLine : "spinner";
-    },
-    blinkPoint() {
-      return this.isLoad ? blinkPoint : "spinner";
-    }
+    })
   },
   watch: {
     activeWallet() {
       this.createChartLine();
     },
-    activeStamp() {
+    activeStamp(mnth) {
+      this.isLoad = mnth ? false : true;
       this.createChartLine();
     },
     currentRates(rates) {
@@ -76,10 +74,12 @@ export default {
         range: this.dateRange
       });
       this.d = this.chart.chartLinePath;
+      this.pointY = this.chart.dataStack.slice(-1)[0].y;
     }
   },
   methods: {
     createChartLine() {
+      this.isCurrent = false;
       const [rates, action] = this.activeStamp.mnth
         ? ["fullRates", "fetchFullRates"]
         : ["lastRates", "fetchCurrentRates"];
@@ -96,8 +96,13 @@ export default {
           this.chart.createTicks();
           this.d = this.chart.chartLinePath;
           this.isLoad = true;
-          if (!this.activeStamp.mnth)
-            this.currentRates = this.coins[this.activeWallet.name][rates];
+          if (!this.activeStamp.mnth) {
+            this.isCurrent = true;
+            this.$nextTick().then(
+              () =>
+                (this.currentRates = this.coins[this.activeWallet.name][rates])
+            );
+          }
         });
     }
   }

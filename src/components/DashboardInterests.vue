@@ -1,16 +1,16 @@
 <template>
   <div class="interest-wrapper">
-    <Interest v-for="wallet in wallets" :key="wallet.id" :wallet="wallet" />
+    <dash-interest v-for="wallet in wallets" :key="wallet.id" :wallet="wallet" />
   </div>
 </template>
 
 <script>
-import Interest from "./DashboardInterest";
+import DashInterest from "./DashboardInterest";
 
 export default {
   name: "DashboardInterest",
   components: {
-    Interest
+    DashInterest
   },
   computed: {
     wallets() {

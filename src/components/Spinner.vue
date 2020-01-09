@@ -5,7 +5,9 @@
 </template>
 
 <script>
-export default {};
+export default {
+  name: "spinner"
+};
 </script>
 
 <style>
@@ -22,7 +24,7 @@ export default {};
   height: 49px;
   margin: 0 auto;
   border: 3px solid white;
-  opacity: .05;
+  opacity: 0.05;
   border-radius: 50%;
   border-left-color: transparent;
   border-right-color: transparent;

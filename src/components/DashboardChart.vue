@@ -1,26 +1,24 @@
 <template>
   <div class="chart">
     <div class="chart-header">
-      <div class="chart-title">
-        {{ wallet.name.replace(/\w/i, l => l.toUpperCase()) }} Chart
-      </div>
-      <timestamp />
+      <div class="chart-title">{{ wallet.name.replace(/\w/i, l => l.toUpperCase()) }} Chart</div>
+      <chart-timestamp />
     </div>
     <div class="chart-graph">
-      <graph />
+      <chart-graph />
     </div>
   </div>
 </template>
 
 <script>
-import Graph from './chart/ChartGraph';
-import Timestamp from './chart/ChartTimestamp';
+import ChartGraph from "./chart/ChartGraph";
+import ChartTimestamp from "./chart/ChartTimestamp";
 
 export default {
-  name: 'DashboardChart',
+  name: "DashboardChart",
   components: {
-    Timestamp,
-    Graph
+    ChartTimestamp,
+    ChartGraph
   },
   computed: {
     wallet() {

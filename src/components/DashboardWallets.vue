@@ -1,6 +1,6 @@
 <template>
   <div class="wallets">
-    <Wallet
+    <dash-wallet
       v-for="wallet in wallets"
       :key="wallet.id"
       :currency="wallet"
@@ -11,12 +11,12 @@
 </template>
 
 <script>
-import Wallet from "./DashboardWallet";
+import DashWallet from "./DashboardWallet";
 
 export default {
   name: "DashboardWallets",
   components: {
-    Wallet
+    DashWallet
   },
   computed: {
     wallets() {
@@ -37,7 +37,7 @@ export default {
   content: "My wallets";
   position: absolute;
   top: -3vw;
-  width: 74.52px;
+  width: 84.52px;
   height: 21px;
   color: var(--color-white);
   font-size: 16px;

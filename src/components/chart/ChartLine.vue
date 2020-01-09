@@ -1,5 +1,5 @@
 <template lang="pug">
-svg.chart-line(xmlns='http://www.w3.org/2000/svg' :viewBox='viewBox' vector-effect="non-scaling-stroke" ) 
+svg.chart-line(xmlns='http://www.w3.org/2000/svg' :viewBox='viewBox'  vector-effect="non-scaling-stroke") 
   g( fill='transparent' stroke="var(--color-green)" stroke-width='2')
     path( :d='d') 
   slot

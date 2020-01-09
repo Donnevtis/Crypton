@@ -43,6 +43,7 @@ export class Chart {
         }
 
         const croppedData = cropData(data)
+        console.log(croppedData)
         this.limits = this.findLimits(croppedData)
         const xResolution = (croppedData[croppedData.length - 1].time - croppedData[0].time) / this.width
         this.yResolution = (this.limits.max - this.limits.min) / this.height
@@ -58,6 +59,7 @@ export class Chart {
                 price: +croppedData[i].priceUsd
             })
         }
+        console.log(this.dataStack)
 
         this.createLabels()
 

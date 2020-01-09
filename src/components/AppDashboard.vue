@@ -1,33 +1,33 @@
 <template>
   <div class="dashboard">
-    <balance class="balance-module" :mainInfo="mainInfo" @update="changeColor" />
-    <wallets class="wallets-module" />
-    <interest class="interes-module" />
-    <recieve class="receive-module" />
-    <chart class="chart-module" />
+    <dash-balance class="balance-module" :mainInfo="mainInfo" @update="changeColor" />
+    <dash-wallets class="wallets-module" />
+    <dash-interest class="interes-module" />
+    <dash-recieve class="receive-module" />
+    <dash-chart class="chart-module" />
     <div class="markets" />
     <div class="transactions" />
-    <news class="news-module" />
+    <dash-news class="news-module" />
   </div>
 </template>
 
 <script>
-import Balance from "./DashboardBalance";
-import Wallets from "./DashboardWallets";
-import Interest from "./DashboardInterests";
-import Recieve from "./DashboardRecieve";
-import News from "./DashboardNews";
-import Chart from "./DashboardChart";
+import DashBalance from "./DashboardBalance";
+import DashWallets from "./DashboardWallets";
+import DashInterest from "./DashboardInterests";
+import DashRecieve from "./DashboardRecieve";
+import DashNews from "./DashboardNews";
+import DashChart from "./DashboardChart";
 
 export default {
   name: "AppDashboard",
   components: {
-    Balance,
-    Wallets,
-    Interest,
-    Recieve,
-    News,
-    Chart
+    DashBalance,
+    DashWallets,
+    DashInterest,
+    DashRecieve,
+    DashNews,
+    DashChart
   },
   data() {
     return {
@@ -49,69 +49,68 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "../scss/variables";
 @media (min-width: 480px) {
-  
-
-.dashboard {
-  position: fixed;
-  height: calc(100vh - 108px);
-  width: calc(100vw - 90px);
-  padding: 40px 40px 38px 30px;
-  bottom: 0;
-  right: 0;
-  display: grid;
-  grid-template-rows: 0.7fr 1.2fr 1.25fr 0.85fr;
-  grid-template-columns: 1.36fr 1.36fr 0.4fr 1.2fr 1.58fr;
-  grid-template-areas:
-    "a b b b g"
-    "a c d d g"
-    "e e e f g"
-    "e e e f h";
-  gap: 1.3vw;
-}
-.balance-module {
-  grid-area: a;
-}
-.wallets-module {
-  grid-area: b;
-}
-.interes-module {
-  grid-area: c;
-}
-.receive-module {
-  grid-area: d;
-}
-.chart-module {
-  grid-area: e;
-}
-.markets {
-  grid-area: f;
-  background-color: var(--color-middle);
-}
-.transactions {
-  grid-area: g;
-  background-color: var(--color-middle);
-}
-.news-module {
-  grid-area: h;
-}
-div {
-  border-radius: 2px;
-}
+  .dashboard {
+    position: fixed;
+    height: calc(100vh - 108px);
+    width: calc(100vw - 90px);
+    padding: 40px 40px 38px 30px;
+    bottom: 0;
+    right: 0;
+    display: grid;
+    grid-template-rows: 0.7fr 1.2fr 1.25fr 0.85fr;
+    grid-template-columns: 1.36fr 1.36fr 0.4fr 1.2fr 1.58fr;
+    grid-template-areas:
+      "a b b b g"
+      "a c d d g"
+      "e e e f g"
+      "e e e f h";
+    gap: 1.3vw;
+  }
+  .balance-module {
+    grid-area: a;
+  }
+  .wallets-module {
+    grid-area: b;
+  }
+  .interes-module {
+    grid-area: c;
+  }
+  .receive-module {
+    grid-area: d;
+  }
+  .chart-module {
+    grid-area: e;
+  }
+  .markets {
+    grid-area: f;
+    background-color: $color-middle;
+  }
+  .transactions {
+    grid-area: g;
+    background-color: $color-middle;
+  }
+  .news-module {
+    grid-area: h;
+  }
+  div {
+    border-radius: 2px;
+  }
 }
 @media (max-width: 480px) {
-.dashboard {
-  position: absolute;
-  height: auto;
-  width: 100%;
-  padding: 10px ;
-  bottom: auto;
-  right: 0;
-  display: grid;
-  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-  grid-template-columns: 1fr ;
-  gap: 5vh;
-}
+  .dashboard {
+    position: absolute;
+    height: auto;
+    width: 100%;
+    padding: 10px;
+    bottom: auto;
+    right: 0;
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr;
+    gap: 5vh;
+  }
 }
 </style>
