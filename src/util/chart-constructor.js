@@ -1,7 +1,7 @@
 //the graph constructor
 
 export class Chart {
-    #XStep = 80
+    #XStep = 70
     #YStep = 50
     #width = 600
     #height = 200
@@ -130,7 +130,7 @@ export class Chart {
     currentPrice(data) {
         this.createChartLine(data)
         this.gridX.forEach(i => i.x -= this.dataStack[this.dataStack.length - 1].x - this.dataStack[this.dataStack.length - 2].x)
-        if (this.gridX[0].x <= 30 - this.XStep) {
+        if (this.gridX[0].x <= -30) {
             const i = -this.gridX[0].i
             const x = this.gridX[this.gridX.length - 1].x + this.XStep
             const t = this.timeSetter({ x })
