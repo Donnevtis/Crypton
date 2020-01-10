@@ -47,7 +47,13 @@ export default {
     };
   },
   mounted() {
-    this.chart = new Chart(this.$refs.box);
+    const box = this.$refs.box;
+    this.chart = new Chart({
+      width: box.clientWidth,
+      height: box.clientHeight,
+      stepX: 70,
+      stepY: 50
+    });
     this.createChartLine();
   },
   computed: {

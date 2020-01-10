@@ -1,14 +1,15 @@
 //the graph constructor
 
 export class Chart {
-    #XStep = 70
-    #YStep = 50
-    #width = 600
-    #height = 200
-
+    #stepX
+    #stepY
+    #width
+    #height
     constructor(box) {
-        this.#width = this.XStep * ~~(box.clientWidth / this.XStep)
-        this.#height = this.YStep * ~~(box.clientHeight / this.YStep)
+        this.#stepX = box.stepX ? Math.max(box.stepX, 30) : 70
+        this.#stepY = Math.max(box.stepY, 10) || 50
+        this.#width = this.stepX * ~~(box.width / this.stepX) || 600
+        this.#height = this.stepY * ~~(box.height / this.stepY) || 200
         this.viewBox = `0 0 ${this.width} ${this.height}`
     }
 
@@ -25,10 +26,10 @@ export class Chart {
 
     // MAIN CHART LINE CREATOR 
     initChart(data) {
-        const absciss = Math.floor(this.width / this.XStep) - 1
-        const ordinates = Math.floor(this.height / this.YStep)
-        this.gridX = this.stepper(this.XStep, absciss, 'x', 30) //coords for horizontal grid, left offset = 30     
-        this.gridY = this.stepper(this.YStep, ordinates, 'y') //horizontal dividing lines   
+        const absciss = Math.floor(this.width / this.stepX) - 1
+        const ordinates = Math.floor(this.height / this.stepY)
+        this.gridX = this.stepper(this.stepX, absciss, 'x', 30) //coords for horizontal grid, left offset = 30     
+        this.gridY = this.stepper(this.stepY, ordinates, 'y') //horizontal dividing lines   
         this.createChartLine(data)
     }
     createChartLine({ data, range }) {
@@ -132,7 +133,7 @@ export class Chart {
         this.gridX.forEach(i => i.x -= this.dataStack[this.dataStack.length - 1].x - this.dataStack[this.dataStack.length - 2].x)
         if (this.gridX[0].x <= -30) {
             const i = -this.gridX[0].i
-            const x = this.gridX[this.gridX.length - 1].x + this.XStep
+            const x = this.gridX[this.gridX.length - 1].x + this.stepX
             const t = this.timeSetter({ x })
             this.gridX.push({ x, t, i })
             this.gridX.shift()
@@ -147,11 +148,11 @@ export class Chart {
     get width() {
         return this.#width
     }
-    get XStep() {
-        return this.#XStep
+    get stepX() {
+        return this.#stepX
     }
-    get YStep() {
-        return this.#YStep
+    get stepY() {
+        return this.#stepY
     }
 
 }
