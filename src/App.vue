@@ -40,7 +40,6 @@ export default {
   --color-wallets-counter: #252529;
   --charcoal-grey: #323235;
 }
-
 * {
   box-sizing: border-box;
   margin: 0;
@@ -69,7 +68,7 @@ button {
   border: none;
   background: 0;
   padding: 0;
-
+  color: $color-white;
   &:focus {
     outline: none;
   }
@@ -78,9 +77,7 @@ button {
 ul {
   list-style-type: none;
 }
-div {
-  border-radius: 2px;
-}
+
 @media (max-width: 480px) {
   #app {
     position: absolute;
