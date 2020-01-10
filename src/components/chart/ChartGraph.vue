@@ -21,15 +21,15 @@
 </template>
 
 <script>
-import ChartLine from "./ChartLine";
-import ChartHelper from "./ChartHelper";
-import AppSpinner from "../Spinner";
-import BlinkPoint from "./ChartBlinkPoint";
-import { mapGetters } from "vuex";
-import { Chart } from "../../util/chart-constructor";
+import ChartLine from './ChartLine';
+import ChartHelper from './ChartHelper';
+import AppSpinner from '../Spinner';
+import BlinkPoint from './ChartBlinkPoint';
+import { mapGetters } from 'vuex';
+import { Chart } from '../../util/chart-constructor';
 
 export default {
-  name: "ChartGraph",
+  name: 'ChartGraph',
   components: {
     ChartLine,
     ChartHelper,
@@ -40,7 +40,7 @@ export default {
     return {
       chart: {},
       currentRates: [],
-      d: "",
+      d: '',
       pointY: 0,
       isLoad: false,
       isCurrent: false
@@ -61,9 +61,9 @@ export default {
       return this.$store.state.history.coins;
     },
     ...mapGetters({
-      activeStamp: "activeStamp",
-      activeWallet: "activeWallet",
-      dateRange: "dateRange"
+      activeStamp: 'activeStamp',
+      activeWallet: 'activeWallet',
+      dateRange: 'dateRange'
     })
   },
   watch: {
@@ -87,8 +87,8 @@ export default {
     createChartLine() {
       this.isCurrent = false;
       const [rates, action] = this.activeStamp.mnth
-        ? ["fullRates", "fetchFullRates"]
-        : ["lastRates", "fetchCurrentRates"];
+        ? ['fullRates', 'fetchFullRates']
+        : ['lastRates', 'fetchCurrentRates'];
 
       this.$store
         .dispatch(action, {
