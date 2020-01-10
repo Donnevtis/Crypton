@@ -1,6 +1,6 @@
 <template>
   <div class="balance-component">
-    <div class="transactions">
+    <div class="balance-component-transactions">
       <span>{{ transactions }}</span>
       <span>{{mainInfo.transactions == 1 ? 'Transaction' : 'Transactions' }}</span>
     </div>
@@ -14,12 +14,14 @@
       {{ mainInfo.balance ? mainInfo.balance : 0 }}
       <span>{{ mainInfo.currency == 'EUR' ? 'USD' : mainInfo.currency }}</span>
     </span>
+
     <span class="currency">
       {{ mainInfo.currencyEUR + ' ' + mainInfo.currency}}
       <span
         class="percent"
       >{{ mainInfo.currencyProfit > 0 ? `+${mainInfo.currencyProfit}%` : `${mainInfo.currencyProfit}%` }}</span>
     </span>
+
     <button class="buy-button" @click="$emit('update')">buy</button>
   </div>
 </template>
@@ -31,7 +33,7 @@ export default {
     mainInfo: Object
   },
   computed: {
-    transactions: function() {
+    transactions() {
       if (!this.mainInfo.transactions) {
         return 0;
       }
@@ -45,14 +47,14 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .balance-component {
   position: relative;
   padding: 30px 23px 20px 30px;
   background-color: var(--color-light);
   width: 100%;
 }
-.transactions {
+.balance-component-transactions {
   position: relative;
   top: -4px;
   left: 0;
@@ -60,7 +62,7 @@ export default {
   font-weight: 400;
   color: var(--color-white);
 }
-.transactions span:last-child {
+.balance-component-transactions span:last-child {
   position: absolute;
   left: 0;
   bottom: -17px;
