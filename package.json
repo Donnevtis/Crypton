@@ -6,9 +6,10 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "test": "jest"
+    "test": "jest --watchAll"
   },
   "dependencies": {
+    "axios": "^0.19.1",
     "core-js": "^2.6.11",
     "pug": "^2.0.4",
     "vue": "^2.6.11",
