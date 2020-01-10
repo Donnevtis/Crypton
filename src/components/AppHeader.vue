@@ -49,7 +49,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../scss/variables";
+@import "../scss/variables", "../scss/functions";
 .header {
   display: flex;
   position: fixed;
@@ -70,20 +70,27 @@ export default {
 .title {
   font-weight: 200;
   position: relative;
-  font-size: 24px;
+  font-size: px-rem(24);
 }
+
 .search-form {
   position: absolute;
-  left: 245px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  left: px-rem(235);
+  width: px-rem(245);
+  height: px-rem(35);
+  background: $color-light;
 }
 .support {
   display: flex;
   justify-content: space-between;
-  width: 142px;
+  width: px-rem(142);
   &-button {
-    width: 96px;
-    height: 35px;
-    font-size: 12px;
+    width: px-rem(96);
+    height: px-rem(35);
+    font-size: px-rem(12);
     background-color: $color-light;
     display: flex;
     align-items: center;
@@ -92,13 +99,13 @@ export default {
       background: $color-bright;
     }
     img {
-      margin: 0 12px;
+      margin: 0 px-rem(12);
     }
   }
 }
 
 .plus-button {
-  font-size: 24px;
+  font-size: px-rem(24);
   border: 2px solid $color-light;
   text-align: center;
   transition: ease 0.1s;
@@ -133,9 +140,9 @@ export default {
 
 .name {
   display: block;
-  font-size: 14px;
+  font-size: px-rem(14);
   font-weight: 500;
-  margin: 0 14px;
+  margin: 0 px-rem(14);
 }
 .profile-button {
   display: block;
@@ -154,8 +161,8 @@ export default {
 
 button {
   border-radius: 2px;
-  width: 35px;
-  height: 35px;
+  width: px-rem(35);
+  height: px-rem(35);
 }
 
 .support-button {
