@@ -11,6 +11,7 @@
 </template>
 
 <script>
+const axios = require('axios').default;
 import { setInterval } from 'timers';
 
 export default {
@@ -30,11 +31,11 @@ export default {
   },
   methods: {
     getNews() {
-      fetch(
-        'https://min-api.cryptocompare.com/data/v2/news/?d177dd631fd9bac1a16566cfe5d289b34a7479d57daa474ebaa36fcb873cdd4d',
-        { cors: 'no-cors' }
-      )
-        .then(res => res.json())
+      axios
+        .get(
+          'https://min-api.cryptocompare.com/data/v2/news/?d177dd631fd9bac1a16566cfe5d289b34a7479d57daa474ebaa36fcb873cdd4d'
+        )
+        .then(res => res.data)
         .then(res => {
           this.news = res.Data[0].title;
           this.link = res.Data[0].url;
