@@ -49,14 +49,14 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import "../scss/variables";
 @media (min-width: 480px) {
   .dashboard {
     position: fixed;
     height: calc(100vh - 108px);
     width: calc(100vw - 90px);
-    padding: 40px 40px 38px 30px;
+    padding: 2.5rem 2.5rem 2.4rem 1.9rem;
     bottom: 0;
     right: 0;
     display: grid;
@@ -104,7 +104,7 @@ export default {
     position: absolute;
     height: auto;
     width: 100%;
-    padding: 10px;
+    padding: .7rem;
     bottom: auto;
     right: 0;
     display: grid;
