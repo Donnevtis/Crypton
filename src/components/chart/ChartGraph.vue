@@ -54,25 +54,21 @@ export default {
       stepX: 70,
       stepY: 50
     });
-    this.createChartLine();
+    this.fetchRates();
   },
   computed: {
     coins() {
       return this.$store.state.history.coins;
     },
-    ...mapGetters({
-      activeStamp: 'activeStamp',
-      activeWallet: 'activeWallet',
-      dateRange: 'dateRange'
-    })
+    ...mapGetters(['activeStamp', 'activeWallet', 'dateRange'])
   },
   watch: {
     activeWallet() {
-      this.createChartLine();
+      this.fetchRates();
     },
     activeStamp(mnth) {
       this.isLoad = mnth ? false : true;
-      this.createChartLine();
+      this.fetchRates();
     },
     currentRates(rates) {
       this.chart.currentPrice({
@@ -84,7 +80,7 @@ export default {
     }
   },
   methods: {
-    createChartLine() {
+    fetchRates() {
       this.isCurrent = false;
       const [rates, action] = this.activeStamp.mnth
         ? ['fullRates', 'fetchFullRates']
@@ -94,22 +90,25 @@ export default {
         .dispatch(action, {
           coinName: this.activeWallet.name
         })
-        .then(() => {
-          this.chart.initChart({
-            data: this.coins[this.activeWallet.name][rates],
-            range: this.dateRange
-          });
-          this.chart.createTicks();
-          this.d = this.chart.chartLinePath;
-          this.isLoad = true;
-          if (!this.activeStamp.mnth) {
-            this.isCurrent = true;
-            this.$nextTick().then(
-              () =>
-                (this.currentRates = this.coins[this.activeWallet.name][rates])
-            );
-          }
+        .then(() => this.initChart(rates))
+        .catch(err => {
+          // eslint-disable-next-line
+          if (err) console.error(err);
+          this.isLoad = false;
         });
+    },
+    initChart(rates) {
+      this.chart.initChart({
+        data: this.coins[this.activeWallet.name][rates],
+        range: this.dateRange
+      });
+      this.chart.createTicks();
+      this.d = this.chart.chartLinePath;
+      this.isLoad = true;
+      if (!this.activeStamp.mnth) {
+        this.isCurrent = true;
+        this.currentRates = this.coins[this.activeWallet.name][rates];
+      }
     }
   }
 };
