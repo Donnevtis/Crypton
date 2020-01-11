@@ -1,7 +1,7 @@
 <template lang="pug">
 .chart-container(ref='box')
   template(v-if='isLoad')
-    svg.chart-graph(xmlns='http://www.w3.org/2000/svg' :viewBox='chart.viewBox' width="500" height="150" vector-effect="non-scaling-stroke")      
+    svg.chart-graph(xmlns='http://www.w3.org/2000/svg' :viewBox='chart.viewBox'  vector-effect="non-scaling-stroke")      
       g(stroke='var(--charcoal-grey)' stroke-width='0.5' style='shape-rendering: crispEdges')
         template(v-for='line in chart.gridY' )        
           line( :key='line.y' x1='0' :y1='line.y' :x2='chart.width' :y2='line.y')   
@@ -21,15 +21,15 @@
 </template>
 
 <script>
-import ChartLine from './ChartLine';
-import ChartHelper from './ChartHelper';
-import AppSpinner from '../Spinner';
-import BlinkPoint from './ChartBlinkPoint';
-import { mapGetters } from 'vuex';
-import { Chart } from '../../util/chart-constructor';
+import ChartLine from "./ChartLine";
+import ChartHelper from "./ChartHelper";
+import AppSpinner from "../Spinner";
+import BlinkPoint from "./ChartBlinkPoint";
+import { mapGetters } from "vuex";
+import { Chart } from "../../util/chart-constructor";
 
 export default {
-  name: 'ChartGraph',
+  name: "ChartGraph",
   components: {
     ChartLine,
     ChartHelper,
@@ -40,7 +40,7 @@ export default {
     return {
       chart: {},
       currentRates: [],
-      d: '',
+      d: "",
       pointY: 0,
       isLoad: false,
       isCurrent: false
@@ -52,7 +52,7 @@ export default {
       width: box.clientWidth,
       height: box.clientHeight,
       stepX: 70,
-      stepY: 50
+      stepY: 40
     });
     this.fetchRates();
   },
@@ -60,7 +60,7 @@ export default {
     coins() {
       return this.$store.state.history.coins;
     },
-    ...mapGetters(['activeStamp', 'activeWallet', 'dateRange'])
+    ...mapGetters(["activeStamp", "activeWallet", "dateRange"])
   },
   watch: {
     activeWallet() {
@@ -83,8 +83,8 @@ export default {
     fetchRates() {
       this.isCurrent = false;
       const [rates, action] = this.activeStamp.mnth
-        ? ['fullRates', 'fetchFullRates']
-        : ['lastRates', 'fetchCurrentRates'];
+        ? ["fullRates", "fetchFullRates"]
+        : ["lastRates", "fetchCurrentRates"];
 
       this.$store
         .dispatch(action, {
