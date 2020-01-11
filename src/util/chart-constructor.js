@@ -48,7 +48,6 @@ export class Chart {
         const xResolution = (croppedData[croppedData.length - 1].time - croppedData[0].time) / this.width
         this.yResolution = (this.limits.max - this.limits.min) / this.height
         this.dataStack = []
-
         for (let i = 0; i < croppedData.length; i++) {
             const pathX = ((croppedData[i].time - croppedData[0].time) / xResolution).toFixed(2)
             const pathY = (this.costToCoordsY(croppedData[i].priceUsd)).toFixed(2)
@@ -59,6 +58,7 @@ export class Chart {
                 price: +croppedData[i].priceUsd
             })
         }
+
 
         this.createLabels()
 
