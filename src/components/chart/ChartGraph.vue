@@ -14,7 +14,7 @@
       transition-group(tag='g' name="timers-list" )        
           svg.chart-label-container(v-for='tick in chart.gridX' :key='tick.i' width='80' :x='tick.x' :y='chart.height')
             text.chart-labels(stroke='transparent' text-anchor="middle") {{ tick.t }}
-    chart-line(:d="d" :viewBox="chart.viewBox") 
+    chart-line(:d="d" :viewBox="chart.viewBox" :isCurrent="isCurrent") 
   app-spinner(v-else)
   blink-point(v-if="isCurrent" :chart="chart" :y="pointY")   
   chart-helper(v-if="isLoad" :chart="chart" :currency="activeWallet.name")
