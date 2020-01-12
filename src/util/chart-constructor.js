@@ -121,7 +121,8 @@ export class Chart {
                 new Date(mSec).toLocaleString("en", {
                     day: "numeric",
                     month: "short"
-                });
+                }).toLowerCase()
+
         }
 
         const t = this.dataStack.find((l, index, arr) => l.x <= time.x && arr[index + 1].x >= time.x)

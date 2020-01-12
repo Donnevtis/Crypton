@@ -10,9 +10,9 @@
         line(:x1='chart.width' :y1='0' :x2='chart.width' :y2='chart.height')    
     svg.chart-timers(:viewBox='chart.viewBox' vector-effect="non-scaling-stroke")
       g(stroke='var(--charcoal-grey)' stroke-width='1')
-        line(v-for='tick in chart.gridX' :key='tick.x' :x1='tick.x' :y1='chart.height' :x2='tick.x' :y2='chart.height+3' style="transform: translateY(-26px)")
+        line(v-for='tick in chart.gridX' :key='tick.x' :x1='tick.x' :y1='chart.height' :x2='tick.x' :y2='chart.height+3' style="transform: translateY(-36px)")
       transition-group(tag='g' name="timers-list" )        
-          svg.chart-label-container(v-for='tick in chart.gridX' :key='tick.i' width='80' :x='tick.x' :y='chart.height')
+          svg.chart-label-container(v-for='tick in chart.gridX' :key='tick.i' width='80' :x='tick.x' :y='chart.height-5' )
             text.chart-labels(stroke='transparent' text-anchor="middle") {{ tick.t }}
     chart-line(:d="d" :viewBox="chart.viewBox" :isCurrent="isCurrent") 
   app-spinner(v-else)
@@ -132,7 +132,7 @@ export default {
   position: absolute;
   height: 100%;
   width: 100%;
-  transform: translateY(28px);
+  transform: translateY(38px);
 }
 .chart-labels {
   position: absolute;
