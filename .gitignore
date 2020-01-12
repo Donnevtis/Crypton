@@ -3,7 +3,7 @@ node_modules
 vue.config.js
 .gitignore
 /dist
-
+/scetch
 # local env files
 .env.local
 .env.*.local

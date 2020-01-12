@@ -39,7 +39,8 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "../scss/mixins";
 .interest {
   position: relative;
   display: flex;
@@ -80,12 +81,9 @@ export default {
   font-size: 18px;
 }
 .options {
+  @include options;
   position: absolute;
   right: 0;
-  width: 10px;
-  height: 16px;
-  background: url("../assets/svg/ellypsis.svg") no-repeat center;
-  cursor: pointer;
 }
 .options:hover {
   background: url("../assets/svg/ellypsis-white.svg") no-repeat center;

@@ -28,7 +28,8 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+@import "../scss/utils";
 .chart {
   display: flex;
   flex-direction: column;
@@ -36,7 +37,7 @@ export default {
   width: 100%;
   height: 100%;
   background-color: var(--color-middle);
-  padding: 30px 20px 40px 40px;
+  padding: 30px 20px 70px 40px;
 }
 .chart-header {
   display: flex;
@@ -47,7 +48,7 @@ export default {
 .chart-graph {
   position: relative;
   width: 100%;
-  height: 25vh;
+  height: 74%;
 }
 .chart-title {
   font-size: 1.4vw;

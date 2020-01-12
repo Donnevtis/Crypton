@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <app-header />
+    <component :is="mobile" />
     <app-sidebar />
     <app-dashboard />
   </div>
@@ -10,17 +10,23 @@
 import AppSidebar from "./components/AppSideBar";
 import AppDashboard from "./components/AppDashboard";
 import AppHeader from "./components/AppHeader";
+import MobileHeader from "./components/TheMobileHeader";
 export default {
   name: "app",
   components: {
     AppSidebar,
     AppHeader,
     AppDashboard
+  },
+  created() {
+    this.mobile = window.matchMedia("(min-width: 400px)").matches
+      ? AppHeader
+      : MobileHeader;
   }
 };
 </script>
 <style lang="scss">
-@import "./scss/variables";
+@import "./scss/variables", "./scss/functions";
 
 :root {
   --color-dark: #18191d;
@@ -73,16 +79,16 @@ button {
     outline: none;
   }
 }
-
 ul {
   list-style-type: none;
 }
 
 @media (max-width: 480px) {
-  #app {
+  body {
     position: absolute;
     width: 100%;
     height: auto;
+    padding: px-rem(28) px-rem(32);
   }
 }
 

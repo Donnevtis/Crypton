@@ -18,7 +18,7 @@
 
     <div class="user-menu">
       <button class="sandwich">
-        <img class="warn-icon" alt="menu" src="../assets/svg/sandwitch.svg" />
+        <img class="warn-icon" alt="menu" src="../assets/svg/sandwich.svg" />
       </button>
 
       <div class="name">{{fullName}}</div>
@@ -49,7 +49,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../scss/variables", "../scss/functions";
+@import "../scss/utils";
+
 .header {
   display: flex;
   position: fixed;
@@ -68,9 +69,7 @@ export default {
 }
 
 .title {
-  font-weight: 200;
-  position: relative;
-  font-size: px-rem(24);
+  @include title;
 }
 
 .search-form {

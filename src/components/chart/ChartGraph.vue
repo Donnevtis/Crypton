@@ -52,7 +52,7 @@ export default {
       width: box.clientWidth,
       height: box.clientHeight,
       stepX: 70,
-      stepY: 40
+      stepY: 36.25
     });
     this.fetchRates();
   },

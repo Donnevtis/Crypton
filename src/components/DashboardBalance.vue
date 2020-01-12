@@ -11,16 +11,15 @@
     </div>
 
     <span class="balance">
-      {{ mainInfo.balance ? mainInfo.balance : 0 }}
-      <span>{{ mainInfo.currency == 'EUR' ? 'USD' : mainInfo.currency }}</span>
+      {{ mainInfo.balance ? mainInfo.balance + '0' : 0 }}
+      <!-- <span>{{ mainInfo.currency == 'EUR' ? 'USD' : mainInfo.currency }}</span> -->
     </span>
 
-    <span class="currency">
-      {{ mainInfo.currencyEUR + ' ' + mainInfo.currency}}
-      <span
-        class="percent"
-      >{{ mainInfo.currencyProfit > 0 ? `+${mainInfo.currencyProfit}%` : `${mainInfo.currencyProfit}%` }}</span>
-    </span>
+    <span class="currency">{{ mainInfo.currencyEUR + ' ' + mainInfo.currency}}</span>
+
+    <span
+      class="percent"
+    >{{ mainInfo.currencyProfit > 0 ? `+${mainInfo.currencyProfit}%` : `${mainInfo.currencyProfit}%` }}</span>
 
     <button class="buy-button" @click="$emit('update')">buy</button>
   </div>
@@ -48,117 +47,136 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../scss/utils";
 .balance-component {
+  display: grid;
+  grid-template: 1fr 3fr 1fr/1fr 1fr;
   position: relative;
-  padding: 30px 23px 20px 30px;
-  background-color: var(--color-light);
+  padding: px-rem(30) px-rem(23) px-rem(20) px-rem(30);
+  background-color: $color-light;
   width: 100%;
-}
-.balance-component-transactions {
-  position: relative;
-  top: -4px;
-  left: 0;
-  font-size: 2.5vw;
-  font-weight: 400;
-  color: var(--color-white);
-}
-.balance-component-transactions span:last-child {
-  position: absolute;
-  left: 0;
-  bottom: -17px;
-  content: "Transactions";
-  color: var(--color-text-dark);
-  font-size: 0.8vw;
-  font-weight: 400;
-  line-height: 16px;
-  text-align: center;
-}
-.wallets {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  top: 27px;
-  right: 23px;
-  width: 4.5vw;
-  height: 5.3vw;
-  background-color: var(--color-wallets-counter);
-  color: var(--color-white);
-  font-size: 2.5vw;
-  font-weight: 400;
-  text-align: center;
+
+  &-transactions {
+    position: relative;
+    font-size: 2.5vw;
+
+    & > span:last-child {
+      position: absolute;
+      color: $color-text-dark;
+      font-size: 0.95vw;
+      top: px-rem(50);
+      left: 0;
+    }
+  }
 }
 
-.wallets span:last-child {
-  position: relative;
-  font-size: 0.9vw;
-  font-weight: 400;
+.wallets {
+  display: flex;
+  flex-direction: column;
+  justify-self: end;
+  padding: 0.5rem 0.75rem 0.2rem;
+  background-color: $color-wallets-counter;
+  font-size: 2.5vw;
   text-align: center;
+  line-height: 2rem;
+
+  & > span:last-child {
+    position: relative;
+    font-size: 0.9vw;
+    text-align: center;
+  }
 }
+
 .balance {
-  justify-self: start;
-  position: absolute;
-  bottom: 74px;
-  color: var(--color-white);
+  position: relative;
+  grid-column: 1/2;
+  grid-row: 2;
+  align-self: end;
   font-size: 3.5vw;
-  font-weight: 400;
-  flex-grow: 4;
   text-align: center;
   letter-spacing: 0.5px;
+
+  &::before {
+    content: "Current balance";
+    position: absolute;
+    top: px-rem(-17);
+    color: $color-text-light;
+    font-size: 0.85vw;
+    text-align: center;
+    letter-spacing: 0.3px;
+  }
+
+  &::after {
+    content: "USD";
+    position: absolute;
+    color: $color-text-light;
+    font-size: 0.85vw;
+    text-align: center;
+  }
 }
-.balance::before {
-  content: "Current balance";
-  position: absolute;
-  top: -14px;
-  color: var(--color-text-light);
-  font-size: 0.85vw;
-  font-weight: 400;
-  text-align: center;
-}
-.balance span {
-  position: relative;
-  top: -35px;
-  left: -10px;
-  color: var(--color-text-dark);
-  font-size: 0.85vw;
-  font-weight: 400;
-  text-align: center;
-}
-.currency {
-  position: absolute;
-  bottom: 20px;
-  left: 30px;
-  color: var(--color-white);
-  font-size: 0.85vw;
-  font-weight: 400;
-}
+
+.currency,
 .percent {
-  color: var(--color-green);
+  grid-row: 3;
+  grid-column: 1;
+  align-self: end;
   font-size: 0.85vw;
-  font-weight: 400;
 }
+
+.percent {
+  color: $color-green;
+  justify-self: end;
+  padding-right: 1.8rem;
+}
+
 .buy-button {
-  position: absolute;
-  bottom: 20px;
-  right: 23px;
-  width: 3.3vw;
-  height: 1.6vw;
-  border: 3px solid var(--color-green);
-  border-top-left-radius: 25px;
-  border-bottom-left-radius: 25px;
-  border-top-right-radius: 25px;
-  border-bottom-right-radius: 25px;
+  grid-row: 3;
+  grid-column: 2;
+  align-self: end;
+  justify-self: end;
+  padding: 0.1rem 0.8rem;
+  border: 3px solid $color-green;
+  border-radius: px-rem(25);
   font-size: 0.8vw;
-  font-weight: 400;
-  color: var(--color-white);
   transition: ease 0.1s;
+
+  &:hover {
+    background-color: $color-bright;
+    border-color: $color-green;
+  }
 }
-.buy-button:hover {
-  background-color: var(--color-bright);
-  border-color: var(--color-green);
-}
-div {
-  border-radius: 2px;
+@media (max-width: 480px) {
+  .balance-component {
+    padding: px-rem(29) px-rem(20) px-rem(30);
+    grid-template: 1fr 1.5fr 0.58fr/1fr 1fr;
+
+    &-transactions {
+      font-size: px-rem(34);
+      & > span:last-child {
+        font-size: px-rem(12);
+      }
+    }
+  }
+  .wallets {
+    font-size: px-rem(34);
+    & > span:last-child {
+      font-size: px-rem(13);
+    }
+  }
+  .balance {
+    font-size: px-rem(48);
+    letter-spacing: 0.5px;
+
+    &::before,
+    &::after {
+      font-size: px-rem(12);
+    }
+  }
+  .currency,
+  .percent,
+  .buy-button {
+    font-size: px-rem(12);
+    border-width: 2px;
+  }
 }
 </style>

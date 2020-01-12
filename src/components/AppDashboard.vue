@@ -32,9 +32,9 @@ export default {
   data() {
     return {
       mainInfo: {
-        transactions: 1456,
+        transactions: 2345,
         walletsCount: 5,
-        balance: 1424,
+        balance: 3.433,
         currencyEUR: 2.7795,
         currency: "EUR",
         currencyProfit: 15
@@ -95,16 +95,16 @@ export default {
   .news-module {
     grid-area: h;
   }
-  div {
-    border-radius: 2px;
-  }
+}
+div {
+  border-radius: 2px;
 }
 @media (max-width: 480px) {
   .dashboard {
-    position: absolute;
+    position: relative;
     height: auto;
     width: 100%;
-    padding: .7rem;
+    padding-top: 0.9rem;
     bottom: auto;
     right: 0;
     display: grid;
