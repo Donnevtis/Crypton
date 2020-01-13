@@ -9,3 +9,9 @@
   position: relative;
   font-size: px-rem(24);
 }
+@mixin flex($dir: row) {
+  display: flex;
+  flex-direction: $dir;
+  justify-content: space-between;
+  align-items: center;
+}

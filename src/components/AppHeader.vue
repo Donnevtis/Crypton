@@ -49,7 +49,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../scss/utils";
+@import "../scss/common";
 
 .header {
   display: flex;
@@ -177,7 +177,21 @@ button {
 
 @media (max-width: 480px) {
   .header {
+    width: inherit;
+    height: inherit;
+    padding: 0;
     position: relative;
+    & .support {
+      display: none;
+    }
+  }
+  .search-form {
+    display: none;
+  }
+  .user-menu {
+    & .name {
+      display: none;
+    }
   }
 }
 </style>

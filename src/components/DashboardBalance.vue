@@ -47,14 +47,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../scss/utils";
+@import "../scss/common";
 .balance-component {
   display: grid;
   grid-template: 1fr 3fr 1fr/1fr 1fr;
   position: relative;
   padding: px-rem(30) px-rem(23) px-rem(20) px-rem(30);
   background-color: $color-light;
-  width: 100%;
 
   &-transactions {
     position: relative;

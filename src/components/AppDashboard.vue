@@ -1,6 +1,7 @@
 <template>
   <div class="dashboard">
     <dash-balance class="balance-module" :mainInfo="mainInfo" @update="changeColor" />
+    <dash-wallets-labels class="wallets-labels-module" />
     <dash-wallets class="wallets-module" />
     <dash-interest class="interes-module" />
     <dash-recieve class="receive-module" />
@@ -13,6 +14,7 @@
 
 <script>
 import DashBalance from "./DashboardBalance";
+import DashWalletsLabels from "./DashboardWalletsLabels";
 import DashWallets from "./DashboardWallets";
 import DashInterest from "./DashboardInterests";
 import DashRecieve from "./DashboardRecieve";
@@ -23,6 +25,7 @@ export default {
   name: "AppDashboard",
   components: {
     DashBalance,
+    DashWalletsLabels,
     DashWallets,
     DashInterest,
     DashRecieve,
@@ -50,19 +53,20 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../scss/variables";
+@import "../scss/common";
 @media (min-width: 480px) {
   .dashboard {
     position: fixed;
     height: calc(100vh - 108px);
     width: calc(100vw - 90px);
-    padding: 2.5rem 2.5rem 2.4rem 1.9rem;
+    padding: 0 2.5rem 2.4rem 1.9rem;
     bottom: 0;
     right: 0;
     display: grid;
-    grid-template-rows: 0.7fr 1.2fr 1.25fr 0.85fr;
+    grid-template-rows: 0.1fr 0.7fr 1.2fr 1.25fr 0.85fr;
     grid-template-columns: 1.36fr 1.36fr 0.4fr 1.2fr 1.58fr;
     grid-template-areas:
+      ". w w w ."
       "a b b b g"
       "a c d d g"
       "e e e f g"
@@ -71,6 +75,9 @@ export default {
   }
   .balance-module {
     grid-area: a;
+  }
+  .wallets-labels-module {
+    grid-area: w;
   }
   .wallets-module {
     grid-area: b;
@@ -99,6 +106,15 @@ export default {
 div {
   border-radius: 2px;
 }
+@media (max-width: 768px) {
+  .dashboard {
+    grid-template-rows: 0.7fr 1.2fr 1.25fr 0.85fr;
+    grid-template-columns: 1.36fr 1.36fr 0.4fr 1.2fr;
+  }
+  .transactions {
+    display: none;
+  }
+}
 @media (max-width: 480px) {
   .dashboard {
     position: relative;
@@ -108,9 +124,9 @@ div {
     bottom: auto;
     right: 0;
     display: grid;
-    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 0.05fr 0.35fr 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-template-columns: 1fr;
-    gap: 5vh;
+    gap: px-rem(20);
   }
 }
 </style>

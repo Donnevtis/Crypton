@@ -29,7 +29,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../scss/utils";
+@import "../scss/common";
 .chart {
   display: flex;
   flex-direction: column;
@@ -54,5 +54,10 @@ export default {
   font-size: 1.4vw;
   font-weight: 300;
   color: var(--color-white);
+}
+@media (max-width: 480px) {
+  .chart {
+    display: none;
+  }
 }
 </style>
