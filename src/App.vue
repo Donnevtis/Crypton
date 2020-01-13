@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <component :is="mobile" />
+    <component :is="adaptive" />
     <app-sidebar />
     <app-dashboard />
   </div>
@@ -19,7 +19,7 @@ export default {
     AppDashboard
   },
   created() {
-    this.mobile = window.matchMedia("(min-width: 400px)").matches
+    this.adaptive = window.matchMedia("(min-width: 480px)").matches
       ? AppHeader
       : MobileHeader;
   }
@@ -88,64 +88,7 @@ ul {
     position: absolute;
     width: 100%;
     height: auto;
-    padding: px-rem(28) px-rem(32);
+    padding: px-rem(28) 0;
   }
 }
-
-// #app {
-//   position: fixed;
-//   font-family: "Avenir", Helvetica, Arial, sans-serif;
-//   -webkit-font-smoothing: antialiased;
-//   -moz-osx-font-smoothing: grayscale;
-//   width: 100%;
-//   height: 100vh;
-// }
-// ul {
-//   list-style-type: none;
-// }
-// * {
-//   user-select: none;
-//   box-sizing: border-box;
-//   margin: 0;
-//   padding: 0;
-//   font-family: BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell,
-//     "Open Sans", "Helvetica Neue", sans-serif;
-// }
-// body {
-//   background-color: var(--color-dark);
-// }
-// svg {
-//   display: block;
-// }
-// input,
-// select,
-// a {
-//   border: none;
-//   text-decoration: none;
-//   outline: none;
-//   cursor: text;
-//   background-color: transparent;
-//   vertical-align: middle;
-//   color: white;
-// }
-
-// button {
-//   position: relative;
-//   border: none;
-//   background: 0;
-//   padding: 0;
-// }
-// button:focus {
-//   outline: none;
-// }
-// div {
-//   border-radius: 2px;
-// }
-// @media (max-width: 480px) {
-//   #app {
-//     position: absolute;
-//     width: 100%;
-//     height: auto;
-//   }
-// }
 </style>

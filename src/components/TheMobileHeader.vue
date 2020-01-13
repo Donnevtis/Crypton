@@ -29,7 +29,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../scss/utils";
+@import "../scss/common";
 .header-mobile {
   display: flex;
   justify-content: space-between;
