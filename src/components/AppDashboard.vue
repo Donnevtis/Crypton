@@ -1,36 +1,38 @@
 <template>
   <div class="dashboard">
-    <dash-balance class="balance-module" :mainInfo="mainInfo" @update="changeColor" />
+    <dash-total class="balance-module" :mainInfo="mainInfo" @update="changeColor" />
     <dash-wallets-labels class="wallets-labels-module" />
     <dash-wallets class="wallets-module" />
     <dash-interest class="interes-module" />
     <dash-recieve class="receive-module" />
     <dash-chart class="chart-module" />
     <div class="markets" />
-    <div class="transactions" />
+    <dash-transactions class="transactions" />
     <dash-news class="news-module" />
   </div>
 </template>
 
 <script>
-import DashBalance from "./DashboardBalance";
+import DashTotal from "./DashboardTotal";
 import DashWalletsLabels from "./DashboardWalletsLabels";
 import DashWallets from "./DashboardWallets";
 import DashInterest from "./DashboardInterests";
 import DashRecieve from "./DashboardRecieve";
 import DashNews from "./DashboardNews";
-import DashChart from "./DashboardChart";
+import DashChart from "./base/Chart";
+import DashTransactions from "./base/Transactions";
 
 export default {
   name: "AppDashboard",
   components: {
-    DashBalance,
+    DashTotal,
     DashWalletsLabels,
     DashWallets,
     DashInterest,
     DashRecieve,
     DashNews,
-    DashChart
+    DashChart,
+    DashTransactions
   },
   data() {
     return {
@@ -56,13 +58,7 @@ export default {
 @import "../scss/common";
 @media (min-width: 480px) {
   .dashboard {
-    position: fixed;
-    height: calc(100vh - 108px);
-    width: calc(100vw - 90px);
-    padding: 0 2.5rem 2.4rem 1.9rem;
-    bottom: 0;
-    right: 0;
-    display: grid;
+    @include main-grid;
     grid-template-rows: 0.1fr 0.7fr 1.2fr 1.25fr 0.85fr;
     grid-template-columns: 1.36fr 1.36fr 0.4fr 1.2fr 1.58fr;
     grid-template-areas:
@@ -71,7 +67,6 @@ export default {
       "a c d d g"
       "e e e f g"
       "e e e f h";
-    gap: 1.3vw;
   }
   .balance-module {
     grid-area: a;
@@ -97,7 +92,6 @@ export default {
   }
   .transactions {
     grid-area: g;
-    background-color: $color-middle;
   }
   .news-module {
     grid-area: h;

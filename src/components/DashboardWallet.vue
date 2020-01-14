@@ -46,6 +46,7 @@ export default {
   padding: px-rem(10);
   transition: ease 0.2s;
   overflow: hidden;
+  cursor: pointer;
 
   &-header,
   &-footer {

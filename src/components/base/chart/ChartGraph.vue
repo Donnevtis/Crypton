@@ -23,10 +23,10 @@
 <script>
 import ChartLine from "./ChartLine";
 import ChartHelper from "./ChartHelper";
-import AppSpinner from "../Spinner";
+import AppSpinner from "../../Spinner";
 import BlinkPoint from "./ChartBlinkPoint";
 import { mapGetters } from "vuex";
-import { Chart } from "../../util/chart-constructor";
+import { Chart } from "../../../utils/chart-constructor";
 
 export default {
   name: "ChartGraph",

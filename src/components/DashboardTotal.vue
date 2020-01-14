@@ -27,7 +27,7 @@
 
 <script>
 export default {
-  name: "DashboardBalance",
+  name: "DashboardTotal",
   props: {
     mainInfo: Object
   },

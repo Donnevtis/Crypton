@@ -29,7 +29,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../scss/common";
+@import "../../scss/common";
 .chart {
   display: flex;
   flex-direction: column;
