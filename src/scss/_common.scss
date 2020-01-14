@@ -13,3 +13,10 @@
     }
   }
 }
+@mixin main-grid {
+  position: relative;
+  display: grid;
+  height: calc(100vh - 108px);
+  padding: 0 2.5rem 2.4rem 1.9rem;
+  gap: 1.3vw;
+}
