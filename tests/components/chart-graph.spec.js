@@ -1,19 +1,13 @@
 import { shallowMount, createLocalVue, mount } from '@vue/test-utils'
-import ChartGraph from '../../src/components/chart/ChartGraph'
+import ChartGraph from '../../src/components/base/chart/ChartGraph'
 import Spinner from '../../src/components/Spinner'
 import Vuex from 'vuex'
-import Blinker from '../../src/components/chart/ChartBlinkPoint'
-import Helper from '../../src/components/chart/ChartHelper'
+import Blinker from '../../src/components/base/chart/ChartBlinkPoint'
+import Helper from '../../src/components/base/chart/ChartHelper'
+import { d, coinData } from '../constants'
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
-const coinData = {
-    "bitcoin": {
-        "lastRates": [{ "priceUsd": "13805.6057564532338837", "time": 1515628800000, "date": "2018-01-11T00:00:00.000Z" }, { "priceUsd": "13722.7988452536021464", "time": 1515715200000, "date": "2018-01-12T00:00:00.000Z" }, { "priceUsd": "14271.5266791604401972", "time": 1515801600000, "date": "2018-01-13T00:00:00.000Z" }, { "priceUsd": "13722.6565001658500127", "time": 1515888000000, "date": "2018-01-14T00:00:00.000Z" }, { "priceUsd": "13847.8002197588300577", "time": 1515974400000, "date": "2018-01-15T00:00:00.000Z" }, { "priceUsd": "12124.7764227470634477", "time": 1516060800000, "date": "2018-01-16T00:00:00.000Z" }, { "priceUsd": "10617.4863050440655055", "time": 1516147200000, "date": "2018-01-17T00:00:00.000Z" }, { "priceUsd": "11428.0417459848192602", "time": 1516233600000, "date": "2018-01-18T00:00:00.000Z" }, { "priceUsd": "11461.7714084566219395", "time": 1516320000000, "date": "2018-01-19T00:00:00.000Z" }
-        ]
-    }
-}
-const d = 'M0, 30.03 L85.71, 0 L171.43, 30.04 L257.14, 23.19 L342.86, 117.5 L428.57, 200 L514.29, 155.64 L600, 153.79'
 
 describe('chart component', () => {
     let state

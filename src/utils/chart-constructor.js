@@ -7,7 +7,7 @@ export class Chart {
     #height
     constructor(box) {
         this.#stepX = box.stepX ? Math.max(box.stepX, 30) : 70
-        this.#stepY = Math.max(box.stepY, 10) || 50
+        this.#stepY = box.stepY ? Math.max(box.stepY, 10) : 50
         this.#width = this.stepX * ~~(box.width / this.stepX) || 600
         this.#height = this.stepY * ~~(box.height / this.stepY) || 200
         this.viewBox = `0 0 ${this.width} ${this.height}`
@@ -91,7 +91,7 @@ export class Chart {
     // USD LABELS CREATOR
     createLabels() {
         let max = this.limits.max
-        const step = (max - this.limits.min) / this.gridY.length
+        const step = (max - this.limits.min) / (this.gridY.length - 1) // ! necessary to devide into intervals, not into amaunt of line
         this.gridY.forEach(i => {
             i.$ = max >= 1000 && this.range > 4e5 ? (max / 1000).toFixed(1) + "k" : max.toFixed(2)
             max -= step

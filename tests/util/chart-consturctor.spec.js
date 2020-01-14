@@ -1,13 +1,8 @@
-import { Chart } from '../../src/util/chart-constructor'
+import { Chart } from '../../src/utils/chart-constructor'
+import { box, coinData, line } from '../constants'
 
 describe('chart class', () => {
 
-    const box = {
-        width: 1200.6,
-        height: 400.3,
-        stepX: 60,
-        stepY: 40
-    }
     const chart = new Chart(box)
     const rates = () => {
         const res = []
@@ -20,24 +15,37 @@ describe('chart class', () => {
     }
     const data = {
         data: rates(),
-        range: 3e4
+        range: 3e4,
     }
-
-    it('viewBox', (() => {
+    it('viewBox', () => {
         expect(chart).toEqual({
             viewBox: '0 0 1200 400'
         });
-    }))
+    })
+    describe('graph field and graph line', () => {
 
-    it('dataStack', (() => {
-        chart.initChart(data)
-        expect(chart.dataStack.length).toBe(5);
-        expect(chart.dataStack.slice(-1)[0].x).toBe(1200);
-        expect(chart.dataStack.slice(-1)[0].y).toBe(0);
-    }))
+        beforeEach(() => {
+            chart.initChart(data)
+        })
 
-    it('svg path', (() => {
-        expect(chart.chartLinePath).toBe('M0, 400 L300, 300 L600, 200 L900, 100 L1200, 0');
-    }))
+        it('dataStack', () => {
+            expect(chart.dataStack.length).toBe(5);
+            expect(chart.dataStack.slice(-1)[0].x).toBe(1200);
+            expect(chart.dataStack.slice(-1)[0].y).toBe(0);
+        })
+
+        it('limits', () => {
+            expect(chart.limits).toEqual({ min: 500, max: 900 })
+        })
+
+        it('price lines', () => {
+            expect(chart.gridY[0].$).toBe('900.00')
+            expect(chart.gridY[10].$).toBe('500.00')
+        })
+
+        it('svg path', () => {
+            expect(chart.chartLinePath).toBe(line);
+        })
+    })
 
 })
