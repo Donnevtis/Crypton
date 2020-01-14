@@ -2,7 +2,7 @@
   <div id="app">
     <component :is="adaptive" />
     <app-sidebar />
-    <app-dashboard />
+    <router-view />
   </div>
 </template>
 
@@ -57,6 +57,7 @@ body {
     "Open Sans", "Helvetica Neue", sans-serif;
   background-color: $color-dark;
   color: $color-white;
+  padding-left: px-rem(90);
 }
 input,
 select,
@@ -64,7 +65,6 @@ a {
   border: none;
   text-decoration: none;
   outline: none;
-  cursor: text;
   background-color: transparent;
   vertical-align: middle;
   color: $color-white;
@@ -75,6 +75,8 @@ button {
   background: 0;
   padding: 0;
   color: $color-white;
+  cursor: pointer;
+
   &:focus {
     outline: none;
   }
