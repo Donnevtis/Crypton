@@ -53,13 +53,10 @@ export default {
 
 .header {
   display: flex;
-  position: fixed;
+  position: relative;
   align-items: center;
   justify-content: space-between;
-  width: calc(100vw - 90px);
   height: 6.8rem;
-  right: 0;
-  top: 0;
   padding: 0 2.5rem 0 1.9rem;
   &-wrap {
     width: 65vw;
