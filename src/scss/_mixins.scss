@@ -3,6 +3,9 @@
   height: 1rem;
   background: url('../assets/svg/ellypsis.svg') no-repeat center;
   cursor: pointer;
+  &:hover {
+    background: url('../assets/svg/ellypsis-white.svg') no-repeat center;
+  }
 }
 @mixin title {
   font-weight: 200;
@@ -14,4 +17,11 @@
   flex-direction: $dir;
   justify-content: space-between;
   align-items: center;
+}
+@mixin main-grid {
+  position: relative;
+  display: grid;
+  height: calc(100vh - 108px);
+  padding: 0 px-rem(39) px-rem(37) px-rem(29);
+  gap: 1.3vw;
 }

@@ -56,6 +56,35 @@ export default {
 
 <style lang="scss">
 @import "../scss/common";
+
+.balance-module {
+  grid-area: a;
+}
+.wallets-labels-module {
+  grid-area: w;
+}
+.wallets-module {
+  grid-area: b;
+}
+.interes-module {
+  grid-area: c;
+}
+.receive-module {
+  grid-area: d;
+}
+.chart-module {
+  grid-area: e;
+}
+.markets {
+  grid-area: f;
+  background-color: $color-middle;
+}
+.transactions {
+  grid-area: g;
+}
+.news-module {
+  grid-area: h;
+}
 @media (min-width: 480px) {
   .dashboard {
     @include main-grid;
@@ -68,34 +97,6 @@ export default {
       "e e e f g"
       "e e e f h";
   }
-  .balance-module {
-    grid-area: a;
-  }
-  .wallets-labels-module {
-    grid-area: w;
-  }
-  .wallets-module {
-    grid-area: b;
-  }
-  .interes-module {
-    grid-area: c;
-  }
-  .receive-module {
-    grid-area: d;
-  }
-  .chart-module {
-    grid-area: e;
-  }
-  .markets {
-    grid-area: f;
-    background-color: $color-middle;
-  }
-  .transactions {
-    grid-area: g;
-  }
-  .news-module {
-    grid-area: h;
-  }
 }
 div {
   border-radius: 2px;
@@ -105,22 +106,40 @@ div {
     grid-template-rows: 0.7fr 1.2fr 1.25fr 0.85fr;
     grid-template-columns: 1.36fr 1.36fr 0.4fr 1.2fr;
   }
-  .transactions {
-    display: none;
-  }
 }
 @media (max-width: 480px) {
   .dashboard {
     position: relative;
-    height: auto;
-    width: 100%;
+    // height: auto;
+    // width: 100%;
     padding-top: 0.9rem;
-    bottom: auto;
-    right: 0;
+    // bottom: auto;
+    // right: 0;
     display: grid;
-    grid-template-rows: 1fr 0.05fr 0.35fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 0.05fr 0.35fr 0.56fr 0.57fr 1fr 1fr 1fr 1fr;
     grid-template-columns: 1fr;
     gap: px-rem(20);
+    grid-template-areas:
+      "a"
+      "w"
+      "b"
+      "c"
+      "d"
+      "g"
+      "e"
+      "f"
+      "h";
+  }
+
+  $modules: (
+    balance-module wallets-labels-module wallets-module interes-module
+      receive-module chart-module markets transactions news-module header
+  );
+
+  @each $module in $modules {
+    .#{$module} {
+      margin: 0 px-rem(32);
+    }
   }
 }
 </style>

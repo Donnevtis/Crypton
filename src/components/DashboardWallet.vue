@@ -7,7 +7,7 @@
       </div>
     </div>
     <div class="wallet-footer">
-      <span class="name">{{ currency.name.replace(/\w/i, l => l.toUpperCase()) }}</span>
+      <span class="name">{{ currency.name }}</span>
       <transition name="fade">
         <span v-if="currency.active" class="rate">{{ currency.amount }}</span>
       </transition>
@@ -82,14 +82,15 @@ export default {
     position: relative;
     bottom: 0;
     left: 0;
-    font-size: 1rem;
+    font-size: 1.14vw;
+    text-transform: capitalize;
   }
 
   .rate {
     position: relative;
     bottom: 0;
     right: 0;
-    font-size: px-rem(24);
+    font-size: 1.715vw;
     text-align: right;
     transition: ease 0.5s;
   }
@@ -124,6 +125,12 @@ export default {
     &.active {
       flex-grow: inherit;
       width: px-rem(200);
+    }
+    .name {
+      font-size: 1rem;
+    }
+    .rate {
+      font-size: px-rem(24);
     }
   }
 }

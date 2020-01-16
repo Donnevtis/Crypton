@@ -110,7 +110,7 @@ export default {
 }
 @media (max-width: 768px) {
   .news {
-    display: none;
+    width: initial;
   }
 }
 </style>

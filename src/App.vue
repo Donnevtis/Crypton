@@ -30,7 +30,7 @@ export default {
 
 :root {
   --color-dark: #18191d;
-  --color-slate: #222429;
+  --color-slate: #1e2025;
   --color-middle: #1d2024;
   --color-light: #2a2b31;
   --color-bright: #45464d;
@@ -69,6 +69,15 @@ a {
   vertical-align: middle;
   color: $color-white;
 }
+input {
+  &[type="number"] {
+    -moz-appearance: textfield;
+    &:invalid {
+      border: solid 1px rgba(255, 0, 0, 0.418);
+    }
+  }
+}
+
 button {
   position: relative;
   border: none;
