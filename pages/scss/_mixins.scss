@@ -1,0 +1,17 @@
+@mixin options {
+  width: px-rem(5);
+  height: 1rem;
+  background: url('../assets/svg/ellypsis.svg') no-repeat center;
+  cursor: pointer;
+}
+@mixin title {
+  font-weight: 200;
+  position: relative;
+  font-size: px-rem(24);
+}
+@mixin flex($dir: row) {
+  display: flex;
+  flex-direction: $dir;
+  justify-content: space-between;
+  align-items: center;
+}
