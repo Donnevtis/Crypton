@@ -4,8 +4,8 @@
       <circle cx="16" cy="16" r="14" fill="none" stroke="var(--color-light)" stroke-width="2" />
       <path :d="d" fill="transparent" stroke="var(--color-green)" stroke-width="3" />
     </svg>
-    <div class="percent" :wallet="wallet">{{ wallet.fullness + '%' }}</div>
-    <div class="name" :wallet="wallet">{{wallet.name}}</div>
+    <span class="percent">{{ wallet.fullness + '%' }}</span>
+    <div class="name">{{wallet.name}}</div>
     <button class="options"></button>
   </div>
 </template>
@@ -39,53 +39,50 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-@import "../scss/mixins";
+<style lang="scss">
+@import "../scss/common";
 .interest {
   position: relative;
   display: flex;
-  /* justify-content: space-between; */
+  justify-content: space-between;
   align-items: center;
-  background-color: var(--color-slate);
-}
-.loader {
-  box-sizing: border-box;
-  position: relative;
-  width: 2.3vw;
-  height: 2.3vw;
-}
-.percent {
-  position: absolute;
-  left: 4vw;
-  font-size: 24px;
-  font-weight: 300;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: normal;
-  letter-spacing: normal;
-  color: #ffffff;
-}
-.name {
-  position: absolute;
-  left: 10vw;
-  font-size: 12px;
-  font-weight: 500;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: normal;
-  letter-spacing: normal;
-  color: #606166;
-}
-.fa-ellipsis-v {
-  color: var(--color-light);
-  font-size: 18px;
-}
-.options {
-  @include options;
-  position: absolute;
-  right: 0;
-}
-.options:hover {
-  background: url("../assets/svg/ellypsis-white.svg") no-repeat center;
+  background-color: $color-slate;
+  .loader {
+    width: 2.3vw;
+    height: 2.3vw;
+  }
+  .percent {
+    // align-self: flex-start;
+    width: 4rem;
+    font-size: 1.715vw;
+    font-weight: 400;
+    text-align: start;
+  }
+  .name {
+    width: 4rem;
+    left: 10vw;
+    font-size: 0.85vw;
+    color: $font-color-dark;
+    text-transform: capitalize;
+  }
+
+  @media (max-width: 480px) {
+    & {
+      height: px-rem(40);
+    }
+    .loader {
+      position: relative;
+      width: px-rem(32);
+      height: px-rem(32);
+    }
+    .percent {
+      width: 5rem;
+      font-size: px-rem(24);
+    }
+    .name {
+      width: 4.5rem;
+      font-size: px-rem(12);
+    }
+  }
 }
 </style>

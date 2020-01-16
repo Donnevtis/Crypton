@@ -57,7 +57,7 @@ export default {
 }
 @media (max-width: 480px) {
   .chart {
-    display: none;
+    width: initial;
   }
 }
 </style>

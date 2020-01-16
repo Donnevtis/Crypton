@@ -20,14 +20,18 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss">
+@import "../scss/common";
 .interest-wrapper {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 17px 21px 15px 24px;
+  padding: px-rem(17) px-rem(19) px-rem(15) px-rem(24);
   position: relative;
-  background-color: var(--color-slate);
+  background-color: $color-slate;
   height: 100%;
+  @media (max-width: 480px) {
+    padding: px-rem(15) px-rem(18) px-rem(15) px-rem(20);
+  }
 }
 </style>

@@ -30,7 +30,7 @@ export default {
   left: 0%;
   top: 0%;
   bottom: 0%;
-  width: 5.7rem;
+  width: px-rem(91);
   background-color: $color-middle;
   border-radius: 0;
 }
