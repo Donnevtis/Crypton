@@ -1,15 +1,23 @@
 <template>
-  <my-app />
+  <nuxt-child />
 </template>
 
 <script>
-import myApp from "./App";
 export default {
-  components: {
-    myApp
+  layout: "App",
+  fetch({ redirect }) {
+    redirect("/dashboard");
   }
 };
 </script>
 
 <style>
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.5s;
+}
+.page-enter,
+.page-leave-to {
+  opacity: 0;
+}
 </style>

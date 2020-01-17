@@ -7,14 +7,14 @@ import {
 } from './utils'
 
 import NuxtLoading from './components/nuxt-loading.vue'
-import NuxtBuildIndicator from './components/nuxt-build-indicator'
 
+import _1a3a6a4b from '..\\layouts\\App.vue'
 import _6f6c098b from './layouts/default.vue'
 
-const layouts = { "_default": _6f6c098b }
+const layouts = { "_App": _1a3a6a4b,"_default": _6f6c098b }
 
 export default {
-  head: {"meta":[],"link":[],"style":[],"script":[]},
+  head: {"titleTemplate":"Cryptonix","meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"},{"name":"msapplication-TileColor","content":"#da532c"},{"name":"theme-color","content":"#ffffff"},{"hid":"description","name":"description","content":"Meta description"}],"link":[{"rel":"icon","href":"\u002Ffavicon\u002Ffavicon.ico"},{"rel":"apple-touch-icon","sizes":"180x180","href":"\u002Ffavicon\u002Fapple-touch-icon.png"},{"rel":"icon","type":"image\u002Fpng","sizes":"32x32","href":"\u002Ffavicon\u002Ffavicon-32x32.png"},{"rel":"icon","type":"image\u002Fpng","sizes":"16x16","href":"\u002Ffavicon\u002Ffavicon-16x16.png"},{"rel":"manifest","href":"\u002Ffavicon\u002Fsite.webmanifest"},{"rel":"mask-icon","href":"\u002Ffavicon\u002Fsafari-pinned-tab.svg","color":"#5bbad5"}],"style":[],"script":[]},
 
   render (h, props) {
     const loadingEl = h('NuxtLoading', { ref: 'loading' })
@@ -48,7 +48,7 @@ export default {
       }
     }, [
       loadingEl,
-      h(NuxtBuildIndicator),
+
       transitionEl
     ])
   },
@@ -158,10 +158,6 @@ export default {
     },
 
     setLayout (layout) {
-      if(layout && typeof layout !== 'string') {
-        throw new Error('[nuxt] Avoid using non-string value as layout property.')
-      }
-
       if (!layout || !layouts['_' + layout]) {
         layout = 'default'
       }

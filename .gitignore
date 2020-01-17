@@ -4,6 +4,7 @@ vue.config.js
 .gitignore
 /dist
 /scetch
+/.nuxt
 # temporary
 package-lock.deprecated.json
 # local env files
