@@ -43,7 +43,6 @@ export default {
   .wallets {
     margin: 0;
     overflow: scroll;
-
     &-wrap {
       position: absolute;
       width: 175%;

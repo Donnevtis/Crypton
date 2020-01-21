@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard">
-    <dash-total class="balance-module" :mainInfo="mainInfo" @update="changeColor" />
+    <dash-total class="total-module" :mainInfo="mainInfo" @update="changeColor" />
     <dash-wallets-labels class="wallets-labels-module" />
     <dash-wallets class="wallets-module" />
     <dash-interest class="interes-module" />
@@ -57,7 +57,7 @@ export default {
 <style lang="scss">
 @import "../scss/common";
 
-.balance-module {
+.total-module {
   grid-area: a;
 }
 .wallets-labels-module {
@@ -110,14 +110,10 @@ div {
 @media (max-width: 480px) {
   .dashboard {
     position: relative;
-    // height: auto;
-    // width: 100%;
     padding-top: 0.9rem;
-    // bottom: auto;
-    // right: 0;
     display: grid;
-    grid-template-rows: 1fr 0.05fr 0.35fr 0.56fr 0.57fr 1fr 1fr 1fr 1fr;
-    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 0.05fr 0.35fr 0.56fr 0.57fr 1.65fr 1.04fr 1.09fr 0.42fr;
+    grid-template-columns: auto;
     gap: px-rem(20);
     grid-template-areas:
       "a"
@@ -136,10 +132,10 @@ div {
       receive-module chart-module markets transactions news-module header
   );
 
-  @each $module in $modules {
-    .#{$module} {
-      margin: 0 px-rem(32);
-    }
-  }
+  // @each $module in $modules {
+  //   .#{$module} {
+  //     margin: 0 px-rem(32);
+  //   }
+  // }
 }
 </style>

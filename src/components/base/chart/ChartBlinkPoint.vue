@@ -1,5 +1,5 @@
 <template lang="pug">
-svg.blink-point(xmlns='http://www.w3.org/2000/svg' :viewBox='chart.viewBox')
+svg.blink-point(xmlns='http://www.w3.org/2000/svg' :viewBox='chart.viewBox' preserveAspectRatio="xMinYMin meet")
   rect.blink-point-diamond(stroke="white" fill="transparent" :x="chart.width" :y="y" width="5" height="5" :transform="`rotate(45,${chart.width+2.5},${y-2.5})`")  
 </template>
 

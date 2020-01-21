@@ -57,7 +57,9 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style lang='scss'>
+@import "../scss/common";
+
 .news {
   display: flex;
   flex-direction: column;
@@ -66,51 +68,51 @@ export default {
   width: 100%;
   height: 100%;
   padding: 0.85vw 1.43vw 1.28vw;
-  background-color: var(--color-middle);
-}
-.news-title {
-  position: relative;
+  background-color: $color-middle;
 
-  font-size: 1vw;
-  font-weight: normal;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: normal;
-  letter-spacing: normal;
-  color: var(--color-white);
+  &-title {
+    position: relative;
+    font-size: 1vw;
+    color: $color-white;
+  }
+
+  &-content {
+    position: relative;
+    width: 100%;
+    left: 1%;
+    font-size: 0.85vw;
+    color: $color-white;
+    &:hover a {
+      cursor: pointer;
+      color: $color-green;
+      text-decoration-line: underline;
+    }
+  }
+
+  &-date {
+    position: relative;
+    left: 0;
+    bottom: 0;
+    font-size: 0.8vw;
+    color: $color-text-middle;
+  }
 }
-.news-content {
-  position: relative;
-  width: 100%;
-  left: 1%;
-  font-size: 0.85vw;
-  font-weight: normal;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: normal;
-  letter-spacing: normal;
-  color: var(--color-white);
-}
-.news-content:hover a {
-  cursor: pointer;
-  color: var(--color-green);
-  text-decoration-line: underline;
-}
-.news-date {
-  position: relative;
-  left: 0;
-  bottom: 0;
-  font-size: 0.8vw;
-  font-weight: normal;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: normal;
-  letter-spacing: normal;
-  color: var(--color-text-middle);
-}
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .news {
     width: initial;
+    padding: px-rem(12) px-rem(12) px-rem(20) px-rem(21);
+
+    &-title {
+      font-size: px-rem(16);
+    }
+
+    &-content {
+      font-size: px-rem(14);
+    }
+
+    &-date {
+      font-size: px-rem(12);
+    }
   }
 }
 </style>

@@ -53,6 +53,7 @@ export default {
   user-select: none;
 }
 body {
+  position: fixed;
   font-family: BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell,
     "Open Sans", "Helvetica Neue", sans-serif;
   background-color: $color-dark;
@@ -99,7 +100,7 @@ ul {
     position: absolute;
     width: 100%;
     height: auto;
-    padding: px-rem(28) 0;
+    padding: px-rem(28) px-rem(32);
   }
 }
 </style>
