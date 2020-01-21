@@ -1,6 +1,6 @@
 <template lang="pug">
 svg.chart-line(xmlns='http://www.w3.org/2000/svg' :viewBox='viewBox'  vector-effect="non-scaling-stroke"  preserveAspectRatio="xMinYMin meet") 
-  g( fill='transparent' stroke="var(--color-green)" stroke-width='2')
+  g( fill='transparent' stroke-width='2')
     path(:class="{'chart-line__animate':!isCurrent}" :d='d') 
   slot
 </template>
@@ -17,10 +17,16 @@ export default {
 </script>
 
 <style lang="scss">
+@import "../../../scss/variables";
 .chart-line {
   position: absolute;
   height: 100%;
   width: 100%;
+
+  & > g {
+    stroke: $color-green;
+  }
+
   .chart-line__animate {
     transition-duration: 0.5s;
   }

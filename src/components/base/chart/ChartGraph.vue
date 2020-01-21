@@ -2,14 +2,14 @@
 .chart-container(ref='box')
   template(v-if='isLoad')
     svg.chart-graph(xmlns='http://www.w3.org/2000/svg' :viewBox='chart.viewBox'  vector-effect="non-scaling-stroke" preserveAspectRatio="xMinYMin meet")      
-      g(stroke='var(--charcoal-grey)' stroke-width='0.5' style='shape-rendering: crispEdges')
+      g(stroke-width='0.5' style='shape-rendering: crispEdges')
         template(v-for='line in chart.gridY')        
           line( :key='line.y' x1='0' :y1='line.y' :x2='chart.width' :y2='line.y')   
           g.chart-labels-container.chart-labels
             text.chart-label(stroke='transparent' x='25' :y='line.y + 3'  text-anchor="middle") {{ line.$ }}               
         //- line(:x1='chart.width' :y1='0' :x2='chart.width' :y2='chart.height')    
     svg.chart-timers(:viewBox='chart.viewBox' vector-effect="non-scaling-stroke" preserveAspectRatio="xMinYMin meet")
-      g(stroke='var(--charcoal-grey)' stroke-width='.5')
+      g(stroke-width='.5')
         line(v-for='tick in chart.gridX' :key='tick.i' :x1='tick.x' :y1='chart.height-2' :x2='tick.x' :y2='chart.height+3' style="transform: translateY(-36px)")
       transition-group(tag='g' name="timers-list" )        
         svg.chart-labels-container(v-for='tick in chart.gridX' :key='tick.i' width='80' :x='tick.x' :y='chart.height-5' preserveAspectRatio="xMinYMin meet")
@@ -128,29 +128,39 @@ export default {
     height: 100%;
     width: 100%;
     overflow: visible;
+
+    & > g {
+      stroke: $charcoal-grey;
+    }
   }
+
   &-timers {
     position: absolute;
     height: 100%;
     width: 100%;
     transform: translateY(38px);
   }
+
   &-labels {
     transform: translateX(-65px);
   }
+
   &-label {
     position: absolute;
     font-size: px-rem(10);
     font-weight: 500;
     fill: $color-text-light;
   }
+
   &-labels-container {
     overflow: visible;
   }
 }
+
 .timers-list-enter-active {
   transition: all 1s;
 }
+
 .timers-list-enter {
   opacity: 0;
 }
@@ -159,6 +169,7 @@ export default {
   .chart-container {
     margin-left: px-rem(25);
   }
+
   .chart-labels {
     transform: translateX(-45px);
   }

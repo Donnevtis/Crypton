@@ -128,14 +128,14 @@ div {
   }
 
   $modules: (
-    balance-module wallets-labels-module wallets-module interes-module
+    total-module wallets-labels-module wallets-module interes-module
       receive-module chart-module markets transactions news-module header
   );
 
-  // @each $module in $modules {
-  //   .#{$module} {
-  //     margin: 0 px-rem(32);
-  //   }
-  // }
+  @each $module in $modules {
+    .#{$module} {
+      margin: 0 px-rem(32);
+    }
+  }
 }
 </style>

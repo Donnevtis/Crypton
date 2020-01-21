@@ -1,8 +1,8 @@
 <template>
   <div class="interest">
     <svg class="loader" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35">
-      <circle cx="16" cy="16" r="14" fill="none" stroke="var(--color-light)" stroke-width="2" />
-      <path :d="d" fill="transparent" stroke="var(--color-green)" stroke-width="3" />
+      <circle cx="16" cy="16" r="14" fill="none" stroke-width="2" />
+      <path :d="d" fill="transparent" stroke-width="3" />
     </svg>
     <span class="percent">{{ wallet.fullness + '%' }}</span>
     <div class="name">{{wallet.name}}</div>
@@ -50,9 +50,16 @@ export default {
   .loader {
     width: 2.3vw;
     height: 2.3vw;
+
+    & > circle {
+      stroke: $color-light;
+    }
+
+    & > path {
+      stroke: $color-green;
+    }
   }
   .percent {
-    // align-self: flex-start;
     width: 4rem;
     font-size: 1.715vw;
     font-weight: 400;
