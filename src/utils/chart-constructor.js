@@ -7,6 +7,7 @@ export class Chart {
     #height
     constructor(box) {
         this.#stepX = box.stepX ? Math.max(box.stepX, 30) : 70
+        this.#stepX = box.width / ~~(box.width / this.stepX)
         this.#stepY = box.stepY ? Math.max(box.stepY, 10) : 50
         this.#width = this.stepX * ~~(box.width / this.stepX) || 600
         this.#height = this.stepY * ~~(box.height / this.stepY) || 200
