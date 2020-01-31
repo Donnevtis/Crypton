@@ -1,5 +1,5 @@
 import { Chart } from '../../src/utils/chart-constructor'
-import { box, coinData, line } from '../constants'
+import { box, line } from '../constants'
 
 describe('chart class', () => {
 
@@ -19,7 +19,7 @@ describe('chart class', () => {
     }
     it('viewBox', () => {
         expect(chart).toEqual({
-            viewBox: '0 0 1200 400'
+            viewBox: '0 0 1200.6 400'
         });
     })
     describe('graph field and graph line', () => {
@@ -30,7 +30,7 @@ describe('chart class', () => {
 
         it('dataStack', () => {
             expect(chart.dataStack.length).toBe(5);
-            expect(chart.dataStack.slice(-1)[0].x).toBe(1200);
+            expect(chart.dataStack.slice(-1)[0].x).toBe(1200.6);
             expect(chart.dataStack.slice(-1)[0].y).toBe(0);
         })
 

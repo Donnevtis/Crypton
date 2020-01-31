@@ -4,11 +4,11 @@ export const coinData = {
         ]
     }
 }
-export const d = 'M0, 30.03 L85.71, 0 L171.43, 30.04 L257.14, 23.19 L342.86, 117.5 L428.57, 200 L514.29, 155.64 L600, 153.79'
+export const d = 'M0, 43.55 L85.71, 0 L171.43, 43.56 L257.14, 33.63 L342.86, 170.38 L428.57, 290 L514.29, 225.67 L600, 222.99'
 export const box = {
     width: 1200.6,
     height: 400.3,
     stepX: 60,
     stepY: 40
 }
-export const line = 'M0, 400 L300, 300 L600, 200 L900, 100 L1200, 0';
+export const line = 'M0, 400 L300.15, 300 L600.3, 200 L900.45, 100 L1200.6, 0';
