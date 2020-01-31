@@ -6,6 +6,8 @@ export class Chart {
     #width
     #height
     constructor(box) {
+        box.width = box.width || 600
+        box.height = box.height || 300
         this.#stepX = box.stepX ? Math.max(box.stepX, 30) : 70
         this.#stepX = box.width / ~~(box.width / this.stepX)
         this.#stepY = box.stepY ? Math.max(box.stepY, 10) : 50
@@ -29,7 +31,7 @@ export class Chart {
     initChart(data) {
         const absciss = Math.floor(this.width / this.stepX) - 1
         const ordinates = Math.floor(this.height / this.stepY)
-        this.gridX = this.stepper(this.stepX, absciss, 'x', 30) //coords for horizontal grid, left offset = 30     
+        this.gridX = this.stepper(this.stepX, absciss, 'x', 30) //coords for horizontal grid, left offset = 30        
         this.gridY = this.stepper(this.stepY, ordinates, 'y') //horizontal dividing lines   
         this.createChartLine(data)
     }
