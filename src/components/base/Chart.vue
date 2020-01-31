@@ -3,6 +3,7 @@
     <div class="chart-header">
       <div class="chart-title">{{ wallet.name }} Chart</div>
       <chart-timestamp />
+      <slot />
     </div>
 
     <chart-graph />
