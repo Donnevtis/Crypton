@@ -21,13 +21,9 @@ npm run serve
 
 ### Compiles and minifies for production
 
-# <<<<<<< HEAD
-
 ```
 npm run build
 ```
-
-> > > > > > > chart-refactor
 
 ### Lints and fixes files
 
