@@ -1,15 +1,15 @@
 <template>
   <div class="wallet" @click="changer">
-    <div class="header">
+    <div class="wallet-header">
       <span class="acronym">{{currency.acronym}}</span>
       <div class="icon">
         <img :src="currency.icon" />
       </div>
     </div>
-    <div class="footer">
-      <span class="name">{{currency.name}}</span>
+    <div class="wallet-footer">
+      <span class="name">{{ currency.name }}</span>
       <transition name="fade">
-        <span v-if="currency.active" class="rate">{{ currency.amount}}</span>
+        <span v-if="currency.active" class="rate">{{ currency.amount }}</span>
       </transition>
     </div>
   </div>
@@ -30,85 +30,108 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss">
+@import "../scss/common";
 .wallet {
+  position: relative;
   display: flex;
   flex-flow: column nowrap;
   align-items: space-between;
   justify-content: space-between;
   position: relative;
   height: 100%;
-  background-color: var(--color-middle);
-  color: var(--color-white);
+  background-color: $color-middle;
+  color: $color-white;
   width: 8.9vw;
-  padding: 10px;
+  padding: px-rem(10);
   transition: ease 0.2s;
   overflow: hidden;
+  cursor: pointer;
+
+  &-header,
+  &-footer {
+    @include flex();
+  }
+
+  &-header {
+    .acronym {
+      position: relative;
+      top: 0;
+      left: 0;
+      color: $color-text-dark;
+      font-size: px-rem(12);
+    }
+    .icon {
+      position: relative;
+      top: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+      width: 35px;
+      height: 35px;
+      background: $color-text-dark;
+      transition: ease 0.2s;
+    }
+  }
+
+  &-footer {
+    align-items: flex-end;
+  }
+
+  .name {
+    position: relative;
+    bottom: 0;
+    left: 0;
+    font-size: 1.14vw;
+    text-transform: capitalize;
+  }
+
+  .rate {
+    position: relative;
+    bottom: 0;
+    right: 0;
+    font-size: 1.715vw;
+    text-align: right;
+    transition: ease 0.5s;
+  }
+
+  img {
+    margin: 0 auto;
+  }
+
+  &.active {
+    flex-grow: 0.6;
+    background-color: $color-green;
+    .icon {
+      background: rgba($color-text-dark, 0.3);
+    }
+    .acronym {
+      color: rgba($color-text-dark, 0.3);
+    }
+  }
 }
-.header,
-.footer {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-.footer {
-  align-items: flex-end;
-}
-.acronym {
-  position: relative;
-  top: 0;
-  left: 0;
-  color: var(--color-text-dark);
-  font-size: 12px;
-  font-weight: 400;
-  text-align: center;
-}
-.name {
-  position: relative;
-  bottom: 0;
-  left: 0;
-  font-size: 16px;
-  font-weight: 400;
-  text-align: center;
-}
-.rate {
-  position: relative;
-  bottom: 0;
-  right: 0;
-  font-size: 24px;
-  font-weight: 400;
-  text-align: right;
-  transition: ease 0.5s;
-}
-.icon {
-  position: relative;
-  top: 0;
-  right: 0;
-  display: flex;
-  align-items: center;
-  width: 35px;
-  height: 35px;
-  background: var(--color-text-dark);
-  transition: ease 0.2s;
-}
-.active {
-  flex-grow: 0.6;
-  background-color: var(--color-green);
-}
-.active .icon {
-  background: var(--color-text-dark-transporent);
-}
-.active .acronym {
-  color: var(--color-text-dark-transporent);
-}
-img {
-  display: block;
-  margin: 0 auto;
-  overflow: visible;
-}
+
 .fade-enter,
 .fade-leave-to {
   transform: translateX(40px);
   opacity: 0;
+}
+
+@media (max-width: 480px) {
+  .wallet {
+    width: px-rem(120);
+    padding: px-rem(10) px-rem(12) px-rem(14);
+
+    &.active {
+      flex-grow: inherit;
+      width: px-rem(200);
+    }
+    .name {
+      font-size: 1rem;
+    }
+    .rate {
+      font-size: px-rem(24);
+    }
+  }
 }
 </style>

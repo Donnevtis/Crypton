@@ -1,11 +1,11 @@
 <template>
   <div class="interest">
     <svg class="loader" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35">
-      <circle cx="16" cy="16" r="14" fill="none" stroke="var(--color-light)" stroke-width="2" />
-      <path :d="d" fill="transparent" stroke="var(--color-green)" stroke-width="3" />
+      <circle cx="16" cy="16" r="14" fill="none" stroke-width="2" />
+      <path :d="d" fill="transparent" stroke-width="3" />
     </svg>
-    <div class="percent" :wallet="wallet">{{ wallet.fullness + '%' }}</div>
-    <div class="name" :wallet="wallet">{{wallet.name}}</div>
+    <span class="percent">{{ wallet.fullness + '%' }}</span>
+    <div class="name">{{wallet.name}}</div>
     <button class="options"></button>
   </div>
 </template>
@@ -25,9 +25,10 @@ export default {
       };
       const coords = [];
       const limit = Math.round(this.wallet.fullness * 3.6); // degree of percents (10 percent * 3.6 = 36 degree)
-      for (let φ = 0; φ < limit; φ++) { // φ is degree
+      for (let φ = 0; φ < limit; φ++) {
+        // φ is degree
         if (φ % 2 == 0) continue;
-        const rad = φ * Math.PI / 180;
+        const rad = (φ * Math.PI) / 180;
         const x = (ringVal.r * Math.sin(rad) + 16).toFixed(5);
         const y = (ringVal.r * Math.cos(rad) + 16).toFixed(5);
         coords.push(`L ${x} ${y}`);
@@ -38,55 +39,57 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss">
+@import "../scss/common";
 .interest {
   position: relative;
   display: flex;
-  /* justify-content: space-between; */
+  justify-content: space-between;
   align-items: center;
-  background-color: var(--color-slate);
-}
-.loader {
-  box-sizing: border-box;
-  position: relative;
-  width: 2.3vw;
-  height: 2.3vw;
-}
-.percent {
-  position: absolute;
-  left: 4vw;
-  font-size: 24px;
-  font-weight: 300;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: normal;
-  letter-spacing: normal;
-  color: #ffffff;
-}
-.name {
-  position: absolute;
-  left: 10vw;
-  font-size: 12px;
-  font-weight: 500;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: normal;
-  letter-spacing: normal;
-  color: #606166;
-}
-.fa-ellipsis-v {
-  color: var(--color-light);
-  font-size: 18px;
-}
-.options {
-  position: absolute;
-  right: 0;
-  width: 10px;
-  height: 16px;
-  background: url("../assets/ellypsis.svg") no-repeat center;
-  cursor: pointer;
-}
-.options:hover {
-  background: url("../assets/ellypsis-white.svg") no-repeat center;
+  background-color: $color-slate;
+  .loader {
+    width: 2.3vw;
+    height: 2.3vw;
+
+    & > circle {
+      stroke: $color-light;
+    }
+
+    & > path {
+      stroke: $color-green;
+    }
+  }
+  .percent {
+    width: 4rem;
+    font-size: 1.715vw;
+    font-weight: 400;
+    text-align: start;
+  }
+  .name {
+    width: 4rem;
+    left: 10vw;
+    font-size: 0.85vw;
+    color: $font-color-dark;
+    text-transform: capitalize;
+  }
+
+  @media (max-width: 480px) {
+    & {
+      height: px-rem(40);
+    }
+    .loader {
+      position: relative;
+      width: px-rem(32);
+      height: px-rem(32);
+    }
+    .percent {
+      width: 5rem;
+      font-size: px-rem(24);
+    }
+    .name {
+      width: 4.5rem;
+      font-size: px-rem(12);
+    }
+  }
 }
 </style>

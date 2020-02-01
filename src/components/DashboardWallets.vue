@@ -1,22 +1,23 @@
 <template>
   <div class="wallets">
-    <Wallet
-      v-for="wallet in wallets"
-      :key="wallet.id"
-      :currency="wallet"
-      :class="{active: wallet.active}"
-    />
-    <a href="#">Add wallet</a>
+    <div class="wallets-wrap">
+      <dash-wallet
+        v-for="wallet in wallets"
+        :key="wallet.id"
+        :currency="wallet"
+        :class="{active: wallet.active}"
+      />
+    </div>
   </div>
 </template>
 
 <script>
-import Wallet from "./DashboardWallet";
+import DashWallet from "./DashboardWallet";
 
 export default {
   name: "DashboardWallets",
   components: {
-    Wallet
+    DashWallet
   },
   computed: {
     wallets() {
@@ -26,33 +27,30 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "../scss/common";
 .wallets {
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+
+  &-wrap {
+    height: 100%;
+    width: 100%;
+    @include flex();
+  }
 }
-.wallets::before {
-  content: "My wallets";
-  position: absolute;
-  top: -3vw;
-  width: 74.52px;
-  height: 21px;
-  color: var(--color-white);
-  font-size: 16px;
-  font-weight: 400;
-  text-align: center;
-}
-a {
-  position: absolute;
-  top: -2.8vw;
-  right: 1vw;
-  cursor: pointer;
-  color: var(--color-green);
-  font-size: 12px;
-  font-weight: 400;
-  text-align: center;
-  letter-spacing: 0.4px;
+
+@media (max-width: 480px) {
+  .wallets {
+    margin: 0;
+    overflow: scroll;
+    &-wrap {
+      position: absolute;
+      width: 175%;
+
+      &:first-child {
+        padding-left: 2rem;
+      }
+    }
+  }
 }
 </style>

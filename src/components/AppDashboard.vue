@@ -1,40 +1,45 @@
 <template>
   <div class="dashboard">
-    <balance class="balance-module" :mainInfo="mainInfo" @update="changeColor" />
-    <wallets class="wallets-module" />
-    <interest class="interes-module" />
-    <recieve class="receive-module" />
-    <chart class="chart-module" />
+    <dash-total class="total-module" :mainInfo="mainInfo" @update="changeColor" />
+    <dash-wallets-labels class="wallets-labels-module" />
+    <dash-wallets class="wallets-module" />
+    <dash-interest class="interes-module" />
+    <dash-recieve class="receive-module" />
+    <dash-chart class="chart-module" />
     <div class="markets" />
-    <div class="transactions" />
-    <news class="news-module" />
+    <dash-transactions class="transactions" />
+    <dash-news class="news-module" />
   </div>
 </template>
 
 <script>
-import Balance from "./DashboardBalance";
-import Wallets from "./DashboardWallets";
-import Interest from "./DashboardInterests";
-import Recieve from "./DashboardRecieve";
-import News from "./DashboardNews";
-import Chart from "./DashboardChart";
+import DashTotal from "./DashboardTotal";
+import DashWalletsLabels from "./DashboardWalletsLabels";
+import DashWallets from "./DashboardWallets";
+import DashInterest from "./DashboardInterests";
+import DashRecieve from "./DashboardRecieve";
+import DashNews from "./DashboardNews";
+import DashChart from "./base/Chart";
+import DashTransactions from "./base/Transactions";
 
 export default {
   name: "AppDashboard",
   components: {
-    Balance,
-    Wallets,
-    Interest,
-    Recieve,
-    News,
-    Chart
+    DashTotal,
+    DashWalletsLabels,
+    DashWallets,
+    DashInterest,
+    DashRecieve,
+    DashNews,
+    DashChart,
+    DashTransactions
   },
   data() {
     return {
       mainInfo: {
-        transactions: 1456,
+        transactions: 2345,
         walletsCount: 5,
-        balance: 1424,
+        balance: 3.433,
         currencyEUR: 2.7795,
         currency: "EUR",
         currencyProfit: 15
@@ -49,26 +54,14 @@ export default {
 };
 </script>
 
-<style scoped>
-.dashboard {
-  position: fixed;
-  height: calc(100vh - 108px);
-  width: calc(100vw - 90px);
-  padding: 40px 40px 38px 30px;
-  bottom: 0;
-  right: 0;
-  display: grid;
-  grid-template-rows: 0.7fr 1.2fr 1.25fr 0.85fr;
-  grid-template-columns: 1.36fr 1.36fr 0.4fr 1.2fr 1.58fr;
-  grid-template-areas:
-    "a b b b g"
-    "a c d d g"
-    "e e e f g"
-    "e e e f h";
-  gap: 1.3vw;
-}
-.balance-module {
+<style lang="scss">
+@import "../scss/common";
+
+.total-module {
   grid-area: a;
+}
+.wallets-labels-module {
+  grid-area: w;
 }
 .wallets-module {
   grid-area: b;
@@ -84,16 +77,65 @@ export default {
 }
 .markets {
   grid-area: f;
-  background-color: var(--color-middle);
+  background-color: $color-middle;
 }
 .transactions {
   grid-area: g;
-  background-color: var(--color-middle);
 }
 .news-module {
   grid-area: h;
 }
+@media (min-width: 480px) {
+  .dashboard {
+    @include main-grid;
+    grid-template-rows: 0.1fr 0.7fr 1.2fr 1.25fr 0.85fr;
+    grid-template-columns: 1.36fr 1.36fr 0.4fr 1.2fr 1.58fr;
+    grid-template-areas:
+      ". w w w ."
+      "a b b b g"
+      "a c d d g"
+      "e e e f g"
+      "e e e f h";
+  }
+}
 div {
   border-radius: 2px;
+}
+@media (max-width: 768px) {
+  .dashboard {
+    grid-template-rows: 0.7fr 1.2fr 1.25fr 0.85fr;
+    grid-template-columns: 1.36fr 1.36fr 0.4fr 1.2fr;
+  }
+}
+@media (max-width: 480px) {
+  .dashboard {
+    position: relative;
+    padding-top: 0.9rem;
+    display: grid;
+    grid-template-rows: 1fr 0.05fr 0.35fr 0.56fr 0.57fr 1.65fr 1.04fr 1.09fr 0.42fr;
+    grid-template-columns: auto;
+    gap: px-rem(20);
+    grid-template-areas:
+      "a"
+      "w"
+      "b"
+      "c"
+      "d"
+      "g"
+      "e"
+      "f"
+      "h";
+  }
+
+  $modules: (
+    total-module wallets-labels-module wallets-module interes-module
+      receive-module chart-module markets transactions news-module header
+  );
+
+  @each $module in $modules {
+    .#{$module} {
+      margin: 0 px-rem(32);
+    }
+  }
 }
 </style>

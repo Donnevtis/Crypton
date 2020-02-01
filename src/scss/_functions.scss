@@ -1,0 +1,15 @@
+@import './variables';
+
+@function px-rem($n) {
+  $px: $n / $font-primary;
+  $trim: strip-unit($px);
+  @return $trim * 1rem;
+}
+
+@function strip-unit($number) {
+  @return $number / extract-unit($number);
+}
+
+@function extract-unit($number) {
+  @return $number * 0 + 1;
+}

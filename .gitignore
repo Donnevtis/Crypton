@@ -3,7 +3,10 @@ node_modules
 vue.config.js
 .gitignore
 /dist
+/scetch
 
+# temporary
+package-lock.deprecated.json
 # local env files
 .env.local
 .env.*.local
