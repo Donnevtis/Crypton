@@ -1,6 +1,6 @@
 # Cryptonix
 
-**Cryptocurrency aggregator web application demo.**
+**Web application demo of Cryptocurrency wallet aggregator**
 
 ### Stack
 
