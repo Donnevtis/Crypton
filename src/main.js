@@ -10,8 +10,7 @@ const Wallets = () => import('./components/AppWallets')
 Vue.use(Router)
 
 
-const router = new Router({
-    mode: 'history',
+const router = new Router({    
     fallback: false,
     routes: [
 
