@@ -1,32 +1,29 @@
-# Crypton
+# Cryptonix
 
-```
-Демо приложения - агрегатора криптовалютных кошельков.
+**Cryptocurrency aggregator web application demo.**
 
-Стек: Vue.js, Vuex, Vue-Router.
+### Stack
 
-```
+- Vue.js
+- Vuex
+- Vue-Router
+
+### Link
+
+**[cryptonix.surge.sh](http://cryptonix.surge.sh/)**
 
 ## Project setup
 
-```
-npm install
-```
+`yarn install`
 
 ### Compiles and hot-reloads for development
 
-```
-npm run serve
-```
+`yarn run serve`
 
 ### Compiles and minifies for production
 
-```
-npm run build
-```
+`yarn run build`
 
 ### Lints and fixes files
 
-```
-npm run lint
-```
+`yarn run lint`
