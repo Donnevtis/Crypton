@@ -10,7 +10,7 @@
         //- line(:x1='chart.width' :y1='0' :x2='chart.width' :y2='chart.height')    
     svg.chart-timers(:viewBox='chart.viewBox' vector-effect="non-scaling-stroke" preserveAspectRatio="xMinYMin meet")
       g(stroke-width='.5')
-        line(v-for='tick in chart.gridX' :key='tick.i' :x1='tick.x' :y1='chart.height-2' :x2='tick.x' :y2='chart.height+3' style="transform: translateY(-36px)")
+        line( v-for='tick in chart.gridX' :key='tick.i' :x1='tick.x' :y1='chart.height-2' :x2='tick.x' :y2='chart.height+3' style="transform: translateY(-36px)")
       transition-group(tag='g' name="timers-list" )        
         svg.chart-labels-container(v-for='tick in chart.gridX' :key='tick.i' width='80' :x='tick.x' :y='chart.height-5' preserveAspectRatio="xMinYMin meet")
           text.chart-label(stroke='transparent' text-anchor="middle") {{ tick.t }}
@@ -139,6 +139,7 @@ export default {
     height: 100%;
     width: 100%;
     transform: translateY(38px);
+    stroke: $charcoal-grey;
   }
 
   &-labels {
