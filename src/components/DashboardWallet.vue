@@ -31,7 +31,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../scss/common";
+
 .wallet {
   position: relative;
   display: flex;

@@ -115,7 +115,6 @@ export default {
 </script>
 
 <style lang='scss'>
-@import "../../../scss/common";
 .chart-container {
   position: relative;
   height: 100%;

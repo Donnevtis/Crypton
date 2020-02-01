@@ -55,8 +55,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../scss/common";
-
 .total-module {
   grid-area: a;
 }

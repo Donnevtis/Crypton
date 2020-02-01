@@ -42,7 +42,7 @@ export default {
 </script>
 
 <style lang='scss'>
-@import "../scss/common";
+
 .recieve {
   display: flex;
   flex-flow: row wrap;

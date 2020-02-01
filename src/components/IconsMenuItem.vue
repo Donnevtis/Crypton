@@ -19,7 +19,7 @@ export default {
 };
 </script>
 <style lang='scss'>
-@import "../scss/common";
+
 li {
   height: px-rem(60);
   position: relative;

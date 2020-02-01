@@ -11,5 +11,12 @@ module.exports = {
                 'utils': path.resolve(__dirname, 'src/utils')
             }
         }
+    },
+    css: {
+        loaderOptions: {
+            scss: {
+                prependData: `@import "~@/scss/common.scss";`
+            }
+        }
     }
 }

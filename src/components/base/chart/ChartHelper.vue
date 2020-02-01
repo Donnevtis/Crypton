@@ -73,7 +73,6 @@ export default {
 </script>
 
 <style lang='scss'>
-@import "../../../scss/common";
 .helper-field {
   position: absolute;
   width: 100%;

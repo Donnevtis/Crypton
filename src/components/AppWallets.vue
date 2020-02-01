@@ -24,7 +24,7 @@ export default {
 </script>
 
 <style lang='scss'>
-@import "../scss/common";
+
 .app-wallets {
   @include main-grid;
   grid-template-rows: 0.5fr 3fr 5fr;

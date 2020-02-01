@@ -17,7 +17,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../../../scss/variables";
 .chart-line {
   position: absolute;
   height: 100%;

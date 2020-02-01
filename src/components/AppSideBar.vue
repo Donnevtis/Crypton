@@ -19,7 +19,6 @@ export default {
 };
 </script>
 <style lang="scss">
-@import "../scss/variables", "../scss/functions";
 .sidebar {
   position: fixed;
   padding: 2rem 0;

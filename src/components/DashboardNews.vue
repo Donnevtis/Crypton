@@ -58,7 +58,7 @@ export default {
 };
 </script>
 <style lang='scss'>
-@import "../scss/common";
+
 
 .news {
   display: flex;

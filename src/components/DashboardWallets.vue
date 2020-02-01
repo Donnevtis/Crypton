@@ -28,7 +28,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../scss/common";
+
 .wallets {
   position: relative;
 

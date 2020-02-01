@@ -26,8 +26,6 @@ export default {
 };
 </script>
 <style lang="scss">
-@import "./scss/variables", "./scss/functions";
-
 * {
   box-sizing: border-box;
   margin: 0;

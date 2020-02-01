@@ -40,7 +40,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../scss/common";
+
 .interest {
   position: relative;
   display: flex;

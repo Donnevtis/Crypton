@@ -16,7 +16,7 @@ export default {
 </script>
 
 <style lang='scss'>
-@import "../scss/common";
+
 .convers-button {
   position: relative;
   width: px-rem(34);

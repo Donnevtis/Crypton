@@ -12,8 +12,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../scss/variables";
-
 div {
   position: absolute;
   border-radius: 50%;

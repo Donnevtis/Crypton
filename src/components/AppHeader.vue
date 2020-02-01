@@ -49,8 +49,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../scss/common";
-
 .header {
   display: flex;
   position: relative;

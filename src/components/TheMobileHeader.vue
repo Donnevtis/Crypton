@@ -29,7 +29,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../scss/common";
+
 .header {
   padding: 2rem 3rem 2rem 2rem;
   @media (max-width: 480px) {
