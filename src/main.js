@@ -10,7 +10,7 @@ const Wallets = () => import('./components/AppWallets')
 Vue.use(Router)
 
 
-const router = new Router({    
+const router = new Router({
     fallback: false,
     routes: [
 
@@ -20,6 +20,8 @@ const router = new Router({
     ],
 
 })
+
+Vue.filter('capitalize', val => val.replace(/\w/i, i => i.toUpperCase()))
 
 new Vue({
     store,

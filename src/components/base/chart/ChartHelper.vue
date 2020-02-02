@@ -7,7 +7,7 @@ div
         svg(:x='x1-75' :y='yBudge' style='overflow:visible')
           rect(:width='width' :height='height'  x='0' y='0'  rx="2" ry="2")
           rect(width='10' height='10' :transform='`rotate(45,75,${yArrow})`' :x='75' :y='yArrow')
-          text.chart-helper-price(x='75' y='18' text-anchor="middle") {{currency.replace(/\w/i,i=>i.toUpperCase()) + ' Price: ' + helper.price}}     
+          text.chart-helper-price(x='75' y='18' text-anchor="middle") {{currency + ' Price: ' + helper.price | capitalize}}     
           text.chart-helper-date(x='75' y='33' text-anchor="middle") {{helper.date}}
       rect.chart-rect(@mousemove.stop="onmousemove" :width="chart.width" :height="chart.height" fill="transparent" style="display:block")
 </template>
