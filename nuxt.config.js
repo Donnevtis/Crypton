@@ -54,7 +54,7 @@ export default {
     modules: ['@nuxtjs/style-resources'],
     styleResources: {
         scss: [
-            './src/scss/_common.scss'
+            './assets/scss/_common.scss'
         ]
     }
 }
