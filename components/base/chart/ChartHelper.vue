@@ -1,14 +1,14 @@
 <template lang="pug">
 div
-  svg.helper-field(xmlns='http://www.w3.org/2000/svg' :viewBox='chart.viewBox')
+  svg.helper-field(xmlns='http://www.w3.org/2000/svg' :viewBox='chart.viewBox' preserveAspectRatio="xMinYMin meet")
     g.helper-group
       g.chart-helper
-        line(:x1='x1' y1='0' :x2='x1' :y2='chart.height' stroke="var(--color-text-light)" stroke-width='.5'  style='shape-rendering: crispEdges')
+        line(:x1='x1' y1='0' :x2='x1' :y2='chart.height' stroke-width='.5' style='shape-rendering: crispEdges')
         svg(:x='x1-75' :y='yBudge' style='overflow:visible')
-          rect(:width='width' :height='height' fill='var(--color-light)' x='0' y='0'  rx="2" ry="2")
-          rect(width='10' height='10' fill='var(--color-light)' :transform='`rotate(45,75,${yArrow})`' :x='75' :y='yArrow')
-          text.helper-price(x='75' y='18' text-anchor="middle") {{currency.replace(/\w/i,i=>i.toUpperCase()) + ' Price: ' + helper.price}}     
-          text.helper-date(x='75' y='33' text-anchor="middle") {{helper.date}}
+          rect(:width='width' :height='height'  x='0' y='0'  rx="2" ry="2")
+          rect(width='10' height='10' :transform='`rotate(45,75,${yArrow})`' :x='75' :y='yArrow')
+          text.chart-helper-price(x='75' y='18' text-anchor="middle") {{currency.replace(/\w/i,i=>i.toUpperCase()) + ' Price: ' + helper.price}}     
+          text.chart-helper-date(x='75' y='33' text-anchor="middle") {{helper.date}}
       rect.chart-rect(@mousemove.stop="onmousemove" :width="chart.width" :height="chart.height" fill="transparent" style="display:block")
 </template>
 
@@ -72,28 +72,39 @@ export default {
 };
 </script>
 
-<style>
+<style lang='scss'>
 .helper-field {
   position: absolute;
   width: 100%;
   height: 100%;
   overflow: visible;
 }
-.chart-helper {
-  font-size: 10px;
-  font-weight: 500;
 
+.chart-helper {
+  font-size: px-rem(10);
+  font-weight: 500;
   opacity: 0;
   transition: opacity 0.5s ease-out;
+
+  rect {
+    fill: $color-light;
+  }
+
+  & > line {
+    stroke: $color-text-light;
+  }
+
+  &-price {
+    fill: $color-white;
+    font-size: px-rem(12);
+    font-weight: 500;
+  }
+
+  &-date {
+    fill: $color-text-light;
+  }
 }
-.helper-price {
-  fill: var(--color-white);
-  font-size: 12px;
-  font-weight: 500;
-}
-.helper-date {
-  fill: var(--color-text-light);
-}
+
 .helper-group:hover .chart-helper {
   opacity: 1;
 }

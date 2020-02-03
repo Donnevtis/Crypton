@@ -16,8 +16,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../scss/variables", "../scss/functions";
-
 input {
   font-size: px-rem(13);
   margin-left: px-rem(13);

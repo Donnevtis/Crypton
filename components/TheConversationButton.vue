@@ -15,18 +15,20 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang='scss'>
+
 .convers-button {
   position: relative;
-  width: 34px;
-  height: 34px;
-  background: var(--color-conversation-active);
+  width: px-rem(34);
+  height: px-rem(34);
+  background: $color-conversation-active;
   border-radius: 2px;
-}
-.convers-button__icon {
-  display: block;
-  margin: 7px auto 0;
-  position: relative;
-  z-index: 1;
+
+  &__icon {
+    display: block;
+    margin: 7px auto 0;
+    position: relative;
+    z-index: 1;
+  }
 }
 </style>

@@ -2,25 +2,29 @@
   <div class="app-wallets">
     <div class="app-wallets-balance"></div>
     <wallets-transactions class="transaction-module" />
-    <wallets-chart class="chart-module" />
+    <wallets-chart class="chart-module">
+      <chart-date-picker />
+    </wallets-chart>
   </div>
 </template>
 
 <script>
 import walletsTransactions from "./base/Transactions";
 import walletsChart from "./base/Chart";
+import ChartDatePicker from "./base/chart/DatePicker";
 
 export default {
   name: "app-wallets",
   components: {
     walletsTransactions,
-    walletsChart
+    walletsChart,
+    ChartDatePicker
   }
 };
 </script>
 
 <style lang='scss'>
-@import "../scss/common";
+
 .app-wallets {
   @include main-grid;
   grid-template-rows: 0.5fr 3fr 5fr;

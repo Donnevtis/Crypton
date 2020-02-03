@@ -21,7 +21,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../scss/common";
+
 .interest-wrapper {
   display: flex;
   flex-direction: column;

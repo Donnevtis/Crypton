@@ -1,13 +1,13 @@
 <template>
   <div class="chart-timestamps">
-    <a
-      href
-      class="chart-timestamp chart-timestamps-1m"
-      v-for="timestamp in timestamps.times"
+    <button
+      class="chart-timestamp-btn"
+      v-for="(timestamp, index) in timestamps.times"
       :key="timestamp.id"
-      :class="{ 'chart-timestamp_active': timestamp.active}"
+      :class="{ 'chart-timestamp-btn_active': timestamp.active, 'chart-timestamp-btn_hiding': index == 2 || index == 3}"
       @click.prevent="setActiveStamp(timestamp.id)"
-    >{{timestamp.t}}</a>
+    >{{timestamp.t}}</button>
+    <button class="chart-timestamp-btn-open options"></button>
   </div>
 </template>
 
@@ -22,30 +22,60 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .chart-timestamps {
-  right: 0;
   width: 13vw;
   display: flex;
   justify-content: space-between;
-}
-.chart-timestamp {
-  width: 3vw;
-  height: 1.6vw;
-  font-size: 0.85vw;
-  font-weight: 500;
-  line-height: 2.7vh;
-  color: var(--color-text-light);
-  cursor: pointer;
-  text-align: center;
-}
-.chart-timestamp_active {
-  background-color: var(--color-text-light);
-  border-radius: 1vw;
 
-  color: var(--color-white);
+  .chart-timestamp-btn {
+    display: block;
+    position: relative;
+    width: 3vw;
+    height: 1.6vw;
+    font-size: 0.85vw;
+    color: $color-text-light;
+    cursor: pointer;
+    text-align: center;
+
+    &_active {
+      background-color: $color-text-light;
+      border-radius: 1vw;
+      color: $color-white;
+    }
+
+    &:hover {
+      color: $color-white;
+    }
+
+    &-open {
+      display: none;
+    }
+  }
 }
-.chart-timestamp:hover {
-  color: var(--color-white);
+@media (max-width: 480px) {
+  .chart-timestamps {
+    width: px-rem(120);
+
+    .chart-timestamp-btn {
+      font-size: px-rem(12);
+      width: px-rem(37);
+      height: px-rem(23);
+
+      &_active {
+        border-radius: 14px;
+      }
+
+      &-open {
+        display: block;
+        height: px-rem(23);
+        width: px-rem(15);
+        background-position: right;
+      }
+    }
+    .chart-timestamp-btn_hiding {
+      display: none;
+    }
+  }
 }
 </style>

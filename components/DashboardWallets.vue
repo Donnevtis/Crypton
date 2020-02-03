@@ -28,7 +28,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../scss/common";
+
 .wallets {
   position: relative;
 
@@ -43,7 +43,6 @@ export default {
   .wallets {
     margin: 0;
     overflow: scroll;
-
     &-wrap {
       position: absolute;
       width: 175%;

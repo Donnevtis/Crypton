@@ -1,8 +1,8 @@
 <template>
   <li>
-    <NuxtLink class="menu-link" :to="path">
+    <router-link class="menu-link" :to="path">
       <img :src="src" alt="icon" />
-    </NuxtLink>
+    </router-link>
   </li>
 </template>
 <script>
@@ -19,7 +19,7 @@ export default {
 };
 </script>
 <style lang='scss'>
-@import "../scss/common";
+
 li {
   height: px-rem(60);
   position: relative;
@@ -33,7 +33,7 @@ li {
       background: $color-light;
     }
   }
-  .active-link {
+  .router-link-active {
     background: $color-light;
 
     & img {

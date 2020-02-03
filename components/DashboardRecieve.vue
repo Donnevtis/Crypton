@@ -42,7 +42,7 @@ export default {
 </script>
 
 <style lang='scss'>
-@import "../scss/common";
+
 .recieve {
   display: flex;
   flex-flow: row wrap;
@@ -147,7 +147,7 @@ export default {
 %before-position {
   position: absolute;
   text-align: end;
-  width: 4rem;
+  width: 4vw;
   left: -5.5vw;
   top: px-rem(6);
 }
@@ -168,7 +168,6 @@ export default {
 
     &-key {
       @extend %inputs_firm;
-      width: px-rem(219);
     }
 
     & > span {
@@ -193,6 +192,7 @@ export default {
   }
   %before-position {
     left: px-rem(-75);
+    width: 4rem;
   }
 }
 </style>

@@ -47,7 +47,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../scss/common";
+
 .balance-component {
   display: grid;
   grid-template: 1fr 3fr 1fr/1fr 1fr;
