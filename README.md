@@ -1,26 +1,24 @@
-# Crypton
+# Cryptonix
+
+**Web application demo of Cryptocurrency wallet aggregator**
+
+*Version with server-side rendering*
+
+### Stack
+
+- Vue.js
+- Vuex
+- Nuxt.js
+
 
 ## Project setup
-```
-npm install
-```
+
+`yarn install`
 
 ### Compiles and hot-reloads for development
-```
-npm run serve
-```
+
+`yarn dev`
 
 ### Compiles and minifies for production
-```
-npm run build
-```
 
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
+`yarn run generate`
