@@ -2,14 +2,13 @@
 
 **Web application demo of Cryptocurrency wallet aggregator**
 
-*Version with server-side rendering*
+_Version with server-side rendering_
 
 ### Stack
 
 - Vue.js
 - Vuex
 - Nuxt.js
-
 
 ## Project setup
 
@@ -21,4 +20,12 @@
 
 ### Compiles and minifies for production
 
+`yarn build`
+
+### Generate every route as a HTML file
+
 `yarn run generate`
+
+### Start the server
+
+`yarn start`
