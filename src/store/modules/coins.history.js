@@ -22,7 +22,9 @@ const
                     commit('addCurrentPrice', { current, coinName })
                 })
             })
-
+        },
+        closeWS() {
+            API.closeWS();
         }
     },
     mutations = {

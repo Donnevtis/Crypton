@@ -56,6 +56,9 @@ export default {
     });
     this.fetchRates();
   },
+  beforeDestroy() {
+    this.$store.dispatch("closeWS");
+  },
   computed: {
     coins() {
       return this.$store.state.history.coins;
