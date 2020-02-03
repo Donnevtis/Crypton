@@ -5,6 +5,7 @@
   "scripts": {
     "start": "nuxt start",
     "build": "nuxt build",
+    "heroku-postbuild": "yarn run build",
     "lint": "vue-cli-service lint",
     "test": "jest",
     "test-watch": "jest --watchAll",
