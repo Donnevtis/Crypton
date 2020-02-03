@@ -48,5 +48,13 @@ export default {
     router: {
         linkActiveClass: 'active-link',
         linkExactActiveClass: 'exact-active-link',
+    },
+
+
+    modules: ['@nuxtjs/style-resources'],
+    styleResources: {
+        scss: [
+            './src/scss/_common.scss'
+        ]
     }
 }
