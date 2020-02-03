@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "start": "nuxt start",
+    "build": "nuxt build",
     "lint": "vue-cli-service lint",
     "test": "jest",
     "test-watch": "jest --watchAll",
