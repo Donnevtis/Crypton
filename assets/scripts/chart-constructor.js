@@ -1,12 +1,13 @@
-//the graph constructor
-
 export class Chart {
     #stepX
     #stepY
     #width
     #height
     constructor(box) {
+        box.width = box.width || 600
+        box.height = box.height || 300
         this.#stepX = box.stepX ? Math.max(box.stepX, 30) : 70
+        this.#stepX = box.width / ~~(box.width / this.stepX)
         this.#stepY = box.stepY ? Math.max(box.stepY, 10) : 50
         this.#width = this.stepX * ~~(box.width / this.stepX) || 600
         this.#height = this.stepY * ~~(box.height / this.stepY) || 200
@@ -28,10 +29,11 @@ export class Chart {
     initChart(data) {
         const absciss = Math.floor(this.width / this.stepX) - 1
         const ordinates = Math.floor(this.height / this.stepY)
-        this.gridX = this.stepper(this.stepX, absciss, 'x', 30) //coords for horizontal grid, left offset = 30     
+        this.gridX = this.stepper(this.stepX, absciss, 'x', 30) //coords for horizontal grid, left offset = 30        
         this.gridY = this.stepper(this.stepY, ordinates, 'y') //horizontal dividing lines   
         this.createChartLine(data)
     }
+
     createChartLine({ data, range }) {
         this.range = range || 36e4
 
@@ -58,14 +60,13 @@ export class Chart {
                 price: +croppedData[i].priceUsd
             })
         }
-
-
         this.createLabels()
-
     }
+
     costToCoordsY(cost) {
         return (this.limits.max - this.limits.min - (+cost - this.limits.min)) / this.yResolution
     }
+
     findLimits(croppedData) {
         const min = croppedData.reduce(
             (prev, item) => Math.min(prev, item.priceUsd),
@@ -77,16 +78,6 @@ export class Chart {
         )
         return { min, max }
     }
-    get chartLinePath() {
-        const d = [`M${this.dataStack[0].x}, ${this.dataStack[0].y} `];
-
-        for (let i = 1; i < this.dataStack.length; i++) {
-            d.push(`L${this.dataStack[i].x}, ${this.dataStack[i].y} `)
-        }
-
-        return d.join('').trim()
-    }
-
 
     // USD LABELS CREATOR
     createLabels() {
@@ -98,11 +89,11 @@ export class Chart {
         })
     }
 
-
     // TIME/DATE LABELS CREATOR    
     createTicks() {
         this.gridX.forEach((label, index) => { label.t = this.timeSetter(label); label.i = index });
     }
+
     timeSetter(time) {
         const output = this.range > 4e5 ? daysToLocal() : timeToLocal()
 
@@ -142,7 +133,15 @@ export class Chart {
         }
     }
 
-    // GETTER/SETTER SECTION   
+    get chartLinePath() {
+        const d = [`M${this.dataStack[0].x}, ${this.dataStack[0].y} `];
+
+        for (let i = 1; i < this.dataStack.length; i++) {
+            d.push(`L${this.dataStack[i].x}, ${this.dataStack[i].y} `)
+        }
+
+        return d.join('').trim()
+    }
     get height() {
         return this.#height
     }
@@ -155,17 +154,4 @@ export class Chart {
     get stepY() {
         return this.#stepY
     }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-

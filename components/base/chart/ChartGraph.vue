@@ -26,7 +26,7 @@ import ChartHelper from "./ChartHelper";
 import AppSpinner from "../../Spinner";
 import BlinkPoint from "./ChartBlinkPoint";
 import { mapGetters } from "vuex";
-import { Chart } from "../../../utils/chart-constructor";
+import { Chart } from "~~/assets/scripts/chart-constructor";
 
 export default {
   name: "ChartGraph",

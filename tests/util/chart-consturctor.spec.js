@@ -1,4 +1,4 @@
-import { Chart } from '../../src/utils/chart-constructor'
+import { Chart } from '~~/assets/scripts/chart-constructor'
 import { box, coinData, line } from '../constants'
 
 describe('chart class', () => {
