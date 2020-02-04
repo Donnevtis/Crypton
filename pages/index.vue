@@ -6,7 +6,7 @@
 export default {
   layout: "App",
   fetch({ redirect }) {
-    // redirect("/dashboard");
+    redirect("/dashboard");
   }
 };
 </script>
