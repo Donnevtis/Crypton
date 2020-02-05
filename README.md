@@ -4,7 +4,7 @@
 
 _Version with server-side rendering_
 
-**_[live demo on heroku](https://crypton-wallets.herokuapp.com/dashboard)_**
+**_[live demo on heroku](https://crypton-wallets.herokuapp.com/)_**
 
 ### Stack
 
