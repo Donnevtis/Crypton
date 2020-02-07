@@ -20,6 +20,7 @@ input {
   font-size: px-rem(13);
   margin-left: px-rem(13);
   width: px-rem(200);
+  outline: none;
 }
 button {
   width: px-rem(35);

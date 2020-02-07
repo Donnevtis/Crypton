@@ -49,7 +49,6 @@ select,
 a {
   border: none;
   text-decoration: none;
-  outline: none;
   background-color: transparent;
   vertical-align: middle;
   color: $color-white;
