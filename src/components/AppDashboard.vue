@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard">
+  <main class="dashboard">
     <dash-total class="total-module" :mainInfo="mainInfo" @update="changeColor" />
     <dash-wallets-labels class="wallets-labels-module" />
     <dash-wallets class="wallets-module" />
@@ -9,7 +9,7 @@
     <div class="markets" />
     <dash-transactions class="transactions" />
     <dash-news class="news-module" />
-  </div>
+  </main>
 </template>
 
 <script>

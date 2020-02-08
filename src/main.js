@@ -14,8 +14,8 @@ const router = new Router({
     fallback: false,
     routes: [
 
-        { path: '/dashboard', component: DashBoard, },
-        { path: '/wallets', component: Wallets },
+        { path: '/dashboard', component: DashBoard, name: 'Dashboard' },
+        { path: '/wallets', component: Wallets, name: 'Wallets' },
         { path: '/', redirect: '/dashboard' },
     ],
 

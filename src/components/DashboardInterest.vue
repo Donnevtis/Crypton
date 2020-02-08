@@ -6,7 +6,7 @@
     </svg>
     <span class="percent">{{ wallet.fullness + '%' }}</span>
     <div class="name">{{wallet.name}}</div>
-    <button class="options"></button>
+    <button class="options" aria-label="options"></button>
   </div>
 </template>
 
@@ -40,7 +40,6 @@ export default {
 </script>
 
 <style lang="scss">
-
 .interest {
   position: relative;
   display: flex;

@@ -1,9 +1,9 @@
 <template>
-  <div class="wallet" @click="changer">
+  <a href class="wallet" @click.prevent="changer">
     <div class="wallet-header">
       <span class="acronym">{{currency.acronym}}</span>
       <div class="icon">
-        <img :src="currency.icon" />
+        <img :src="currency.icon" :alt="currency.acronym + ' ' + 'icon'" />
       </div>
     </div>
     <div class="wallet-footer">
@@ -12,7 +12,7 @@
         <span v-if="currency.active" class="rate">{{ currency.amount }}</span>
       </transition>
     </div>
-  </div>
+  </a>
 </template>
 
 <script>
@@ -31,7 +31,6 @@ export default {
 </script>
 
 <style lang="scss">
-
 .wallet {
   position: relative;
   display: flex;
@@ -47,6 +46,7 @@ export default {
   transition: ease 0.2s;
   overflow: hidden;
   cursor: pointer;
+  border-radius: 2px;
 
   &-header,
   &-footer {

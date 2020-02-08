@@ -6,8 +6,9 @@
       :key="timestamp.id"
       :class="{ 'chart-timestamp-btn_active': timestamp.active, 'chart-timestamp-btn_hiding': index == 2 || index == 3}"
       @click.prevent="setActiveStamp(timestamp.id)"
+      :aria-label="timestamp.mnth + ' months'"
     >{{timestamp.t}}</button>
-    <button class="chart-timestamp-btn-open options"></button>
+    <button class="chart-timestamp-btn_open options" aria-label="extend"></button>
   </div>
 </template>
 
@@ -48,7 +49,7 @@ export default {
       color: $color-white;
     }
 
-    &-open {
+    &_open {
       display: none;
     }
   }
@@ -66,7 +67,7 @@ export default {
         border-radius: 14px;
       }
 
-      &-open {
+      &_open {
         display: block;
         height: px-rem(23);
         width: px-rem(15);

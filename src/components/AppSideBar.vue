@@ -1,11 +1,11 @@
 <template>
-  <div class="sidebar">
+  <aside class="sidebar">
     <div class="sidebar__logo">
       <img src="../assets/svg/logo.svg" alt="logo" />
     </div>
     <sidebar-menu class="sidebar__menu" />
     <conversation-button class="conversation-button" />
-  </div>
+  </aside>
 </template>
 <script>
 import SidebarMenu from "./IconsMenu.vue";

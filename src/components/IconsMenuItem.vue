@@ -1,6 +1,6 @@
 <template>
   <li>
-    <router-link class="menu-link" :to="path">
+    <router-link class="menu-link" :to="path" :aria-label="path">
       <img :src="src" alt="icon" />
     </router-link>
   </li>
@@ -19,7 +19,6 @@ export default {
 };
 </script>
 <style lang='scss'>
-
 li {
   height: px-rem(60);
   position: relative;

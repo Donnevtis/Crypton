@@ -1,7 +1,7 @@
 <template>
   <div>
     <input type="text" placeholder="Search..." />
-    <button class="search-button">
+    <button class="search-button" aria-label="search">
       <span>
         <img src="../assets/svg/magnifier.svg" alt="icon" />
       </span>

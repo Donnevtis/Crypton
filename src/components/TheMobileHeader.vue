@@ -4,7 +4,7 @@
       <img src="../assets/svg/logo.svg" alt="logo" />
       <div class="btn-wrap">
         <conversation-button />
-        <button>
+        <button name="options">
           <img src="../assets/svg/broken-sandwich.svg" alt="menu" />
         </button>
       </div>
@@ -13,7 +13,7 @@
     <section class="header-dashboard">
       <h1 class="title">Dashboard</h1>
       <span>overview</span>
-      <button class="options"></button>
+      <button class="options" aria-label="options"></button>
     </section>
   </header>
 </template>
@@ -29,7 +29,6 @@ export default {
 </script>
 
 <style lang="scss">
-
 .header {
   padding: 2rem 3rem 2rem 2rem;
   @media (max-width: 480px) {

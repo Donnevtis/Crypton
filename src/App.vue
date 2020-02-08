@@ -22,6 +22,9 @@ export default {
     this.adaptive = window.matchMedia("(min-width: 480px)").matches
       ? AppHeader
       : MobileHeader;
+  },
+  updated() {
+    document.title = `Cryptonix - ${this.$route.name}`;
   }
 };
 </script>

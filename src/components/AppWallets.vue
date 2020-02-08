@@ -1,11 +1,11 @@
 <template>
-  <div class="app-wallets">
+  <main class="app-wallets">
     <div class="app-wallets-balance"></div>
     <wallets-transactions class="transaction-module" />
     <wallets-chart class="chart-module">
       <chart-date-picker />
     </wallets-chart>
-  </div>
+  </main>
 </template>
 
 <script>
@@ -24,7 +24,6 @@ export default {
 </script>
 
 <style lang='scss'>
-
 .app-wallets {
   @include main-grid;
   grid-template-rows: 0.5fr 3fr 5fr;

@@ -1,5 +1,5 @@
 <template>
-  <div class="header">
+  <header class="header">
     <div class="header-wrap">
       <div class="title">{{ title }}</div>
 
@@ -27,7 +27,7 @@
         <img class="warn-icon" alt="menu" src="../assets/svg/men.svg" />
       </button>
     </div>
-  </div>
+  </header>
 </template>
 
 <script>
