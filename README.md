@@ -12,6 +12,9 @@
 
 **[cryptonix.surge.sh](http://cryptonix.surge.sh/)**
 
+### SSR 
+Server-side render version is on "ssr" branch.
+
 ## Project setup
 
 `yarn install`
