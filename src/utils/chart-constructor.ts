@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 interface Box {
   stepX: number;
   stepY: number;
@@ -8,12 +6,12 @@ interface Box {
 }
 
 export class Chart {
-  public stepX;
+  public stepX: number;
   private stepY: number;
   width: number;
   height: number;
-  gridX: {}[];
-  gridY: {}[];
+  gridX: { [k: string]: any }[];
+  gridY: { [k: string]: any }[];
   range: number;
   viewBox: string;
   limits: { min: number; max: number };
@@ -26,24 +24,23 @@ export class Chart {
   }[] = [];
 
   constructor(box: Box) {
+    const width = box.width || 600
+    const height = box.height || 300
     this.stepX = box.stepX ? Math.max(box.stepX, 30) : 70;
+    this.stepX = width / ~~(width / this.stepX);
     this.stepY = box.stepY ? Math.max(box.stepY, 10) : 50;
-    this.width = this.stepX * ~~(box.width / this.stepX) || 600;
-    this.height = this.stepY * ~~(box.height / this.stepY) || 200;
+    this.width = this.stepX * ~~(width / this.stepX) || 600;
+    this.height = this.stepY * ~~(height / this.stepY) || 200;
     this.viewBox = `0 0 ${this.width} ${this.height}`;
   }
 
-  stepper(range, steps, axis, from = 0) {
-    return [
-      ...{
-        *[Symbol.iterator]() {
-          for (let i = 0; i < steps + 1; i++) {
-            yield { [axis]: from };
-            from += range;
-          }
-        }
-      }
-    ];
+  stepper(range: number, steps: number, axis: string, from: number = 0): {}[] {
+    const coords: {}[] = []
+    for (let i = 0; i < steps + 1; i++) {
+      coords.push({ [axis]: from })
+      from += range;
+    }
+    return coords
   }
 
   // MAIN CHART LINE CREATOR
@@ -72,12 +69,14 @@ export class Chart {
       this.width;
     this.yResolution = (this.limits.max - this.limits.min) / this.height;
 
+    this.dataStack = []
     for (let i = 0; i < croppedData.length; i++) {
       const pathX = (
         (croppedData[i].time - croppedData[0].time) /
         xResolution
       ).toFixed(2);
       const pathY = this.costToCoordsY(croppedData[i].priceUsd).toFixed(2);
+
       this.dataStack.push({
         x: +pathX,
         y: +pathY,

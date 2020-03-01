@@ -6,10 +6,17 @@ module.exports = {
     // publicPath: process.env.NODE_ENV === 'production' ?
     //     '/Crypton' : '/',
     configureWebpack: {
+        module: {
+            rules: [
+                {
+                    test: /\.tsx?$/,
+                    use: 'ts-loader',
+                    exclude: /node_modules/,
+                },
+            ],
+        },
         resolve: {
-            alias: {
-                'utils': path.resolve(__dirname, 'src/utils')
-            }
+            extensions: ['.tsx', '.ts', '.js'],
         }
     },
     css: {
