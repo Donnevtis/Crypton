@@ -1,10 +1,10 @@
-const path = require('path')
 module.exports = {
+    // publicPath: process.env.NODE_ENV === 'production' ?
+    //     '/Crypton' : '/',
     devServer: {
         disableHostCheck: true
     },
-    // publicPath: process.env.NODE_ENV === 'production' ?
-    //     '/Crypton' : '/',
+    productionSourceMap: false,
     configureWebpack: {
         module: {
             rules: [
