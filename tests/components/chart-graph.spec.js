@@ -1,4 +1,4 @@
-import { shallowMount, createLocalVue, mount } from '@vue/test-utils'
+import { createLocalVue, mount } from '@vue/test-utils'
 import ChartGraph from '../../src/components/base/chart/ChartGraph'
 import Spinner from '../../src/components/Spinner'
 import Vuex from 'vuex'
@@ -34,7 +34,8 @@ describe('chart component', () => {
         }
         actions = {
             fetchFullRates: jest.fn(() => Promise.resolve()),
-            fetchCurrentRates: jest.fn(() => Promise.resolve())
+            fetchCurrentRates: jest.fn(() => Promise.resolve()),
+            closeWS: jest.fn(() => Promise.resolve())
         }
         store = new Vuex.Store({
             state,

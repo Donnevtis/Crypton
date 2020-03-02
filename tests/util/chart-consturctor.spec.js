@@ -18,9 +18,9 @@ describe('chart class', () => {
         range: 3e4,
     }
     it('viewBox', () => {
-        expect(chart).toEqual({
-            viewBox: '0 0 1200.6 400'
-        });
+        expect(chart.viewBox).toEqual(
+            '0 0 1200.6 400'
+        );
     })
     describe('graph field and graph line', () => {
 
@@ -29,7 +29,7 @@ describe('chart class', () => {
         })
 
         it('dataStack', () => {
-            expect(chart.dataStack.length).toBe(5);
+            expect(chart.dataStack).toHaveLength(5);
             expect(chart.dataStack.slice(-1)[0].x).toBe(1200.6);
             expect(chart.dataStack.slice(-1)[0].y).toBe(0);
         })
