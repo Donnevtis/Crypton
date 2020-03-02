@@ -36,6 +36,7 @@ export default {
     AppSpinner,
     BlinkPoint
   },
+
   data() {
     return {
       chart: {},
@@ -46,25 +47,31 @@ export default {
       isCurrent: false
     };
   },
+
   mounted() {
     const box = this.$refs.box;
+
     this.chart = new Chart({
       width: box.clientWidth,
       height: box.clientHeight,
       stepX: 70,
       stepY: 36.25
     });
+
     this.fetchRates();
   },
+
   beforeDestroy() {
     this.$store.dispatch("closeWS");
   },
+
   computed: {
     coins() {
       return this.$store.state.history.coins;
     },
     ...mapGetters(["activeStamp", "activeWallet", "dateRange"])
   },
+
   watch: {
     activeWallet() {
       this.fetchRates();
@@ -82,6 +89,7 @@ export default {
       this.pointY = this.chart.dataStack.slice(-1)[0].y;
     }
   },
+
   methods: {
     fetchRates() {
       this.isCurrent = false;
@@ -100,6 +108,7 @@ export default {
           this.isLoad = false;
         });
     },
+
     initChart(rates) {
       this.chart.initChart({
         data: this.coins[this.activeWallet.name][rates],
