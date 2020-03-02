@@ -1,19 +1,12 @@
-interface Box {
-  stepX: number;
-  stepY: number;
-  width: number;
-  height: number;
-}
-
 export class Chart {
-  public stepX: number;
-  private stepY: number;
-  width: number;
-  height: number;
+  readonly stepX: number;
+  readonly stepY: number;
+  readonly width: number;
+  readonly height: number;
+  readonly viewBox: string;
   gridX: { [k: string]: any }[];
   gridY: { [k: string]: any }[];
   range: number;
-  viewBox: string;
   limits: { min: number; max: number };
   yResolution: number;
   dataStack: {
@@ -23,7 +16,7 @@ export class Chart {
     price: number;
   }[] = [];
 
-  constructor(box: Box) {
+  constructor(readonly box: { [k: string]: number }) {
     const width = box.width || 600
     const height = box.height || 300
     this.stepX = box.stepX ? Math.max(box.stepX, 30) : 70;
@@ -44,7 +37,7 @@ export class Chart {
   }
 
   // MAIN CHART LINE CREATOR
-  initChart(data) {
+  initChart(data: { data: { time: number }[], range: number }) {
     const absciss = Math.floor(this.width / this.stepX) - 1;
     const ordinates = Math.floor(this.height / this.stepY);
     this.gridX = this.stepper(this.stepX, absciss, 'x', 30); //coords for horizontal grid, left offset = 30
@@ -181,16 +174,4 @@ export class Chart {
     }
   }
 
-  // get height() {
-  //     return this.height
-  // }
-  // get width() {
-  //     return this.width
-  // }
-  // get stepX():number {
-  //     return this.stepX
-  // }
-  // get stepY():number {
-  //     return this.stepY
-  // }
 }
