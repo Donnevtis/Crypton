@@ -81,17 +81,20 @@ export default {
     activeStamp(stamp, oldStamp) {
       if (stamp.mnth && !oldStamp.mnth) {
         this.chart.initChart();
+        this.currentRates = [];
       }
       this.isLoad = stamp.mnth ? false : true;
       this.fetchRates();
     },
     currentRates(rates) {
-      this.chart.currentPrice({
-        data: rates,
-        range: this.dateRange
-      });
-      this.d = this.chart.chartLinePath;
-      this.pointY = this.chart.pointY;
+      if (rates.length) {
+        this.chart.currentPrice({
+          data: rates,
+          range: this.dateRange
+        });
+        this.d = this.chart.chartLinePath;
+        this.pointY = this.chart.pointY;
+      }
     }
   },
 
@@ -117,7 +120,7 @@ export default {
       if (this.isCurrent) {
         this.chart.initChart();
         this.currentRates = this.coins[this.activeWallet.name][rates];
-      } else this.currentRates = [];
+      }
       this.chart.createChartLine({
         data: this.coins[this.activeWallet.name][rates],
         range: this.dateRange
