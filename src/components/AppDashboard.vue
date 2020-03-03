@@ -13,17 +13,17 @@
 </template>
 
 <script>
-import DashTotal from "./DashboardTotal";
-import DashWalletsLabels from "./DashboardWalletsLabels";
-import DashWallets from "./DashboardWallets";
-import DashInterest from "./DashboardInterests";
-import DashRecieve from "./DashboardRecieve";
-import DashNews from "./DashboardNews";
-import DashChart from "./base/Chart";
-import DashTransactions from "./base/Transactions";
+import DashTotal from './DashboardTotal';
+import DashWalletsLabels from './DashboardWalletsLabels';
+import DashWallets from './DashboardWallets';
+import DashInterest from './DashboardInterests';
+import DashRecieve from './DashboardRecieve';
+import DashNews from './DashboardNews';
+import DashChart from './base/Chart';
+import DashTransactions from './base/Transactions';
 
 export default {
-  name: "AppDashboard",
+  name: 'AppDashboard',
   components: {
     DashTotal,
     DashWalletsLabels,
@@ -41,14 +41,14 @@ export default {
         walletsCount: 5,
         balance: 3.433,
         currencyEUR: 2.7795,
-        currency: "EUR",
+        currency: 'EUR',
         currencyProfit: 15
       }
     };
   },
   methods: {
     changeColor() {
-      document.documentElement.style.setProperty("--color-dark-gray", "#fff");
+      document.documentElement.style.setProperty('--color-dark-gray', '#fff');
     }
   }
 };

@@ -8,10 +8,10 @@
   </aside>
 </template>
 <script>
-import SidebarMenu from "./IconsMenu.vue";
-import ConversationButton from "./TheConversationButton.vue";
+import SidebarMenu from './IconsMenu.vue';
+import ConversationButton from './TheConversationButton.vue';
 export default {
-  name: "sidebar",
+  name: 'sidebar',
   components: {
     SidebarMenu,
     ConversationButton

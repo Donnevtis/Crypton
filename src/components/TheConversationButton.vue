@@ -6,9 +6,9 @@
 </template>
 
 <script>
-import NotificationCounter from "./AppCounter";
+import NotificationCounter from './AppCounter';
 export default {
-  name: "ConversationButton",
+  name: 'ConversationButton',
   components: {
     NotificationCounter
   }

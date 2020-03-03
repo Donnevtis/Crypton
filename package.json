@@ -47,6 +47,11 @@
       "autoprefixer": {}
     }
   },
+  "prettier": {
+    "singleQuote": true,
+    "printWidth": 80,
+    "semi": false
+  },
   "browserslist": [
     "> 1%",
     "last 2 versions",

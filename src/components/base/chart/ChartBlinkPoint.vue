@@ -5,7 +5,7 @@ svg.blink-point(xmlns='http://www.w3.org/2000/svg' :viewBox='chart.viewBox' pres
 
 <script>
 export default {
-  name: "blinkPoint",
+  name: 'blinkPoint',
   props: {
     chart: Object,
     y: Number

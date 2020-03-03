@@ -5,10 +5,10 @@
 </template>
 
 <script>
-import DashInterest from "./DashboardInterest";
+import DashInterest from './DashboardInterest';
 
 export default {
-  name: "DashboardInterest",
+  name: 'DashboardInterest',
   components: {
     DashInterest
   },

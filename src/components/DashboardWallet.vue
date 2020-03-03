@@ -17,14 +17,14 @@
 
 <script>
 export default {
-  name: "AppWallet",
+  name: 'AppWallet',
   props: {
     currency: Object,
     tab: Number
   },
   methods: {
     changer() {
-      this.$store.commit("changeActive", this.currency.id);
+      this.$store.commit('changeActive', this.currency.id);
     }
   }
 };

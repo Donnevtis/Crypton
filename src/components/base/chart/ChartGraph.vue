@@ -21,16 +21,15 @@
 </template>
 
 <script>
-import ChartLine from "./ChartLine";
-import ChartHelper from "./ChartHelper";
-import AppSpinner from "../../Spinner";
-import BlinkPoint from "./ChartBlinkPoint";
-import { mapGetters } from "vuex";
-import { Chart } from "../../../utils/chart-constructor";
+import ChartLine from './ChartLine'
+import ChartHelper from './ChartHelper'
+import AppSpinner from '../../Spinner'
+import BlinkPoint from './ChartBlinkPoint'
+import { mapGetters } from 'vuex'
+import { Chart } from '../../../utils/chart-constructor'
 
 export default {
-  name: "ChartGraph",
-
+  name: 'ChartGraph',
   components: {
     ChartLine,
     ChartHelper,
@@ -42,58 +41,58 @@ export default {
     return {
       chart: {},
       currentRates: [],
-      d: "",
+      d: '',
       pointY: 0,
       isLoad: false
-    };
+    }
   },
 
   mounted() {
-    const box = this.$refs.box;
+    const box = this.$refs.box
     this.chart = new Chart({
       width: box.clientWidth,
       height: box.clientHeight,
       stepX: 70,
       stepY: 36.25
-    });
-    this.chart.initChart();
-    this.fetchRates();
+    })
+    this.chart.initChart()
+    this.fetchRates()
   },
 
   beforeDestroy() {
-    this.$store.dispatch("closeWS");
+    this.$store.dispatch('closeWS')
   },
 
   computed: {
     coins() {
-      return this.$store.state.history.coins;
+      return this.$store.state.history.coins
     },
-    ...mapGetters(["activeStamp", "activeWallet", "dateRange"]),
     isCurrent() {
-      return !this.activeStamp.mnth;
-    }
+      return !this.activeStamp.mnth
+    },
+    ...mapGetters(['activeStamp', 'activeWallet', 'dateRange'])
   },
 
   watch: {
     activeWallet() {
-      this.fetchRates();
+      this.fetchRates()
     },
     activeStamp(stamp, oldStamp) {
       if (stamp.mnth && !oldStamp.mnth) {
-        this.chart.initChart();
-        this.currentRates = [];
+        this.chart.initChart()
+        this.currentRates = []
       }
-      this.isLoad = stamp.mnth ? false : true;
-      this.fetchRates();
+      this.isLoad = stamp.mnth ? false : true
+      this.fetchRates()
     },
     currentRates(rates) {
       if (rates.length) {
         this.chart.currentPrice({
           data: rates,
           range: this.dateRange
-        });
-        this.d = this.chart.chartLinePath;
-        this.pointY = this.chart.pointY;
+        })
+        this.d = this.chart.chartLinePath
+        this.pointY = this.chart.pointY
       }
     }
   },
@@ -101,8 +100,8 @@ export default {
   methods: {
     fetchRates() {
       const [rates, action] = this.activeStamp.mnth
-        ? ["fullRates", "fetchFullRates"]
-        : ["lastRates", "fetchCurrentRates"];
+        ? ['fullRates', 'fetchFullRates']
+        : ['lastRates', 'fetchCurrentRates']
 
       this.$store
         .dispatch(action, {
@@ -111,26 +110,26 @@ export default {
         .then(() => this.createChart(rates))
         .catch(err => {
           // eslint-disable-next-line
-          if (err) console.error(err);
-          this.isLoad = false;
-        });
+          if (err) console.error(err)
+          this.isLoad = false
+        })
     },
 
     createChart(rates) {
       if (this.isCurrent) {
-        this.chart.initChart();
-        this.currentRates = this.coins[this.activeWallet.name][rates];
+        this.chart.initChart()
+        this.currentRates = this.coins[this.activeWallet.name][rates]
       }
       this.chart.createChartLine({
         data: this.coins[this.activeWallet.name][rates],
         range: this.dateRange
-      });
-      this.chart.createTicks();
-      this.d = this.chart.chartLinePath;
-      this.isLoad = true;
+      })
+      this.chart.createTicks()
+      this.d = this.chart.chartLinePath
+      this.isLoad = true
     }
   }
-};
+}
 </script>
 
 <style lang='scss'>

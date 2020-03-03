@@ -9,7 +9,7 @@ const
             API.closeWS(); //close WebSocket for prevent multiconnect
             coinName = coinName.toLowerCase()
 
-            if (state.coins[coinName]?.__updated == new Date().setUTCHours(0, 0, 0, 0)) { //Date == today without hours, min and sec
+            if (state.coins[coinName]?.__updated === new Date().setUTCHours(0, 0, 0, 0)) { //Date == today without hours, min and sec
                 return Promise.resolve()
             } else return API.fullData(coinName).then(res => commit('setFullRates', { res, coinName })) //res == {...[price, time, ...etc]}; probable needs remove etc                    
 
