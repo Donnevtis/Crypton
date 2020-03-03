@@ -1,24 +1,38 @@
+interface IPricesCollect { time: number, priceUsd: string }
+interface IEntryData { data: IPricesCollect[], range: number }
+interface IGridX {
+  i: number,
+  t: string,
+  x: number
+}
+interface IGridY {
+  $: string,
+  y: number
+}
+interface IDataStack {
+  x: number
+  y: number
+  time: number
+  price: number
+}
 export class Chart {
-  readonly stepX: number;
-  readonly stepY: number;
-  readonly width: number;
-  readonly height: number;
-  readonly viewBox: string;
-  gridX: { [k: string]: any }[];
-  gridY: { [k: string]: any }[];
-  range: number;
-  limits: { min: number; max: number };
-  yResolution: number;
-  dataStack: {
-    x: number;
-    y: number;
-    time: number;
-    price: number;
-  }[] = [];
+  readonly stepX: number
+  readonly stepY: number
+  readonly width: number
+  readonly height: number
+  readonly viewBox: string
+  gridX: IGridX[] = []
+  gridY: IGridY[] = []
+  range: number = 36e4
+  limits: { [k: string]: number } = {
+    min: Number.MAX_VALUE,
+    max: 0
+  }
+  dataStack: IDataStack[] = []
 
-  constructor(readonly box: { [k: string]: number }) {
-    const width = box.width || 600
-    const height = box.height || 300
+  constructor(box: { [k: string]: number }) {
+    const width = box.width || 600;
+    const height = box.height || 300;
     this.stepX = box.stepX ? Math.max(box.stepX, 30) : 70;
     this.stepX = width / ~~(width / this.stepX);
     this.stepY = box.stepY ? Math.max(box.stepY, 10) : 50;
@@ -27,49 +41,46 @@ export class Chart {
     this.viewBox = `0 0 ${this.width} ${this.height}`;
   }
 
-  stepper(range: number, steps: number, axis: string, from: number = 0): {}[] {
-    const coords: {}[] = []
+  stepper(grid: {}[], range: number, steps: number, axis: string, from: number = 0) {
     for (let i = 0; i < steps + 1; i++) {
-      coords.push({ [axis]: from })
+      grid.push({ [axis]: from })
       from += range;
     }
-    return coords
   }
 
   // MAIN CHART LINE CREATOR
-  initChart(data: { data: { time: number }[], range: number }) {
+  initChart() {
     const absciss = Math.floor(this.width / this.stepX) - 1;
     const ordinates = Math.floor(this.height / this.stepY);
-    this.gridX = this.stepper(this.stepX, absciss, 'x', 30); //coords for horizontal grid, left offset = 30
-    this.gridY = this.stepper(this.stepY, ordinates, 'y'); //horizontal dividing lines
-    this.createChartLine(data);
+    this.gridX = [];
+    this.gridY = [];
+    this.stepper(this.gridX, this.stepX, absciss, 'x', 30); //coords for horizontal grid, left offset = 30
+    this.stepper(this.gridY, this.stepY, ordinates, 'y'); //horizontal dividing lines    
   }
-  createChartLine({ data, range }) {
-    this.range = range || 36e4;
 
-    const cropData = data => {
-      let i = data.length - 1;
+  createChartLine({ data, range }: IEntryData) {
+    const cropData = (data: IPricesCollect[]): IPricesCollect[] => {
+      let i: number = data.length - 1;
       while (data[i].time >= Date.now() - this.range) {
         --i;
       }
       return data.slice(i);
     };
 
-    const croppedData = cropData(data);
+    this.range = range || this.range;
+    const croppedData: IPricesCollect[] = cropData(data);
     this.limits = this.findLimits(croppedData);
-    const xResolution =
-      (croppedData[croppedData.length - 1].time - croppedData[0].time) /
-      this.width;
-    this.yResolution = (this.limits.max - this.limits.min) / this.height;
+    const xResolution: number = (
+      croppedData.slice(-1)[0].time - croppedData[0].time
+    ) / this.width;
+    this.dataStack = [];
 
-    this.dataStack = []
     for (let i = 0; i < croppedData.length; i++) {
-      const pathX = (
+      const pathX: number = +(
         (croppedData[i].time - croppedData[0].time) /
         xResolution
       ).toFixed(2);
-      const pathY = this.costToCoordsY(croppedData[i].priceUsd).toFixed(2);
-
+      const pathY: number = +this.costToCoordsY(croppedData[i].priceUsd).toFixed(2);
       this.dataStack.push({
         x: +pathX,
         y: +pathY,
@@ -80,37 +91,30 @@ export class Chart {
 
     this.createLabels();
   }
-  costToCoordsY(cost) {
+
+  costToCoordsY(cost: string): number {
+    const yResolution: number = (this.limits.max - this.limits.min) / this.height;
     return (
       (this.limits.max - this.limits.min - (+cost - this.limits.min)) /
-      this.yResolution
+      yResolution
     );
   }
-  findLimits(croppedData) {
-    const min = croppedData.reduce(
-      (prev, item) => Math.min(prev, item.priceUsd),
-      9e12
-    );
-    const max = croppedData.reduce(
-      (prev, item) => Math.max(prev, item.priceUsd),
-      0
-    );
-    return { min, max };
-  }
-  get chartLinePath() {
-    const d = [`M${this.dataStack[0].x}, ${this.dataStack[0].y} `];
 
-    for (let i = 1; i < this.dataStack.length; i++) {
-      d.push(`L${this.dataStack[i].x}, ${this.dataStack[i].y} `);
-    }
-
-    return d.join('').trim();
+  findLimits(croppedData: IPricesCollect[]): { min: number, max: number } {
+    return croppedData.reduce(
+      (prev, item) => ({
+        min: Math.min(prev.min, +item.priceUsd),
+        max: Math.max(prev.max, +item.priceUsd)
+      }), {
+      min: Number.MAX_VALUE,
+      max: 0
+    });
   }
 
   // USD LABELS CREATOR
   createLabels() {
-    let max = this.limits.max;
-    const step = (max - this.limits.min) / (this.gridY.length - 1); // ! necessary to devide into intervals, not into amaunt of line
+    let max: number = this.limits.max;
+    const step: number = (max - this.limits.min) / (this.gridY.length - 1); // ! necessary to devide into intervals, not into amaunt of line
 
     this.gridY.forEach(i => {
       i.$ =
@@ -124,40 +128,51 @@ export class Chart {
   // TIME/DATE LABELS CREATOR
   createTicks() {
     this.gridX.forEach((label, index) => {
-      label.t = this.timeSetter(label);
+      label.t = this.timeSetter(label.x);
       label.i = index;
     });
   }
-  timeSetter(time) {
-    const output = this.range > 4e5 ? daysToLocal() : timeToLocal();
 
-    function timeToLocal() {
-      return mSec =>
-        new Date(mSec).toLocaleString('en', {
-          hour12: false,
-          hour: 'numeric',
-          minute: 'numeric',
-          second: 'numeric'
-        });
+  timeSetter(coordX: number) {
+    type Locale = {
+      hour12: false,
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric'
+      day: 'numeric',
+      month: 'short'
+    }
+    const localTime: Pick<Locale, 'hour12' | 'hour' | 'minute' | 'second'> = {
+      hour12: false,
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric'
+    }
+    const localDate: Pick<Locale, 'day' | 'month'> = {
+      day: 'numeric',
+      month: 'short'
     }
 
-    function daysToLocal() {
-      return mSec =>
+    const output: (mSec: number) => string = this.range > 4e5
+      ? dateToLocal(localDate)
+      : dateToLocal(localTime);
+
+    function dateToLocal(local: object) {
+      return (mSec: number) =>
         new Date(mSec)
-          .toLocaleString('en', {
-            day: 'numeric',
-            month: 'short'
-          })
+          .toLocaleString('en', local)
           .toLowerCase();
     }
 
     const t = this.dataStack.find(
-      (l, index, arr) => l.x <= time.x && arr[index + 1].x >= time.x
-    );
+      (el, index, arr) => el.x <= coordX && arr[index + 1].x >= coordX
+    )
+    if (t === undefined) throw new Error('Time not found')
+
     return output(t.time);
   }
 
-  currentPrice(data) {
+  currentPrice(data: IEntryData) {
     this.createChartLine(data);
     this.gridX.forEach(
       i =>
@@ -166,12 +181,25 @@ export class Chart {
           this.dataStack[this.dataStack.length - 2].x)
     );
     if (this.gridX[0].x <= -30) {
-      const i = -this.gridX[0].i;
-      const x = this.gridX[this.gridX.length - 1].x + this.stepX;
-      const t = this.timeSetter({ x });
+      const i: number = -this.gridX[0].i;
+      const x: number = this.gridX[this.gridX.length - 1].x + this.stepX;
+      const t: string = this.timeSetter(x);
       this.gridX.push({ x, t, i });
       this.gridX.shift();
     }
   }
 
+  get chartLinePath(): string {
+    const d: string[] = [`M${this.dataStack[0].x}, ${this.dataStack[0].y} `];
+
+    for (let i = 1; i < this.dataStack.length; i++) {
+      d.push(`L${this.dataStack[i].x}, ${this.dataStack[i].y} `);
+    }
+
+    return d.join('').trim();
+  }
+
+  get pointY(): number {
+    return this.dataStack.slice(-1)[0].y
+  }
 }

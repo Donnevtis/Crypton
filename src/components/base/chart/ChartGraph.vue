@@ -30,6 +30,7 @@ import { Chart } from "../../../utils/chart-constructor";
 
 export default {
   name: "ChartGraph",
+
   components: {
     ChartLine,
     ChartHelper,
@@ -43,21 +44,19 @@ export default {
       currentRates: [],
       d: "",
       pointY: 0,
-      isLoad: false,
-      isCurrent: false
+      isLoad: false
     };
   },
 
   mounted() {
     const box = this.$refs.box;
-
     this.chart = new Chart({
       width: box.clientWidth,
       height: box.clientHeight,
       stepX: 70,
       stepY: 36.25
     });
-
+    this.chart.initChart();
     this.fetchRates();
   },
 
@@ -69,15 +68,21 @@ export default {
     coins() {
       return this.$store.state.history.coins;
     },
-    ...mapGetters(["activeStamp", "activeWallet", "dateRange"])
+    ...mapGetters(["activeStamp", "activeWallet", "dateRange"]),
+    isCurrent() {
+      return !this.activeStamp.mnth;
+    }
   },
 
   watch: {
     activeWallet() {
       this.fetchRates();
     },
-    activeStamp(mnth) {
-      this.isLoad = mnth ? false : true;
+    activeStamp(stamp, oldStamp) {
+      if (stamp.mnth && !oldStamp.mnth) {
+        this.chart.initChart();
+      }
+      this.isLoad = stamp.mnth ? false : true;
       this.fetchRates();
     },
     currentRates(rates) {
@@ -86,13 +91,12 @@ export default {
         range: this.dateRange
       });
       this.d = this.chart.chartLinePath;
-      this.pointY = this.chart.dataStack.slice(-1)[0].y;
+      this.pointY = this.chart.pointY;
     }
   },
 
   methods: {
     fetchRates() {
-      this.isCurrent = false;
       const [rates, action] = this.activeStamp.mnth
         ? ["fullRates", "fetchFullRates"]
         : ["lastRates", "fetchCurrentRates"];
@@ -101,7 +105,7 @@ export default {
         .dispatch(action, {
           coinName: this.activeWallet.name
         })
-        .then(() => this.initChart(rates))
+        .then(() => this.createChart(rates))
         .catch(err => {
           // eslint-disable-next-line
           if (err) console.error(err);
@@ -109,18 +113,18 @@ export default {
         });
     },
 
-    initChart(rates) {
-      this.chart.initChart({
+    createChart(rates) {
+      if (this.isCurrent) {
+        this.chart.initChart();
+        this.currentRates = this.coins[this.activeWallet.name][rates];
+      }
+      this.chart.createChartLine({
         data: this.coins[this.activeWallet.name][rates],
         range: this.dateRange
       });
       this.chart.createTicks();
       this.d = this.chart.chartLinePath;
       this.isLoad = true;
-      if (!this.activeStamp.mnth) {
-        this.isCurrent = true;
-        this.currentRates = this.coins[this.activeWallet.name][rates];
-      }
     }
   }
 };
