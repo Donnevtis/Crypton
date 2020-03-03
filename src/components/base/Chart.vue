@@ -5,17 +5,16 @@
       <chart-timestamp />
       <slot />
     </div>
-
     <chart-graph />
   </div>
 </template>
 
 <script>
-import ChartGraph from "./chart/ChartGraph";
-import ChartTimestamp from "./chart/ChartTimestamp";
+import ChartGraph from './chart/ChartGraph';
+import ChartTimestamp from './chart/ChartTimestamp';
 
 export default {
-  name: "DashboardChart",
+  name: 'DashboardChart',
   components: {
     ChartTimestamp,
     ChartGraph

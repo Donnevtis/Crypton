@@ -42,7 +42,7 @@ const state = {
         acronym: 'XRP',
         name: 'ripple',
         amount: 0.0003,
-        icon: "https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@e35e7396237e8b8afee29deca14407bb5e25926d/svg/black/bch.svg",
+        icon: 'https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@e35e7396237e8b8afee29deca14407bb5e25926d/svg/black/bch.svg',
         fullness: 3,
     }
     ],
@@ -57,7 +57,7 @@ const state = {
     actions = {},
     mutations = {
         changeActive(state, id) {
-            state.wallets.forEach(wallet => wallet.active = wallet.id == id ? true : false)
+            state.wallets.forEach(wallet => wallet.active = wallet.id === id ? true : false)
         }
     };
 

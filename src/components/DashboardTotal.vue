@@ -27,7 +27,7 @@
 
 <script>
 export default {
-  name: "DashboardTotal",
+  name: 'DashboardTotal',
   props: {
     mainInfo: Object
   },
@@ -36,10 +36,10 @@ export default {
       if (!this.mainInfo.transactions) {
         return 0;
       }
-      let trans = (this.mainInfo.transactions + "").split("");
+      let trans = (this.mainInfo.transactions + '').split('');
       if (trans.length > 3) {
-        trans.splice(-3, 0, ",");
-        return trans.join("");
+        trans.splice(-3, 0, ',');
+        return trans.join('');
       } else return this.mainInfo.transactions;
     }
   }
@@ -47,7 +47,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .balance-component {
   display: grid;
   grid-template: 1fr 3fr 1fr/1fr 1fr;
@@ -96,7 +95,7 @@ export default {
   letter-spacing: 0.5px;
 
   &::before {
-    content: "Current balance";
+    content: 'Current balance';
     position: absolute;
     top: px-rem(-17);
     color: $color-text-light;
@@ -106,7 +105,7 @@ export default {
   }
 
   &::after {
-    content: "USD";
+    content: 'USD';
     position: absolute;
     color: $color-text-light;
     font-size: 0.85vw;

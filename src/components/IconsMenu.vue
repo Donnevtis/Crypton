@@ -11,10 +11,10 @@
   </ul>
 </template>
 <script>
-import MenuItem from "./IconsMenuItem.vue";
+import MenuItem from './IconsMenuItem.vue';
 
 export default {
-  name: "sidebarmenu",
+  name: 'sidebarmenu',
   components: {
     MenuItem
   },
@@ -24,35 +24,35 @@ export default {
       menuItems: [
         {
           id: 0,
-          path: "/dashboard"
+          path: '/dashboard'
         },
         {
           id: 1,
-          path: "/wallets"
+          path: '/wallets'
         },
         {
           id: 2,
-          path: "/trandings"
+          path: '/trandings'
         },
         {
           id: 3,
-          path: "/events"
+          path: '/events'
         },
         {
           id: 4,
-          path: "/transactions"
+          path: '/transactions'
         },
         {
           id: 5,
-          path: "/calculator"
+          path: '/calculator'
         },
         {
           id: 6,
-          path: "/news"
+          path: '/news'
         },
         {
           id: 7,
-          path: "/settings"
+          path: '/settings'
         }
       ]
     };

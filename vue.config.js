@@ -22,7 +22,7 @@ module.exports = {
     css: {
         loaderOptions: {
             scss: {
-                prependData: `@import "~@/scss/common.scss";`
+                prependData: '@import "~@/scss/common.scss";'
             }
         }
     }

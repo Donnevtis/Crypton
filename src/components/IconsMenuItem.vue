@@ -7,9 +7,9 @@
 </template>
 <script>
 export default {
-  name: "MenuItem",
+  name: 'MenuItem',
   props: {
-    path: { type: String, required: true, default: "#" }
+    path: { type: String, required: true, default: '#' }
   },
   data() {
     return {

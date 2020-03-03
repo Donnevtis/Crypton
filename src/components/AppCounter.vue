@@ -4,9 +4,9 @@
 
 <script>
 export default {
-  name: "NotificationCounter",
+  name: 'NotificationCounter',
   data() {
-    return { corols: "#7AC231" };
+    return { corols: '#7AC231' };
   }
 };
 </script>

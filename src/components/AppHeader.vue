@@ -31,18 +31,18 @@
 </template>
 
 <script>
-import SearchForm from "./AppSearchForm";
+import SearchForm from './AppSearchForm';
 
 export default {
-  name: "AppHeader",
+  name: 'AppHeader',
   components: {
     SearchForm
   },
   props: {},
   data() {
     return {
-      title: "Dashboard",
-      fullName: "Nikita Resheteev"
+      title: 'Dashboard',
+      fullName: 'Nikita Resheteev'
     };
   }
 };

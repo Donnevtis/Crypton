@@ -7,7 +7,7 @@
 
 <script>
 export default {
-  name: "wallet-labels"
+  name: 'wallet-labels'
 };
 </script>
 

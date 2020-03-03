@@ -13,12 +13,12 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations } from 'vuex';
 export default {
-  name: "ChartTimestamp",
-  computed: mapState(["timestamps"]),
+  name: 'ChartTimestamp',
+  computed: mapState(['timestamps']),
   methods: {
-    ...mapMutations(["setActiveStamp"])
+    ...mapMutations(['setActiveStamp'])
   }
 };
 </script>

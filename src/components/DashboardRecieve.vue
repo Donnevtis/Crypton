@@ -27,7 +27,7 @@
 
 <script>
 export default {
-  name: "DashboardRecieve",
+  name: 'DashboardRecieve',
   data() {
     return {
       thisWallet: this.$store.getters.allWallets[0]

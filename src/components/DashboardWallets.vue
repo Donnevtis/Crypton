@@ -12,10 +12,10 @@
 </template>
 
 <script>
-import DashWallet from "./DashboardWallet";
+import DashWallet from './DashboardWallet';
 
 export default {
-  name: "DashboardWallets",
+  name: 'DashboardWallets',
   components: {
     DashWallet
   },

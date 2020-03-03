@@ -9,12 +9,12 @@
 </template>
 
 <script>
-import walletsTransactions from "./base/Transactions";
-import walletsChart from "./base/Chart";
-import ChartDatePicker from "./base/chart/DatePicker";
+import walletsTransactions from './base/Transactions';
+import walletsChart from './base/Chart';
+import ChartDatePicker from './base/chart/DatePicker';
 
 export default {
-  name: "app-wallets",
+  name: 'app-wallets',
   components: {
     walletsTransactions,
     walletsChart,

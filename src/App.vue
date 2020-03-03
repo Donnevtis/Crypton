@@ -7,19 +7,19 @@
 </template>
 
 <script>
-import AppSidebar from "./components/AppSideBar";
-import AppDashboard from "./components/AppDashboard";
-import AppHeader from "./components/AppHeader";
-import MobileHeader from "./components/TheMobileHeader";
+import AppSidebar from './components/AppSideBar';
+import AppDashboard from './components/AppDashboard';
+import AppHeader from './components/AppHeader';
+import MobileHeader from './components/TheMobileHeader';
 export default {
-  name: "app",
+  name: 'app',
   components: {
     AppSidebar,
     AppHeader,
     AppDashboard
   },
   created() {
-    this.adaptive = window.matchMedia("(min-width: 480px)").matches
+    this.adaptive = window.matchMedia('(min-width: 480px)').matches
       ? AppHeader
       : MobileHeader;
   },

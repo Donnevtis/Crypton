@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import ConversationButton from "./TheConversationButton.vue";
+import ConversationButton from './TheConversationButton.vue';
 
 export default {
   components: {

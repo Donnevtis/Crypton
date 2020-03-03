@@ -48,24 +48,24 @@ export default {
       this.helper =
         this.chart.range > 4e5
           ? {
-              date: new Date(this.point.time).toLocaleString("en", {
-                weekday: "long",
-                day: "numeric",
-                month: "short",
-                year: "numeric"
+              date: new Date(this.point.time).toLocaleString('en', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
               }),
-              price: "$" + this.point.price.toFixed(2)
+              price: '$' + this.point.price.toFixed(2)
             }
           : {
-              date: new Date(this.point.time).toLocaleString("en", {
-                weekday: "short",
-                day: "numeric",
-                month: "short",
-                year: "numeric",
-                hour: "numeric",
-                minute: "numeric"
+              date: new Date(this.point.time).toLocaleString('en', {
+                weekday: 'short',
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric'
               }),
-              price: "$" + this.point.price.toFixed(2)
+              price: '$' + this.point.price.toFixed(2)
             };
     }
   }

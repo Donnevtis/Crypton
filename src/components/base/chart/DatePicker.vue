@@ -13,6 +13,6 @@
 
 <script>
 export default {
-  name: "date-picker"
+  name: 'date-picker'
 };
 </script>
