@@ -117,7 +117,7 @@ export default {
       if (this.isCurrent) {
         this.chart.initChart();
         this.currentRates = this.coins[this.activeWallet.name][rates];
-      }
+      } else this.currentRates = [];
       this.chart.createChartLine({
         data: this.coins[this.activeWallet.name][rates],
         range: this.dateRange
