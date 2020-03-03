@@ -25,7 +25,8 @@ describe('chart class', () => {
     describe('graph field and graph line', () => {
 
         beforeEach(() => {
-            chart.initChart(data)
+            chart.initChart()
+            chart.createChartLine(data)
         })
 
         it('dataStack', () => {
