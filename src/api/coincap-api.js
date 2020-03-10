@@ -1,4 +1,4 @@
-const axios = require('axios').default;
+const axios = require('axios').default
 
 export default {
   fullData(coinName) {
@@ -11,7 +11,8 @@ export default {
     return this.fetch(link)
   },
   fetch(link) {
-    return axios.get(link)
+    return axios
+      .get(link)
       .then(res => {
         if (res.status !== 200) throw Error('Data is not receive') // Needs to write error handler
         return res.data
@@ -19,14 +20,14 @@ export default {
       .then(res => res.data.sort((a, b) => a.time - b.time))
   },
   openWS(coinName, callback) {
-    // Needs changes. It will be rather, if WebSocket won't be closes.       
+    // Needs changes. It will be rather, if WebSocket won't be closes.
     this.WS = new WebSocket(`wss://ws.coincap.io/prices?assets=${coinName}`)
-    const startTime = Date.now();
-    let time = 0;
-    let priceUsd = 0;
+    const startTime = Date.now()
+    let time = 0
+    let priceUsd = 0
     this.WS.onmessage = msg => {
-      priceUsd = JSON.parse(msg.data)[coinName];
-      time = startTime + +msg.timeStamp.toFixed();
+      priceUsd = JSON.parse(msg.data)[coinName]
+      time = startTime + msg.timeStamp
       callback({ priceUsd, time })
     }
   },
