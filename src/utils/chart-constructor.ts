@@ -1,3 +1,5 @@
+import binarySearch from './binarySearch'
+
 interface IPricesCollect {
   time: number
   priceUsd: string
@@ -34,7 +36,7 @@ export class Chart {
     min: Number.MAX_VALUE,
     max: 0
   }
-  dataStack: IDataStack[] = []
+  dataStack!: IDataStack[]
 
   constructor(box: { [k: string]: number }) {
     const width = box.width || 600
@@ -176,10 +178,9 @@ export class Chart {
         new Date(mSec).toLocaleString('en', local).toLowerCase()
     }
 
-    const t = this.dataStack.find(
-      (el, index, arr) => el.x <= coordX && arr[index + 1].x >= coordX
-    )
-    if (t === undefined) throw new Error('Time not found')
+    const pos = binarySearch(this.dataStack, coordX)
+    if (!~pos) throw new Error('Time cannot find')
+    const t = this.dataStack[pos]
 
     return output(t.time)
   }

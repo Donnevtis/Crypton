@@ -13,6 +13,8 @@ div
 </template>
 
 <script>
+import search from '../../../utils/binarySearch'
+
 export default {
   props: {
     chart: Object,
@@ -25,26 +27,24 @@ export default {
       x1: 0,
       helper: {},
       point: { y: 0 }
-    };
+    }
   },
   computed: {
     yBudge() {
       return this.point.y > this.chart.height / 2
         ? this.point.y - this.height - 5
-        : this.point.y + 5;
+        : this.point.y + 5
     },
     yArrow() {
-      return this.point.y > this.chart.height / 2 ? this.height - 10 : -5;
+      return this.point.y > this.chart.height / 2 ? this.height - 10 : -5
     }
   },
   methods: {
     onmousemove(e) {
-      const scaleX = e.target.getBoundingClientRect().width / this.chart.width;
-      const x = (e.pageX - e.target.getBoundingClientRect().x) / scaleX;
-      this.x1 = x;
-      this.point = this.chart.dataStack.find(
-        (item, index, arr) => item.x <= x && arr[index + 1].x >= x
-      );
+      const scaleX = e.target.getBoundingClientRect().width / this.chart.width
+      const x = (e.pageX - e.target.getBoundingClientRect().x) / scaleX
+      this.x1 = x
+      this.point = this.chart.dataStack[search(this.chart.dataStack, x)]
       this.helper =
         this.chart.range > 4e5
           ? {
@@ -66,10 +66,10 @@ export default {
                 minute: 'numeric'
               }),
               price: '$' + this.point.price.toFixed(2)
-            };
+            }
     }
   }
-};
+}
 </script>
 
 <style lang='scss'>
